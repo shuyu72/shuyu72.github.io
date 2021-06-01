@@ -2,3 +2,15 @@ a.custom-card,
 a.custom-card:hover {
   color: inherit;
 }
+
+.navbar-nav { 
+  flex-direction: row;
+}
+
+div.container-custom {
+  margin-bottom: 3rem;
+}
+
+a > i { 
+  color: #fff; 
+} 
