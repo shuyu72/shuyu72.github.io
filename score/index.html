@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>評分</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="index.css" />  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+    <div class="container" style="position: absolute; top: 50%; left: 50%;" >
+        <div class="card">
+            <div class="card-body">                
+                <div id="display"></div>
+                <h3 class="card-title">還沒連到資料庫，沒辦法評分啦</h3>
+            </div>
+        </div>
+    </div>
+    <script>
+        $("#display").append('<img src="pics/heart_broken.gif" alt="red" width="150px" height="200px" " />')
+    </script>
+</body>
+</html>
