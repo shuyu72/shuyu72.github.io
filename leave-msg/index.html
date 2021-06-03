@@ -7,6 +7,7 @@
     </head>
     <body>
         <script type="text/javascript">
+            
             function draw (id){            
             //獲取畫布id
             var canvas =document.getElementById(id);
@@ -30,18 +31,30 @@
             randX = 0;//Math.floor(Math.random() * getWidth());
             randY = 0;//Math.floor(Math.random() * getHeight());
             randMl= Math.floor(Math.random() * 10);
-            randMx= Math.floor(Math.random() * 10);
-            randMy= Math.floor(Math.random() * 10);
-            var x=randX;//矩形的x座標
-            var y=randY;//矩形的y座標
-            var mx=0;//值為0向右，值為0向左
-            var my=0;//值為0向下，值為0向上
+            var x=[];//randX;//矩形的x座標
+            var y=[];//randY;//矩形的y座標
+            var mx=[];//值為0向右，值為0向左
+            var my=[];//值為0向下，值為0向上
             var ml=randMl;//移動的長度
             var w=20;//矩形的寬
             var h=20;//矩形的高
             var cw=document.body.clientWidth;//getWidth();//畫布的寬
             var ch=getHeight();//document.body.clientHeight;//畫布的高
 
+            function initMXMY(size){
+                for(i=0;i<size;i++){
+                    mx.push(0);
+                    my.push(0);
+                }
+            }
+
+            function genXYArr(size){
+                for(i=0;i<size;i++){
+                    x.push(Math.floor(Math.random() * document.body.clientWidth));
+                    y.push(Math.floor(Math.random() * getHeight()));
+                }
+            }
+            
             function getWidth() {
                 return Math.max(
                     document.body.scrollWidth,
@@ -67,31 +80,36 @@
                cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
                cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
                cxt.fillStyle="red";//把矩形設定為紅色
-               cxt.fillRect(x,y,w,h);//繪製矩形
-           //判斷是否到達邊緣
-           if(mx==0){
-                   x=x+ml;//x座標加上移動長度
-                   if(x>cw-w){
-                       mx=1;
-                   }
-               }else{
-                   x=x-ml;
-                   if(x<=0){
-                       mx=0;                       
-                   }
-               }
-                    if(my==0){
-                   y=y+ml;
-                   if(y>ch-h){
-                       my=1;
-                   }
-               }else{
-                   y=y-ml;
-                   if(y<=0){
-                       my=0;                       
-                   }
-               }
+               var size=50;
+               initMXMY(size);
+               genXYArr(size);
+               for(i=0;i<size;i++){
+                    cxt.fillRect(x[i],y[i],w,h);//繪製矩形                
+                    //判斷是否到達邊緣
+                    if(mx[i]==0){
+                        x[i]=x[i]+ml;//x座標加上移動長度
+                        if(x[i]>cw-w){
+                            mx[i]=1;
+                        }
+                    }else{
+                        x[i]=x[i]-ml;
+                        if(x[i]<=0){
+                            mx[i]=0;                       
+                        }
+                    }
+                    if(my[i]==0){
+                        y[i]=y[i]+ml;
+                        if(y[i]>ch-h){
+                            my[i]=1;
+                        }
+                    }else{
+                        y[i]=y[i]-ml;
+                        if(y[i]<=0){
+                            my[i]=0;                       
+                        }
+                    }
            }
+        }              
            window.addEventListener("DOMContentLoaded",draw("canvas"),true);
         </script>
     </body>

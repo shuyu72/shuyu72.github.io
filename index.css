@@ -14,3 +14,13 @@ div.container-custom {
 a > i { 
   color: #fff; 
 } 
+
+#container {
+  position: relative;
+}
+#container canvas, #overlay {
+  position: absolute;
+}
+/* canvas {
+  border: 1px solid black;
+} */

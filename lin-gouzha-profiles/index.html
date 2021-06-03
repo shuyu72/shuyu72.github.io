@@ -4,54 +4,167 @@
   <title>林狗渣profile</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" type="text/css" href="index.css" />  
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="card-body">
-            <i class="fa fa-user-circle fa-5x" aria-hidden="true"><a href="#"></a></i>            
-            <h3 class="card-title"><a href="#">林狗渣</a></h3>
-            <p class="card-text">
-                讓我愛你 然後把我拋棄
-                我只要出發 不要目的
-                我會一直想你 忘記了呼吸
-                孤獨到底 讓我昏迷
-                <br/>
-                如果恨你 就能不忘記你
-                所有的面目 我都不抗拒
-                如果不夠悲傷 就無法飛翔
-                可沒有夢想 何必遠方
-                <br/>
-                我一直都在流浪 可我不曾見過海洋
-                我以為的遺忘 原來躺在你手上
-                我努力微笑堅強 寂寞築成一道圍牆
-                也敵不過夜裡 最溫柔的月光
-                <br/>
-                <br/>
-                如果恨你 就能不忘記你
-                所有的面目 我都不抗拒
-                如果不夠悲傷 就無法飛翔
-                可沒有夢想 何必遠方
-                <br/>
-                我一直都在流浪 可我不曾見過海洋
-                我以為的遺忘 原來躺在你手上
-                我努力微笑堅強 寂寞築成一道圍牆
-                也敵不過夜裡 最溫柔的月光
-                <br/>
-                <br/>
-                我一直都在流浪 可我不曾見過海洋
-                我以為的遺忘 原來躺在你手上
-                我努力微笑堅強 寂寞築成一道圍牆
-                也敵不過夜裡 最溫柔的月光
-                <br/>
-                &#060;林宥嘉 殘酷月光&gt;
-            </p>
+  <div class="container">
+    <div id="container">
+        <canvas id="canvas"></canvas>
+        <div id="overlay">
+            <div class="card-body">
+                <i class="fa fa-user-circle fa-5x" aria-hidden="true"><a href="#"></a></i>            
+                <h3 class="card-title"><a href="#">林狗渣</a></h3>
+                <p class="card-text">
+                    讓我愛你 然後把我拋棄
+                    我只要出發 不要目的
+                    我會一直想你 忘記了呼吸
+                    孤獨到底 讓我昏迷
+                    <br/>
+                    如果恨你 就能不忘記你
+                    所有的面目 我都不抗拒
+                    如果不夠悲傷 就無法飛翔
+                    可沒有夢想 何必遠方
+                    <br/>
+                    我一直都在流浪 可我不曾見過海洋
+                    我以為的遺忘 原來躺在你手上
+                    我努力微笑堅強 寂寞築成一道圍牆
+                    也敵不過夜裡 最溫柔的月光
+                    <br/>
+                    <br/>
+                    如果恨你 就能不忘記你
+                    所有的面目 我都不抗拒
+                    如果不夠悲傷 就無法飛翔
+                    可沒有夢想 何必遠方
+                    <br/>
+                    我一直都在流浪 可我不曾見過海洋
+                    我以為的遺忘 原來躺在你手上
+                    我努力微笑堅強 寂寞築成一道圍牆
+                    也敵不過夜裡 最溫柔的月光
+                    <br/>
+                    <br/>
+                    我一直都在流浪 可我不曾見過海洋
+                    我以為的遺忘 原來躺在你手上
+                    我努力微笑堅強 寂寞築成一道圍牆
+                    也敵不過夜裡 最溫柔的月光
+                    <br/>
+                    &#060;林宥嘉 殘酷月光&gt;
+                </p>
+            </div>
         </div>
     </div>
+</div>
+
+</head>
+<body>
+    <script type="text/javascript">
+            
+        function draw (id){            
+        //獲取畫布id
+        var canvas =document.getElementById(id);
+        canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+          canvas.height = getHeight();//document.body.clientHeight;//window.innerHeight;
+        if(canvas==null)
+            return false;
+        //獲取上下文
+        var  cxt =canvas.getContext("2d");            
+        // randTime = Math.floor(Math.random() * 10 + 10);
+        //var interval=setInterval(function(){move(cxt);},randTime);
+        (function loop() {
+            var randTime = Math.floor(Math.random() * 100);
+            // var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+                setTimeout(function() {
+                move(cxt);
+                loop();  
+            }, randTime);
+        }());
+        }
+        randX = 0;//Math.floor(Math.random() * getWidth());
+        randY = 0;//Math.floor(Math.random() * getHeight());
+        randMl= Math.floor(Math.random() * 10);
+        var x=[];//randX;//矩形的x座標
+        var y=[];//randY;//矩形的y座標
+        var mx=[];//值為0向右，值為0向左
+        var my=[];//值為0向下，值為0向上
+        var ml=randMl;//移動的長度
+        var w=7;//矩形的寬
+        var h=7;//矩形的高
+        var cw=document.body.clientWidth;//getWidth();//畫布的寬
+        var ch=getHeight();//document.body.clientHeight;//畫布的高
+
+        function initMXMY(size){
+            for(i=0;i<size;i++){
+                mx.push(0);
+                my.push(0);
+            }
+        }
+
+        function genXYArr(size){
+            for(i=0;i<size;i++){
+                x.push(Math.floor(Math.random() * document.body.clientWidth));
+                y.push(Math.floor(Math.random() * getHeight()));
+            }
+        }
+        
+        function getWidth() {
+            return Math.max(
+                document.body.scrollWidth,
+                document.documentElement.scrollWidth,
+                document.body.offsetWidth,
+                document.documentElement.offsetWidth,
+                document.documentElement.clientWidth
+            );
+        }
+
+        function getHeight() {
+            return Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.offsetHeight,
+                document.documentElement.offsetHeight,
+                document.documentElement.clientHeight
+            );
+        }
+       
+       function move(cxt){               
+           cxt.clearRect(0,0,getWidth(),getHeight());//在給定的矩形內清除所有的畫素為透明
+           cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
+           cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
+           cxt.fillStyle="red";//把矩形設定為紅色
+           var size=50;
+           initMXMY(size);
+           genXYArr(size);
+           for(i=0;i<size;i++){
+                cxt.fillRect(x[i],y[i],w,h);//繪製矩形                
+                //判斷是否到達邊緣
+                if(mx[i]==0){
+                    x[i]=x[i]+ml;//x座標加上移動長度
+                    if(x[i]>cw-w){
+                        mx[i]=1;
+                    }
+                }else{
+                    x[i]=x[i]-ml;
+                    if(x[i]<=0){
+                        mx[i]=0;                       
+                    }
+                }
+                if(my[i]==0){
+                    y[i]=y[i]+ml;
+                    if(y[i]>ch-h){
+                        my[i]=1;
+                    }
+                }else{
+                    y[i]=y[i]-ml;
+                    if(y[i]<=0){
+                        my[i]=0;                       
+                    }
+                }
+       }
+    }              
+       window.addEventListener("DOMContentLoaded",draw("canvas"),true);
+    </script>
 </body>
 </html>
 
