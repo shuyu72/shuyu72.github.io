@@ -1,27 +1,98 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <title>留言</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="index.css" />  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</head>
-<body>
-    <div class="container">
-        <div class="card">
-            <div class="card-body">                
-                <div id="display"></div>
-                <h3 class="card-title">還沒連到資料庫，沒辦法留言啦</h3>
-            </div>
-        </div>
-    </div>
-    <script>
-        $("#display").append('<img src="pics/heart_broken.gif" alt="red" width="150px" height="200px" " />')
-    </script>
-</body>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>移動方塊</title>
+        <canvas id="canvas"></canvas>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function draw (id){            
+            //獲取畫布id
+            var canvas =document.getElementById(id);
+            canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+  			canvas.height = getHeight();//document.body.clientHeight;//window.innerHeight;
+            if(canvas==null)
+                return false;
+            //獲取上下文
+            var  cxt =canvas.getContext("2d");            
+            // randTime = Math.floor(Math.random() * 10 + 10);
+            //var interval=setInterval(function(){move(cxt);},randTime);
+            (function loop() {
+                var randTime = Math.floor(Math.random() * 100);
+                // var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+                    setTimeout(function() {
+                    move(cxt);
+                    loop();  
+                }, randTime);
+            }());
+            }
+            randX = 0;//Math.floor(Math.random() * getWidth());
+            randY = 0;//Math.floor(Math.random() * getHeight());
+            randMl= Math.floor(Math.random() * 10);
+            randMx= Math.floor(Math.random() * 10);
+            randMy= Math.floor(Math.random() * 10);
+            var x=randX;//矩形的x座標
+            var y=randY;//矩形的y座標
+            var mx=0;//值為0向右，值為0向左
+            var my=0;//值為0向下，值為0向上
+            var ml=randMl;//移動的長度
+            var w=20;//矩形的寬
+            var h=20;//矩形的高
+            var cw=document.body.clientWidth;//getWidth();//畫布的寬
+            var ch=getHeight();//document.body.clientHeight;//畫布的高
+
+            function getWidth() {
+                return Math.max(
+                    document.body.scrollWidth,
+                    document.documentElement.scrollWidth,
+                    document.body.offsetWidth,
+                    document.documentElement.offsetWidth,
+                    document.documentElement.clientWidth
+                );
+            }
+
+            function getHeight() {
+                return Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.offsetHeight,
+                    document.documentElement.clientHeight
+                );
+            }
+           
+           function move(cxt){               
+               cxt.clearRect(0,0,getWidth(),getHeight());//在給定的矩形內清除所有的畫素為透明
+               cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
+               cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
+               cxt.fillStyle="red";//把矩形設定為紅色
+               cxt.fillRect(x,y,w,h);//繪製矩形
+           //判斷是否到達邊緣
+           if(mx==0){
+                   x=x+ml;//x座標加上移動長度
+                   if(x>cw-w){
+                       mx=1;
+                   }
+               }else{
+                   x=x-ml;
+                   if(x<=0){
+                       mx=0;                       
+                   }
+               }
+                    if(my==0){
+                   y=y+ml;
+                   if(y>ch-h){
+                       my=1;
+                   }
+               }else{
+                   y=y-ml;
+                   if(y<=0){
+                       my=0;                       
+                   }
+               }
+           }
+           window.addEventListener("DOMContentLoaded",draw("canvas"),true);
+        </script>
+    </body>
 </html>
