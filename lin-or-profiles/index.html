@@ -13,48 +13,31 @@
 <body>
     <div class="container">
         <div class="card-body">
-            <i class="fa fa-user-circle fa-5x" aria-hidden="true"><a href="#"></a></i>            
-            <h3 class="card-title"><a href="#">林嘔啊</a></h3>
-            <p class="card-text">
-                琥珀色黃昏像糖在很美的遠方 你的臉沒有化妝我卻瘋狂愛上
-                思念跟影子在傍晚一起被拉長 我手中那張入場券陪我數羊
-                <br/>
-                薄荷色草地芬芳像風沒有形狀 我卻能夠牢記你的氣質跟臉龐
-                冷空氣跟琉璃在清晨很有透明感 像我的喜歡被你看穿
-                <br/>
-                攤位上一朵艷陽 我悄悄出現你身旁
-                你慌亂的模樣 我微笑安靜欣賞
-                <br/>
-                我頂著大太陽 只想為你撐傘
-                你靠在我肩膀 深呼吸怕遺忘
-                因為撈魚的蠢遊戲我們開始交談
-                多希望話題不斷 園遊會永不打烊
-                <br/>
-                汽球在我手上 我牽著你瞎晃 有話想對你講 你眼睛卻裝忙
-                雞蛋糕跟你嘴角果醬我都想要嚐
-                園遊會影片在播放 這個世界約好一起逛
-                <br/>
-                琥珀色黃昏像糖在很美的遠方 你的臉沒有化妝我卻瘋狂愛上
-                思念跟影子在傍晚一起被拉長 我手中那張入場券陪我數羊
-                <br/>
-                薄荷色草地芬芳像風沒有形狀 我卻能夠牢記你的氣質跟臉龐
-                冷空氣跟琉璃在清晨很有透明感 像我的喜歡被你看穿
-                <br/>
-                攤位上一朵艷陽 我悄悄出現你身旁
-                你慌亂的模樣 我微笑安靜欣賞
-                <br/>
-                我頂著大太陽 只想為你撐傘
-                你靠在我肩膀 深呼吸怕遺忘
-                因為撈魚的蠢遊戲我們開始交談
-                多希望話題不斷 園遊會永不打烊
-                <br/>
-                汽球在我手上 我牽著你瞎晃 有話想對你講 你眼睛卻裝忙
-                雞蛋糕跟你嘴角果醬我都想要嚐
-                園遊會影片在播放 這個世界約好一起逛
-                <br/>
-                &#060;周杰倫 園遊會&gt;
-            </p>
-        </div>
+            <!-- <i class="fa fa-user-circle fa-5x" aria-hidden="true"><a href="#"></a></i>            
+            <h3 class="card-title"><a href="#">林嘔啊</a></h3> -->
+            <div id="slideshow">
+                <div>
+                    <img src="pics/349324.jpg" style="border-radius: 8px; border: 50%; width: 100%; height: auto;">
+                </div>
+                <div>
+                    <img src="pics/349327.jpg" style="border-radius: 8px; border: 50%; width: 100%; height: auto;">
+                </div>
+                <div>
+                    <img src="pics/349328.jpg" style="border-radius: 8px; border: 50%; width: 100%; height: auto;">
+                </div>
+              </div>        
+            </div>
     </div>
+    <script>
+        $("#slideshow > div:gt(0)").hide();
+            setInterval(function() { 
+            $('#slideshow > div:first')
+            .fadeOut(1)
+            .next()
+            .fadeIn(1000)
+            .end()
+            .appendTo('#slideshow');
+        }, 3000);
+    </script>
 </body>
 </html>

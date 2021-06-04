@@ -1,0 +1,20 @@
+img{
+    border-radius: 50%;
+}
+
+#slideshow { 
+    margin: 50px auto; 
+    position: relative; 
+    padding: 10px;
+    max-width:100%!important;
+    height: auto;     
+    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+}
+  
+  #slideshow > div { 
+    position: absolute; 
+    top: 10px; 
+    left: 10px; 
+    right: 10px; 
+    bottom: 10px; 
+}
