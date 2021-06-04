@@ -2,6 +2,15 @@ body {
     background-image: url("pics/backround.png");
 }
 
+.collapsing {
+    width: 0;
+    transition-property: width;
+    height: 100%;
+    white-space: nowrap;
+    z-index: 7;
+  }
+  
+
 img{
     border-radius: 50%;
 }
@@ -12,7 +21,8 @@ img{
     padding: 10px;
     max-width:100%!important;
     height: auto;     
-    box-shadow: 0 0 20px rgba(0,0,0,0.4); 
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    z-index: 1; 
 }
   
   #slideshow > div { 
