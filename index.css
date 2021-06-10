@@ -24,3 +24,18 @@ a > i {
 /* canvas {
   border: 1px solid black;
 } */
+
+card {
+  display: inline-block;
+}
+
+.angle-right-icon {
+  vertical-align: middle;
+  float: right;
+}
+
+img {
+  border-radius: 50%;
+  width: 30%;
+  height: auto;
+}
