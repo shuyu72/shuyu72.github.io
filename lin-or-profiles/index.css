@@ -1,21 +1,23 @@
-body {
+/* body {
     background-image: url("pics/backround.png");
-}
+} */
 
-.collapsing {
+/* .collapsing {
     width: 0;
     transition-property: width;
     height: 100%;
     white-space: nowrap;
     z-index: 7;
-  }
+  } */
   
 
-img{
+/* img{
     border-radius: 50%;
+} */
+div > p{
+  color: rgb(0,0,255);
 }
-
-#slideshow { 
+/* #slideshow { 
     margin: 50px auto; 
     position: relative; 
     padding: 10px;
@@ -33,3 +35,4 @@ img{
     bottom: 10px; 
 }
 
+ */
