@@ -9,8 +9,78 @@
   <link rel="stylesheet" href="./index.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <canvas id="canvas"></canvas>
+        <img id="heart0" src="pics/heart_0.png" style="display: none;">
+        <img id="heart1" src="pics/heart_1.png" style="display: none;">
+        <img id="heart2" src="pics/heart_2.png" style="display: none;">
+        <img id="heart3" src="pics/heart_3.png" style="display: none;">
+        <img id="heart4" src="pics/heart_4.png" style="display: none;">
+        <img id="heart5" src="pics/heart_5.png" style="display: none;">
+        <img id="heart6" src="pics/heart_6.png" style="display: none;">
+        <img id="heart7" src="pics/heart_7.png" style="display: none;">
+        <img id="heart8" src="pics/heart_8.png" style="display: none;">
+        <img id="heart9" src="pics/heart_9.png" style="display: none;">
+        <img id="heart10" src="pics/heart_10.png" style="display: none;">
+        <img id="heart11" src="pics/heart_11.png" style="display: none;">
+        <img id="heart12" src="pics/heart_12.png" style="display: none;">
+        <img id="heart13" src="pics/heart_13.png" style="display: none;">
+        <img id="heart14" src="pics/heart_14.png" style="display: none;">
+        <img id="heart15" src="pics/heart_15.png" style="display: none;">
+        <img id="heart16" src="pics/heart_16.png" style="display: none;">
+        <img id="heart17" src="pics/heart_17.png" style="display: none;">
+        <img id="heart18" src="pics/heart_18.png" style="display: none;">
+        <img id="heart19" src="pics/heart_19.png" style="display: none;">
+        <img id="heart20" src="pics/heart_20.png" style="display: none;">
+        <img id="heart21" src="pics/heart_21.png" style="display: none;">
+        <img id="heart22" src="pics/heart_22.png" style="display: none;">
+        <img id="heart23" src="pics/heart_23.png" style="display: none;">
+        <img id="heart24" src="pics/heart_24.png" style="display: none;">
+        <img id="heart25" src="pics/heart_25.png" style="display: none;">
 </head>
 <body>
+  <script>
+    var canvas = document.getElementById('canvas'),
+    context = canvas.getContext('2d');
+    canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+    canvas.height = window.innerHeight; 
+    
+
+    function draw(){
+        (function loop() {
+            var randTime = getRandom(10) * 100 + 2000;
+            setTimeout(function() {
+                for(i = 1; i <= 5; i++){
+                    for(j = 1; j <= 5; j++){
+                        drawImg(i, j);
+                        loop();  
+                    }
+                }                        
+            }, randTime);
+        }());
+    }
+    
+    function drawImg(i, j){
+        var w = canvas.width / 7,
+            h = canvas.width / 7,
+            x = (canvas.width / 5) * (i - 1),
+            y = (canvas.height / 5) * (j - 1);
+        if(getRandom(102) % 17 == 0){
+            image = document.getElementById("heart0");                    
+        }
+        else{
+            image = document.getElementById("heart" + ((j - 1 + (i - 1) * 5) + 1).toString());
+        }
+        context.drawImage(image, x, y, w, h);
+    }
+
+    $("canvas").fadeOut(20000);
+    
+    window.addEventListener("DOMContentLoaded",draw(),true);
+
+    function getRandom(x){
+        return Math.floor(Math.random()*x)+1;
+    };
+  </script>
 
 <div class="container">
   <i class="fa fa-heart fa-3x" aria-hidden="true"></i><i class="fa fa-heart fa-3x" aria-hidden="true"></i><i class="fa fa-heart fa-3x" aria-hidden="true"></i>
