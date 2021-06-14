@@ -1,0 +1,88 @@
+.container{
+    grid-template-columns: auto auto auto;
+}
+#grid1{
+    width: 20%;
+    padding: 10px;
+    display: grid;
+}
+#grid2{
+    width: 20%;
+    padding: 10px;
+    display: grid;
+}
+#grid3{
+    width: 20%;
+    padding: 10px;
+    display: grid;
+}
+#grid4{
+    width: 20%;
+    padding: 10px;
+    display: grid;
+}
+#grid5{
+    width: 20%;
+    padding: 10px;
+    display: grid;
+}
+#grid6{
+    width: 20%;
+}
+#grid7{
+    width: 20%;
+}
+#grid8{
+    width: 20%;
+}
+#grid9{
+    width: 20%;
+}
+#grid10{
+    width: 20%;
+}
+#grid11{
+    width: 20%;
+}
+#grid12{
+    width: 20%;
+}
+#grid13{
+    width: 20%;
+}
+#grid14{
+    width: 20%;
+}
+#grid15{
+    width: 20%;
+}
+#grid16{
+    width: 20%;
+}
+#grid17{
+    width: 20%;
+}
+#grid18{
+    width: 20%;
+}
+#grid19{
+    width: 20%;
+}
+#grid20{
+    width: 20%;
+}
+#grid21{
+    width: 20%;
+}
+#grid22{
+    width: 20%;
+}
+#grid23{
+    width: 20%;
+}
+#grid24{
+    width: 20%;
+}
+#grid25{
+    width: 20%;
+}
