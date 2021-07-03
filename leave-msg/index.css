@@ -1,0 +1,11 @@
+/* h1{
+    opacity: 1;
+}
+
+body {
+    opacity:0.5;
+}
+ */
+ body {
+    background: linear-gradient(rgba(255,255,255,.6), rgba(255,255,255,.6)),  url("pics/background.png");
+  }

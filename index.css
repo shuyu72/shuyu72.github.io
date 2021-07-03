@@ -39,3 +39,10 @@ img {
   width: 30%;
   height: auto;
 }
+
+.badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display:inline-block;
+}
