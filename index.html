@@ -11,16 +11,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
   
-
-    <div class="container">
-        <div id="container">
+    <div class="canvas-container">    
         <canvas id="canvas"></canvas>
-        <div id="overlay">
+    </div>
+    <div class="container navbar-expand-lg">
+        <div id="container">
         <div class="container-custom">
             <nav class="navbar navbar-inverse navbar-dark bg-info">
                 <div class="container-fluid">            
                     <div class="navbar-header">
-                        <a class="navbar-brand">&#129505;&#129505;我的朋朋都很漂亮&#129505;&#129505;</a>
+                        <a class="navbar-brand col-lg-12">&#129505;&#129505;我的朋朋都很漂亮&#129505;&#129505;</a>
                     </div>            
                     <div>
                         <ul class="nav navbar-nav">
@@ -33,7 +33,7 @@
                 </div>
             </nav>
         </div>               
-    <div class="container-sm">
+    <div class="container-lg d-flex justify-content-center">
         <div class="px-3">
             <div class="card-deck">
                 <a href="./lin-or-profiles/index.html" class="custom-card">
@@ -95,7 +95,7 @@
             function draw (id){            
             //獲取畫布id
             var canvas =document.getElementById(id);
-            canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+            canvas.width  = getWidth();//document.body.clientWidth;//window.innerWidth;
   			canvas.height = getHeight();//document.body.clientHeight;//window.innerHeight;
             if(canvas==null)
                 return false;
@@ -160,8 +160,8 @@
             }
            
            function move(cxt){               
-               cxt.clearRect(0,0,getWidth(),getHeight());//在給定的矩形內清除所有的畫素為透明
-               cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
+               cxt.clearRect(0, 0, getWidth(), getHeight());//在給定的矩形內清除所有的畫素為透明
+               cxt.fillStyle="#FFFFFF";//把填充顏色設定為指定的顏色
                cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
                cxt.fillStyle="red";//把矩形設定為紅色
                var size=50;

@@ -11,7 +11,7 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <canvas id="canvas"></canvas>
-        <img id="heart0" src="pics/heart_0.png" style="display: none;">
+        <!-- <img id="heart0" src="pics/heart_0.png" style="display: none;">
         <img id="heart1" src="pics/heart_1.png" style="display: none;">
         <img id="heart2" src="pics/heart_2.png" style="display: none;">
         <img id="heart3" src="pics/heart_3.png" style="display: none;">
@@ -37,10 +37,11 @@
         <img id="heart23" src="pics/heart_23.png" style="display: none;">
         <img id="heart24" src="pics/heart_24.png" style="display: none;">
         <img id="heart25" src="pics/heart_25.png" style="display: none;">
-        
+         -->
     </head>
     <body>
-        <div class="container">
+        <div id="rand_shape" style="size: 10rem; border-radius: 50% 50% / 50% 50%; color: #000;"></div>
+        <!-- <div class="container">
             <div class="card-body">
                 <i class="fa fa-user-circle fa-5x" aria-hidden="true"><a href="#"></a></i>            
                 <h3 class="card-title"><a href="#">湯狗巴</a></h3>
@@ -115,10 +116,44 @@
                     <br/>   
                     &#060;Girl's Generation Mr.Mr.&gt;         
                 </p>
-            </div>
-        </div>
-        
+            </div> -->
+        <!-- </div> -->
         <script>
+            // var canvas = document.getElementById('canvas'),
+            // context = canvas.getContext('2d');
+            // canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+            // canvas.height = window.innerHeight;
+            
+            // var rands = []
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // rands.push(50);
+            // function randomAction(){
+            //     var rand_shape = document.getElementById("rand_shape");
+            //     for (i = 0; i < 8; i++){
+            //         rands[i] = getRandom(100);                
+            //     }
+            //     rand_shape.style.borderRadius = rands[0].toString() + "%"+ rands[1].toString() + "%"+ rands[2].toString() + "%" + rands[3].toString() + "% / " + rands[4].toString() + "%" + rands[5].toString() +"%"+ rands[6].toString() + "%" + rands[7].toString() + "% ;"
+            // }
+            
+            // (function loop() {
+            //     var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+            //     setTimeout(function() {
+            //             randomAction();
+            //             loop();  
+            //     }, rand);
+            // }());
+
+            // function getRandom(x){
+            //     return Math.floor(Math.random()*x)+1;
+            // };
+        </script>
+        <!-- <script>
             var canvas = document.getElementById('canvas'),
             context = canvas.getContext('2d');
             canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
@@ -161,7 +196,7 @@
             function getRandom(x){
                 return Math.floor(Math.random()*x)+1;
             };
-        </script>
+        </script> -->
     </body>
  </html>
 

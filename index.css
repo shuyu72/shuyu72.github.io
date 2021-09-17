@@ -18,7 +18,7 @@ a > i {
 #container {
   position: relative;
 }
-#container canvas, #overlay {
+ canvas{/*, #overlay {*/
   position: absolute;
 }
 /* canvas {
@@ -40,6 +40,10 @@ img {
   height: auto;
 }
 
+.canvas-container {
+  width: 100%;
+  /* text-align:center; */
+}
 /* .badge {
   position: absolute;
   top: 0;
