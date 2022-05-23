@@ -1,7 +1,10 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html>
     <head>
         <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, 
+        initial-scale=1.0">
         <title>移動方塊</title>
         <canvas id="canvas"></canvas>
     </head>
@@ -11,8 +14,127 @@
                 if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
                     console.log("Let's get this party started")
                 }
-                navigator.mediaDevices.getUserMedia({video: true});
+                navigator.mediaDevices.getUserMedia({
+                    video: {
+                        minAspectRatio: 1.333,
+                        minFrameRate: 60,
+                        width: 640,
+                        heigth: 480
+                    }
+                })
+                navigator.mediaDevices.getUserMedia( MediaStreamConstraints )
+                .then( MediaStream => {
+                    /*assuming that there is a video tag having
+                    an id 'video' in the index.html*/
+                    const videoElem = document.getElementById( 'video');
+                    
+                    /*it is important to use the srcObject
+                    attribute and not the src attribute
+                    because, the src attribute does not
+                    support the mediaStream as a value*/
+                    videoElem.srcObject = mediaStream;
+                    
+                    //Don't forget to set the autoplay attribute to true
+                    video.autoplay = true;
+                    
+                }).catch( error => {
+                    //code to handle the error
+                });
+                
+            //Or using async/await —
+
+            async function accessCamera() {
+                const videoElem = document.getElementById( 'video');
+                let stream = null;
+                try{
+                    stream = await navigator.mediaDevices.getUserMedia(
+                            MediaStreamConstraints );
+
+                    //adding the received stream to the source of the video element
+                    videoElem.srcObject = stream;
+                
+                    videoElem.autoplay = true;
+                }catch(err) {
+                    //code to handle the error
+                }
             }
+            
+
+            /* This constraints object tells the browser to use the camera
+            having resolution between 1200 X 720 and 1600 X 1080 resolution
+            if available otherwise the returned promise is rejected with
+            "NotFoundError" */
+            // const constraints = {
+            // //disables the audio media content in the resulting media stream
+            //     audio: false,
+            //     video: {
+            //         width: {
+            //             min: 1200,
+            //             max: 1600
+            //         },
+            //         height: {
+            //             min: 720,
+            //             max: 1080
+            //         }
+            //     }
+            // }; // Inherently sets video content to true or "required"
+
+
+        
+        const videoElem = document.getElementById('video');
+        const errorElem = document.getElementById('error');
+        //Declare the MediaStreamConstraints object    
+  
+            function openCamera() {
+    //Ask the User for the access of the device camera and microphone
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(mediaStream => {
+                        /* The received mediaStream contains both the 
+                        video and audio media data*/
+    
+    /*Add the mediaStream directly to the source of the video element
+                        using the srcObject attribute*/
+                        videoElem.srcObject = mediaStream;
+    
+                    }).catch(err => {
+                        // handling the error if any
+                        errorElem.innerHTML = err;
+                        errorElem.style.display = "block";
+                    });
+    
+            }
+
+
+            //             //initializing the deviceId with null
+            // let deviceId = null;
+
+            //returns a promise that resolves to a list of
+            //connected devices
+            navigator.mediaDevices.enumerateDevices()
+            .then( devices => {
+                devices.forEach(device => {
+                    //if the device is a video input
+                    //then get its deviceId
+                    if(device.kind === 'videoinput'){
+                        deviceId = device.deviceId;
+                    }
+                });
+            })
+            .catch(err => {
+                //handle the error
+            });
+
+            /* This constraints object tells the browser to
+            use the camera having the given deviceId if
+            available otherwise use other available devices*/
+            const constraints = {
+            //disables the audio media content in the resulting media stream
+                audio: false,
+                video: {
+                    deviceId: deviceId
+                }
+            }; // Inherently sets video content to true or "required"
+
             
             function draw (id){            
             //獲取畫布id
@@ -119,5 +241,129 @@
            window.addEventListener("DOMContentLoaded",draw("canvas"),true);
            callCamera();
         </script>
+        
+    <style>
+        body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+          
+        video {
+            background-color: black;
+            margin-bottom: 1rem;
+        }
+          
+        #error {
+            color: red;
+            padding: 0.6rem;
+            background-color: rgb(236 157 157);
+            margin-bottom: 0.6rem;
+            display: none;
+        }
+    </style>
+
+  
+<body>
+    <h1> WebRTC getUserMedia() demo</h1>
+    <video id='video'
+           width="600"
+            height="300" 
+            autoplay playsinline>
+        Sorry, video element not supported in your browser
+    </video>
+    <div id="error"></div>
+    <button onclick="openCamera()"> Open Camera</button>
+    
     </body>
+</html> -->
+
+
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,
+	initial-scale=1.0">
+	<style>
+		body {
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		video {
+			background-color: black;
+			margin-bottom: 1rem;
+		}
+		
+		#error {
+			color: red;
+			padding: 0.6rem;
+			background-color: rgb(236 157 157);
+			margin-bottom: 0.6rem;
+			display: none;
+		}
+	</style>
+	<title>GetUserMedia demo</title>
+</head>
+
+<body>
+	<h1> WebRTC getUserMedia() demo</h1>
+
+	<!-- If you use the playsinline attribute then
+	the video is played "inline". If you omit this
+	attribute then it works normal in the desktop
+	browsers, but for the mobile browsers, the video
+	takes the fullscreen by default. And don't forget
+	to use the autoplay attribute-->
+	<video id='video'
+		width="600"
+			height="300"
+			autoplay playsinline>
+		Sorry, video element not supported in your browser
+	</video>
+	<div id="error"></div>
+	<button onclick="openCamera()"> Open Camera</button>
+	<script>
+		const videoElem = document.getElementById('video');
+		const errorElem = document.getElementById('error');
+		//Declare the MediaStreamConstraints object
+		const constraints = {
+			audio: false,
+			video: {
+           facingMode: "environment" //prefers front camera if available
+// or facingMode: "environment"  --> perfers rear camera if available
+      }
+		}
+
+		function openCamera() {
+//Ask the User for the access of the device camera and microphone
+			navigator.mediaDevices.getUserMedia(constraints)
+				.then(mediaStream => {
+					/* The received mediaStream contains both the
+					video and audio media data*/
+
+/*Add the mediaStream directly to the source of the video element
+					using the srcObject attribute*/
+					videoElem.srcObject = mediaStream;
+
+				}).catch(err => {
+					// handling the error if any
+					errorElem.innerHTML = err;
+					errorElem.style.display = "block";
+				});
+
+		}
+	</script>
+</body>
+
 </html>
