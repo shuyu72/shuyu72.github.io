@@ -7,12 +7,12 @@
     </head>
     <body>
         <script type="text/javascript">
-            $(function () {
+            function callCamera() {
                 if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
                     console.log("Let's get this party started")
                 }
                 navigator.mediaDevices.getUserMedia({video: true});
-            });            
+            }
             
             function draw (id){            
             //獲取畫布id
@@ -117,6 +117,7 @@
            }
         }              
            window.addEventListener("DOMContentLoaded",draw("canvas"),true);
+           callCamera();
         </script>
     </body>
 </html>
