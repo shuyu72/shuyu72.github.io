@@ -375,18 +375,12 @@
 </head>
 <body>
 <section id="container" class="container">
-    <h3>The user's camera</h3>
-    <p>If your platform supports the <strong>getUserMedia</strong> API call, you
-        can try the real-time locating and decoding features.
-        Simply allow the page to access your web-cam and point it to a barcode.</p>
-    <p>The various options available allow you to adjust the decoding
-        process to your needs (Type of barcode, resolution, ...)</p>
     <div class="controls">
         <fieldset class="input-group">
             <button class="stop">Stop</button>
         </fieldset>
         <fieldset class="reader-config-group">
-        <!--    <label>
+           <label>
                 <span>Barcode-Type</span>
                 <select name="decoder_readers">
                     <option value="code_128" selected="selected">Code 128</option>
@@ -435,7 +429,7 @@
                     <option selected="selected" value="4">4</option>
                     <option value="8">8</option>
                 </select>
-            </label>-->
+            </label>
             <label>
                 <span>Camera</span>
                 <select name="input-stream_constraints" id="deviceSelection">
@@ -655,7 +649,9 @@ $(function() {
             $node.find("h4.code").html(code);
             $("#result_strip ul.thumbnails").prepend($node);
         }
+        Quagga.offDetected();
     });
+    
 });
 </script>
 <style>
