@@ -7,6 +7,12 @@
     </head>
     <body>
         <script type="text/javascript">
+            $(function () {
+                if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+                    console.log("Let's get this party started")
+                }
+                navigator.mediaDevices.getUserMedia({video: true});
+            });            
             
             function draw (id){            
             //獲取畫布id
