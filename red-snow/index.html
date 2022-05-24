@@ -927,24 +927,24 @@ canvas.drawing, canvas.drawingBuffer {
         <div class="text-center">            
         <div class="container">
             <br>            
-              <div class="col-xs-8 text-center table-wrapper">                                                  
+              <div class="text-center table-wrapper">                                                  
                 <table class="table">
                   <thead>
                     <tr>
-                      <th>項次</th>
-                      <th>品號</th>
-                      <th>品名</th>
-                      <th>條碼</th>
-                      <th>移除</th>
+                      <th class="col-xs-2">項次</th>
+                      <th class="col-xs-2">品號</th>
+                      <th class="col-xs-2">品名</th>
+                      <th class="col-xs-4">條碼</th>
+                      <th class="col-xs-2">移除</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr>
-                      <td>1</td>
-                      <td>0032</td>
-                      <td>奶粉</td>
-                      <td>00379133545</td>
-                      <td><div class="btn btn-danger">移除</div></td>
+                      <td class="col-xs-2">1</td>
+                      <td class="col-xs-2">0032</td>
+                      <td class="col-xs-2">奶粉</td>
+                      <td class="col-xs-4">00379133545</td>
+                      <td class="col-xs-2"><div class="btn btn-danger">移除</div></td>
                     </tr>
                     <tr>
                         <td>2</td>
@@ -1037,10 +1037,17 @@ canvas.drawing, canvas.drawingBuffer {
             });
         </script>
         <style>
-            .table-wrapper {
-                max-height: 20rem;
+            /* .table-wrapper {
+ 
                 overflow: auto;
                 display:inline-block;
+            } */
+            table {
+                max-height: 5rem;
+                width: 100%;
+                /* display: inline-block; */
+                overflow-x: auto;
+                white-space: nowrap;
             }
             
         </style>        
