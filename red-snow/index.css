@@ -1,0 +1,64 @@
+a.custom-card,
+a.custom-card:hover {
+  color: inherit;
+}
+
+.navbar-nav { 
+  flex-direction: row;
+}
+
+div.container-custom {
+  margin-bottom: 3rem;
+}
+
+a > i { 
+  color: #fff; 
+} 
+
+#container {
+  position: relative;
+}
+ canvas{/*, #overlay {*/
+  position: absolute;
+}
+/* canvas {
+  border: 1px solid black;
+} */
+
+card {
+  display: inline-block;
+}
+
+.angle-right-icon {
+  vertical-align: middle;
+  float: right;
+}
+
+img {
+  border-radius: 50%;
+  width: 30%;
+  height: auto;
+}
+
+.container {
+  z-index: 6;
+}
+
+.canvas-container {
+  width: 100%;
+  /* text-align:center; */
+}
+/* .badge {
+  position: absolute;
+  top: 0;
+  right: 0;
+  display:inline-block;
+} */
+
+.background {
+  /* z-index: 5; */
+  width: fit-content;
+  height: 10rem;
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,9,121,1) 35%, rgba(0,212,255,1) 100%);
+}
