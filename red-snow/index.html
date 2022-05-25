@@ -919,11 +919,18 @@ canvas.drawing, canvas.drawingBuffer {
             <div class="col-md-3"></div>         -->
         </div>
         <div class="text-center justify-content-center my-2 row">
-            <div class="mx-0 col-6 col-xs-6 col-sm-6 col-md-6 col-lg-6">
+            <div class="mx-0 input-group col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 <input type="text" class="form-control" placeholder="掃描或輸入單號" id="inputBarCode"/>
-            </div>
-            <div class="mx-1 btn btn-primary" onclick="newRecordOrNewOrder()">確認</div>
-            <div class="mx-1 btn btn-warning">掃描輸入</div>
+                <div class="input-group-append">                
+                    <div class="btn btn-danger px-1 reset-input" onclick="clearInput('inputBarCode')">×</div>
+                </div>
+                <div class="input-group-append">                
+                    <div class="btn btn-primary px-3" onclick="newRecordOrNewOrder()">確認</div>
+                </div>
+                <div class="input-group-append">                
+                    <div class="btn btn-warning px-1">掃描輸入</div>
+                </div>
+            </div>        
         </div>
         <div class="d-flex text-center">
             <!-- <div style="width: 100%" id="reader"></div> -->
@@ -942,55 +949,14 @@ canvas.drawing, canvas.drawingBuffer {
                   <thead>
                     <tr>
                       <th class="col-xs-2">項次</th>
-                      <th class="col-xs-2">品號</th>
-                      <th class="col-xs-2">品名</th>
+                      <!-- <th class="col-xs-2">品號</th>
+                      <th class="col-xs-2">品名</th> -->
                       <th class="col-xs-4">條碼</th>
+                      <th class="col-xs-4">暗記</th>                      
                       <th class="col-xs-2">移除</th>
                     </tr>
                   </thead>
-                  <tbody>
-                    <!-- <tr>
-                      <td class="col-xs-2">1</td>
-                      <td class="col-xs-2">0032</td>
-                      <td class="col-xs-2">奶粉</td>
-                      <td class="col-xs-4">00379133545</td>
-                      <td class="col-xs-2"><div class="btn btn-danger delete">移除</div></td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>0039</td>
-                        <td>軟糖</td>
-                        <td>00687988223</td>
-                        <td><div class="btn btn-danger delete">移除</div></td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>0032</td>
-                        <td>奶粉</td>
-                        <td>05454873232</td>
-                        <td><div class="btn btn-danger delete">移除</div></td>
-                    </tr>
-                    <tr>
-                        <td>4</td>
-                        <td>0032</td>
-                        <td>奶粉</td>
-                        <td>354521212878</td>
-                        <td><div class="btn btn-danger delete">移除</div></td>
-                    </tr>
-                    <tr>
-                        <td>5</td>
-                        <td>0032</td>
-                        <td>奶粉</td>
-                        <td>5653234545451</td>
-                        <td><div class="btn btn-danger delete">移除</div></td>
-                    </tr>
-                    <tr>
-                        <td>6</td>
-                        <td>0032</td>
-                        <td>奶粉</td>
-                        <td>557821212212</td>
-                        <td><div class="btn btn-danger delete">移除</div></td>
-                    </tr> -->
+                  <tbody>                    
                   </tbody>
                 </table>
               </div>
@@ -1020,6 +986,26 @@ canvas.drawing, canvas.drawingBuffer {
             function end() {
                 isStarted = false;
                 isBegun = false;
+                let tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}">下載此訂單</a>';
+                        let table_content = '';
+                            
+                            $.each($("td"), function (index, cell) {
+                                let cellContent = cell.innerHTML;
+                                let td = '';
+                                if (index % 4 === 0 || index % 4 === 1) {
+                                    td = cellContent.split('<td>')[0];                                    
+                                } else if (index % 4 === 2){                                                               
+                                    td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                                }
+                                if (index % 4 === 0 || index % 4 === 1) {                                    
+                                    table_content += td + '%2C'; //Need to return contents of cell                                
+                                } else if (index % 4 === 2){
+                                    table_content += td + '%0A';
+                                }                                
+                            });
+
+                        tpl = tpl.replace('{table_content}', table_content);
+                        $(tpl).appendTo($('#orderId'));
             }
 
             function docReady(fn) {
@@ -1064,17 +1050,28 @@ canvas.drawing, canvas.drawingBuffer {
             $(document).on("click", ".delete", function(){                                
                 $(this).parents("tr").remove();                 
             });
+
+            // $(document).on("click", ".reset-input", function(){                                
+            //     $(this).parents("div").find('input').val("");                 
+            // });
+
+            function clearInput(id) {
+                $("#" + id).val("");
+            }
+
             // function testInput() {
             //     $('#inputBarCode').val('11111');
             // }
             let itemCount = 0;
             function newRecordOrNewOrder() {
                 if (isBegun) {
-                    $('table').find('tbody').append('<tr><td>' + ((itemCount++) + 1).toString() + '</td><td></td><td></td><td>' + $('#inputBarCode').val() + '</td><td><div class="btn btn-danger delete">移除</div></td></tr>');
+                    $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
                     $('#inputBarCode').val('');
+                    itemCount++;
                 } else if (!isBegun && isStarted) {
                     if ($('#inputBarCode').val()) {
                         $('#orderId').html($('#inputBarCode').val());                    
+                        
                         isBegun = true;
                         $('input:text').attr('placeholder','掃描或輸入條碼');
                         $('#inputBarCode').val('');
@@ -1088,29 +1085,38 @@ canvas.drawing, canvas.drawingBuffer {
             function clearTable() {
                 if (!isStarted) {
                     if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
+                        $('#orderId').html('')
                         $('tr td').remove();
+                        itemCount = 0;
                     } 
                 } else {
                     if (confirm("刪除此筆訂單目前的資料嗎?")) {
-                        $('tr td').remove();
+                        $('tr td').remove();                        
+                        itemCount = 0;
                     }
                 }    
             }
 
         </script>
         <style>
-            /* .table-wrapper {
- 
+            .table-wrapper {
+                width: max-content;
                 overflow: auto;
                 display:inline-block;
-            } */
-            table {
-                max-height: 5rem;
-                width: 100%;
-                /* display: inline-block; */
-                overflow-x: auto;
-                white-space: nowrap;
             }
+
+            .close-icon{
+                position:relative;
+                left: -14px;
+                top: -4px;
+            }
+            /* table {
+                max-height: 5rem;
+                width: 120%;
+                /* display: inline-block; */
+                /* overflow-x: auto;
+                white-space: nowrap; 
+            } */
             
         </style>        
     </body>
