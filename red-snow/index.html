@@ -909,6 +909,7 @@ canvas.drawing, canvas.drawingBuffer {
         <!-- <script src="html5-qrcode-demo.js"></script> -->        
     </head>
     <body>
+        <h1 id="result"></h1>
         <div class="container">
         <div class="text-center my-5">
             <!-- <div class="col-md-3"></div>        
@@ -974,6 +975,120 @@ canvas.drawing, canvas.drawingBuffer {
         </div>
         </div>
         <script>
+            $(function () {
+                function initDB () {
+
+                    var db;
+                    var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+                    var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+
+                    var req = indexedDB.open("mydb");
+
+                    req.onsuccess = function (e) {
+                        console.log("open");
+                        db = e.target.result;
+                    };
+
+                    req.onerror = function () {
+                        console.log("error");
+                    };
+
+                    req.onupgradeneeded = function (e) {
+                        console.log("upgradeneeded");          
+
+                        var db = e.target.result;
+                        var emp = { id: 1, name: "ray" };
+                        var store = db.createObjectStore("items", { keyPath: "id" });
+
+                        store.add(emp);
+                    }
+                    return db;
+                }
+
+                function addObj() {                
+                    var db;// = initDB();
+                    var request = indexedDB.open("mydb", 1);  
+                    request.onsuccess = function (evt) {
+                        db = request.result; 
+                        var txn = db.transaction("items", "readwrite");
+                        var store = txn.objectStore("items");
+
+                        var emp2 = { id: 2, name: "vivid" };
+
+                        var req = store.add(emp2);
+                        req.onsuccess = function (e) {
+                            console.log("add");
+                        }
+
+                        req.onerror = function () {
+                            console.log("error");
+                        };
+                    }
+                }
+
+                function getObj() {
+                    var db;// = initDB();
+                    var request = indexedDB.open("mydb", 1);  
+                    request.onsuccess = function (evt) {
+                        db = request.result; 
+                        var txn = db.transaction("items", "readwrite");
+                        var store = txn.objectStore("items");
+
+                        var req = store.get(2);
+
+                        req.onsuccess = function (e) {
+                            console.log("get");
+
+                            var emp = e.target.result;
+                            document.getElementById("result").innerHTML =
+                                emp.id + ", " + emp.name;
+                        }
+
+                        req.onerror = function () {
+                            console.log("error");
+                        };
+                    }
+                }
+
+                function deleteObj() {
+                    var db = initDB();
+                    var txn = db.transaction("items", "readwrite");
+                    var store = txn.objectStore("items");
+
+                    var req = store.delete(1);
+
+                    req.onsuccess = function (e) {
+                        console.log("delete");
+                    }
+
+                    req.onerror = function () {
+                        console.log("error");
+                    };
+                }
+
+                function updateObj() {
+                    var db = initDB();
+                    var txn = db.transaction("items", "readwrite");
+                    var store = txn.objectStore("items");
+
+                    var emp2 = { id: 2, name: "kevin" };
+
+                    var req = store.put(emp2);
+                    req.onsuccess = function (e) {
+                        console.log("put");
+                    }
+
+                    req.onerror = function () {
+                        console.log("error");
+                    };
+                }
+
+                
+                addObj();               
+                getObj(); 
+            });
+
+            
             
             let isStarted = false;
             let isBegun = false;
@@ -982,31 +1097,42 @@ canvas.drawing, canvas.drawingBuffer {
                 isStarted = true;
                 $('input:text').attr('placeholder','掃描或輸入單號');
             }
+            // $(function() {
+            //     // document.getElementById("result").innerHTML = sessionStorage.table_content;
+            //     sessionStorage.removeItem('table_content');
+            // })
 
             function end() {
                 isStarted = false;
                 isBegun = false;
                 let tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}">下載此訂單</a>';
-                        let table_content = '';
-                            
-                            $.each($("td"), function (index, cell) {
-                                let cellContent = cell.innerHTML;
-                                let td = '';
-                                if (index % 4 === 0 || index % 4 === 1) {
-                                    td = cellContent.split('<td>')[0];                                    
-                                } else if (index % 4 === 2){                                                               
-                                    td = $('#field' + (Math.trunc(index / 4)).toString()).val();
-                                }
-                                if (index % 4 === 0 || index % 4 === 1) {                                    
-                                    table_content += td + '%2C'; //Need to return contents of cell                                
-                                } else if (index % 4 === 2){
-                                    table_content += td + '%0A';
-                                }                                
-                            });
+                let table_content = '';
+                    
+                    $.each($("td"), function (index, cell) {
+                        let cellContent = cell.innerHTML;
+                        let td = '';
+                        if (index % 4 === 0 || index % 4 === 1) {
+                            td = cellContent.split('<td>')[0];                                    
+                        } else if (index % 4 === 2){                                                               
+                            td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                        }
+                        if (index % 4 === 0 || index % 4 === 1) {                                    
+                            table_content += td + '%2C'; //Need to return contents of cell                                
+                        } else if (index % 4 === 2){
+                            table_content += td + '%0A';
+                        }                                
+                    });
 
-                        tpl = tpl.replace('{table_content}', table_content);
-                        $(tpl).appendTo($('#orderId'));
+                tpl = tpl.replace('{table_content}', table_content);
+                $(tpl).appendTo($('#orderId'));
+                if (typeof(Storage) !== "undefined") {                    
+                    sessionStorage.table_content = table_content;                
+                    document.getElementById("result").innerHTML = sessionStorage.table_content;
+                } else {
+                    document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+                }
             }
+            
 
             function docReady(fn) {
                 // see if DOM is already available
