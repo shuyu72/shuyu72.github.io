@@ -1007,7 +1007,7 @@ canvas.drawing, canvas.drawingBuffer {
                     var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
                     var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
 
-                    var req = indexedDB.open("mydb");
+                    var req = indexedDB.open("mydb", 3);
 
                     req.onsuccess = function (e) {
                         console.log("open");
@@ -1060,7 +1060,7 @@ canvas.drawing, canvas.drawingBuffer {
                         var txn = db.transaction("items", "readwrite");
                         var store = txn.objectStore("items");
 
-                        var req = store.get(2);
+                        var req = store.get(1);
 
                         req.onsuccess = function (e) {
                             console.log("get");
