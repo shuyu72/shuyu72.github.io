@@ -1030,8 +1030,7 @@ canvas.drawing, canvas.drawingBuffer {
                     return db;
                 }
 
-                function addObj() {                
-                    initDB();
+                function addObj() {                                    
                     var db;// = initDB();
                     var request = indexedDB.open("mydb", 1);  
                     request.onsuccess = function (evt) {
@@ -1060,7 +1059,7 @@ canvas.drawing, canvas.drawingBuffer {
                         var txn = db.transaction("items", "readwrite");
                         var store = txn.objectStore("items");
 
-                        var req = store.get(1);
+                        var req = store.get(2);
 
                         req.onsuccess = function (e) {
                             console.log("get");
