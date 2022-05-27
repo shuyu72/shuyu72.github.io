@@ -990,16 +990,14 @@ canvas.drawing, canvas.drawingBuffer {
                     caches.open(cacheName).then(function(cache) {
                     return cache.addAll(filesToCache)
                     })
-                )
-                })
+                )})
 
                 self.addEventListener("fetch", function(e) {
                 e.respondWith(
                     caches.match(e.request).then(function(response) {
                     return response || fetch(e.request)
                     })
-                )
-                });
+                )});
             });
 
             $(function () {
@@ -1033,6 +1031,7 @@ canvas.drawing, canvas.drawingBuffer {
                 }
 
                 function addObj() {                
+                    initDB();
                     var db;// = initDB();
                     var request = indexedDB.open("mydb", 1);  
                     request.onsuccess = function (evt) {
