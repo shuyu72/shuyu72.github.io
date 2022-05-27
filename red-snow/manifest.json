@@ -1,0 +1,7 @@
+{
+    "name": "APP",
+    "short_name": "App",
+    "lang": "en-US",
+    "start_url": "/index.html",
+    "display": "standalone"
+}
