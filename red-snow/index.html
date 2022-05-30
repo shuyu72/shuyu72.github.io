@@ -1001,7 +1001,7 @@ canvas.drawing, canvas.drawingBuffer {
             });
 
             $(function () {
-
+                
                 addObj();               
                 getObj(); 
                 function initDB () {
@@ -1035,7 +1035,7 @@ canvas.drawing, canvas.drawingBuffer {
 
                 function addObj() {                                    
                     var db;// = initDB();
-                    var request = indexedDB.open("mydb", 1);  
+                    var request = indexedDB.open("mydb", 3);  
                     request.onsuccess = function (evt) {
                         db = request.result; 
                         var txn = db.transaction("items", "readwrite");
@@ -1056,13 +1056,13 @@ canvas.drawing, canvas.drawingBuffer {
 
                 function getObj() {
                     var db;// = initDB();
-                    var request = indexedDB.open("mydb", 1);  
+                    var request = indexedDB.open("mydb", 3);  
                     request.onsuccess = function (evt) {
                         db = request.result; 
                         var txn = db.transaction("items", "readwrite");
                         var store = txn.objectStore("items");
 
-                        var req = store.get(2);
+                        var req = store.get(1);
 
                         req.onsuccess = function (e) {
                             console.log("get");
