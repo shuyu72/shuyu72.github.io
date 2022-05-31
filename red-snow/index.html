@@ -1001,7 +1001,53 @@ canvas.drawing, canvas.drawingBuffer {
             });
 
             $(function () {
-                
+                self.addEventListener('install', function (event) {
+                event.waitUntil(
+                    caches.open('mysite-static-v3').then(function (cache) {
+                    return cache.addAll([
+                        '/index.html'
+                    ]);
+                    }),
+                );
+                });
+                self.addEventListener('activate', function (event) {
+                    event.waitUntil(
+                        caches.keys().then(function (cacheNames) {
+                        return Promise.all(
+                            cacheNames
+                            .filter(function (cacheName) {
+                                // Return true if you want to remove this cache,
+                                // but remember that caches are shared across
+                                // the whole origin
+                            })
+                            // .map(function (cacheName) {
+                            //     return caches.delete(cacheName);
+                            // }),
+                        );
+                        }),
+                    );
+                });
+
+                // document.querySelector('.cache-article').addEventListener('click', function (event) {
+                //     event.preventDefault();
+
+                //     var id = this.dataset.articleId;
+                //     caches.open('mysite-article-' + id).then(function (cache) {
+                //         fetch('/get-article-urls?id=' + id)
+                //         .then(function (response) {
+                //             // /get-article-urls returns a JSON-encoded array of
+                //             // resource URLs that a given article depends on
+                //             return response.json();
+                //         })
+                //         .then(function (urls) {
+                //             cache.addAll(urls);
+                //         });
+                //     });
+                // });
+            })
+
+            $(function () {
+                initDB();
                 addObj();               
                 getObj(); 
                 function initDB () {
@@ -1010,7 +1056,7 @@ canvas.drawing, canvas.drawingBuffer {
                     var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
                     var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
 
-                    var req = indexedDB.open("mydb", 3);
+                    var req = indexedDB.open("mydb", 5);
 
                     req.onsuccess = function (e) {
                         console.log("open");
