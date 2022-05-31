@@ -990,7 +990,7 @@ canvas.drawing, canvas.drawingBuffer {
                 }
             }, false);
             document.getElementById('data').innerHTML = '<li>currentTime: ' + data.currentTime + '</li><li>currentPos: ' + data.currentPos + '</li>';
-            document.getElementById('panel').innerHTML = '<li>' + window.applicationCache + '</li>';
+            document.getElementById('panel').innerHTML = '<li>' + window.applicationCache.status + '</li>';
             applicationCache.onchecking = function(){document.getElementById('panel').innerHTML += '<li>checking...</li>';};
             applicationCache.onerror = function(){document.getElementById('panel').innerHTML += '<li>error</li>';};
             applicationCache.onnoupdate = function(){document.getElementById('panel').innerHTML += '<li>noupdate</li>';};
