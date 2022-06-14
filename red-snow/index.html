@@ -979,80 +979,83 @@ canvas.drawing, canvas.drawingBuffer {
         </div>
         </div>
         <script>
-            document.getElementById('game').addEventListener('click', function(){
-                window.open("test642a.html", null, "height=480,width=640");
-            }, false);
-            document.getElementById('update').addEventListener('click', function(){
-                try {
-                    applicationCache.update();
-                } catch(e) {
-                    document.getElementById('panel').innerHTML += '<li>Error: ' + e + '</li>';
-                }
-            }, false);
-            document.getElementById('data').innerHTML = '<li>currentTime: ' + data.currentTime + '</li><li>currentPos: ' + data.currentPos + '</li>';
-            document.getElementById('panel').innerHTML = '<li>' + window.applicationCache.status + '</li>';
-            applicationCache.onchecking = function(){document.getElementById('panel').innerHTML += '<li>checking...</li>';};
-            applicationCache.onerror = function(){document.getElementById('panel').innerHTML += '<li>error</li>';};
-            applicationCache.onnoupdate = function(){document.getElementById('panel').innerHTML += '<li>noupdate</li>';};
-            applicationCache.ondownloading = function(){document.getElementById('panel').innerHTML += '<li>downloading</li>';};
-            applicationCache.onprogress = function(){document.getElementById('panel').innerHTML += '<li>progress</li>';};
-            applicationCache.onupdateready = function(){document.getElementById('panel').innerHTML += '<li>updateready</li>';};
-            applicationCache.oncached = function(){document.getElementById('panel').innerHTML += '<li>cached</li>';};
-            applicationCache.onobsolete = function(){document.getElementById('panel').innerHTML += '<li>obsolete</li>';};
-            window.ononline = function(){document.getElementById('panel').innerHTML += '<li>online</li>';};
-            window.onoffline = function(){document.getElementById('panel').innerHTML += '<li>offline</li>';}
-                $(function() {
-                    let cacheName = "core" // Whatever name
-                    // Pass all assets here
-                    // This example use a folder named «/core» in the root folder
-                    // It is mandatory to add an icon (Important for mobile users)
-                    let filesToCache = [
-                        "/",
-                        "/index.html",                    
-                    ]
+            // $(function() {
+            //     console.log(localStorage.table_content);                
+            // })
+            // document.getElementById('game').addEventListener('click', function(){
+            //     window.open("test642a.html", null, "height=480,width=640");
+            // }, false);
+            // document.getElementById('update').addEventListener('click', function(){
+            //     try {
+            //         applicationCache.update();
+            //     } catch(e) {
+            //         document.getElementById('panel').innerHTML += '<li>Error: ' + e + '</li>';
+            //     }
+            // }, false);
+            // document.getElementById('data').innerHTML = '<li>currentTime: ' + data.currentTime + '</li><li>currentPos: ' + data.currentPos + '</li>';
+            // document.getElementById('panel').innerHTML = '<li>' + window.applicationCache.status + '</li>';
+            // applicationCache.onchecking = function(){document.getElementById('panel').innerHTML += '<li>checking...</li>';};
+            // applicationCache.onerror = function(){document.getElementById('panel').innerHTML += '<li>error</li>';};
+            // applicationCache.onnoupdate = function(){document.getElementById('panel').innerHTML += '<li>noupdate</li>';};
+            // applicationCache.ondownloading = function(){document.getElementById('panel').innerHTML += '<li>downloading</li>';};
+            // applicationCache.onprogress = function(){document.getElementById('panel').innerHTML += '<li>progress</li>';};
+            // applicationCache.onupdateready = function(){document.getElementById('panel').innerHTML += '<li>updateready</li>';};
+            // applicationCache.oncached = function(){document.getElementById('panel').innerHTML += '<li>cached</li>';};
+            // applicationCache.onobsolete = function(){document.getElementById('panel').innerHTML += '<li>obsolete</li>';};
+            // window.ononline = function(){document.getElementById('panel').innerHTML += '<li>online</li>';};
+            // window.onoffline = function(){document.getElementById('panel').innerHTML += '<li>offline</li>';}
+            //     $(function() {
+            //         var cacheName = "core" // Whatever name
+            //         // Pass all assets here
+            //         // This example use a folder named «/core» in the root folder
+            //         // It is mandatory to add an icon (Important for mobile users)
+            //         var filesToCache = [
+            //             "/",
+            //             "/index.html",                    
+            //         ]
 
-                    self.addEventListener("install", function(e) {
-                    e.waitUntil(
-                        caches.open(cacheName).then(function(cache) {
-                        return cache.addAll(filesToCache)
-                        })
-                    )})
+            //         self.addEventListener("install", function(e) {
+            //         e.waitUntil(
+            //             caches.open(cacheName).then(function(cache) {
+            //             return cache.addAll(filesToCache)
+            //             })
+            //         )})
 
-                    self.addEventListener("fetch", function(e) {
-                    e.respondWith(
-                        caches.match(e.request).then(function(response) {
-                        return response || fetch(e.request)
-                        })
-                    )});
-                });
+            //         self.addEventListener("fetch", function(e) {
+            //         e.respondWith(
+            //             caches.match(e.request).then(function(response) {
+            //             return response || fetch(e.request)
+            //             })
+            //         )});
+            //     });
 
-                $(function () {
-                    self.addEventListener('install', function (event) {
-                    event.waitUntil(
-                        caches.open('mysite-static-v3').then(function (cache) {
-                        return cache.addAll([
-                            '/index.html'
-                        ]);
-                        }),
-                    );
-                    });
-                    self.addEventListener('activate', function (event) {
-                        event.waitUntil(
-                            caches.keys().then(function (cacheNames) {
-                            return Promise.all(
-                                cacheNames
-                                .filter(function (cacheName) {
-                                    // Return true if you want to remove this cache,
-                                    // but remember that caches are shared across
-                                    // the whole origin
-                                })
-                                // .map(function (cacheName) {
-                                //     return caches.delete(cacheName);
-                                // }),
-                            );
-                            }),
-                        );
-                    });
+            //     $(function () {
+            //         self.addEventListener('install', function (event) {
+            //         event.waitUntil(
+            //             caches.open('mysite-static-v3').then(function (cache) {
+            //             return cache.addAll([
+            //                 '/index.html'
+            //             ]);
+            //             }),
+            //         );
+            //         });
+            //         self.addEventListener('activate', function (event) {
+            //             event.waitUntil(
+            //                 caches.keys().then(function (cacheNames) {
+            //                 return Promise.all(
+            //                     cacheNames
+            //                     .filter(function (cacheName) {
+            //                         // Return true if you want to remove this cache,
+            //                         // but remember that caches are shared across
+            //                         // the whole origin
+            //                     })
+            //                     // .map(function (cacheName) {
+            //                     //     return caches.delete(cacheName);
+            //                     // }),
+            //                 );
+            //                 }),
+            //             );
+            //         });
 
                     // document.querySelector('.cache-article').addEventListener('click', function (event) {
                     //     event.preventDefault();
@@ -1070,7 +1073,7 @@ canvas.drawing, canvas.drawingBuffer {
                     //         });
                     //     });
                     // });
-                })
+                // })
 
                 $(function () {
                     initDB();
@@ -1188,9 +1191,9 @@ canvas.drawing, canvas.drawingBuffer {
 
                 
                 
-                let isStarted = false;
-                let isBegun = false;
-
+                var isStarted = false;
+                var isBegun = false;
+                var itemCount = 0;
                 function start() {
                     isStarted = true;
                     $('input:text').attr('placeholder','掃描或輸入單號');
@@ -1203,12 +1206,12 @@ canvas.drawing, canvas.drawingBuffer {
                 function end() {
                     isStarted = false;
                     isBegun = false;
-                    let tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}">下載此訂單</a>';
-                    let table_content = '';
+                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}">下載此訂單</a>';
+                    var table_content = '';
                         
                         $.each($("td"), function (index, cell) {
-                            let cellContent = cell.innerHTML;
-                            let td = '';
+                            var cellContent = cell.innerHTML;
+                            var td = '';
                             if (index % 4 === 0 || index % 4 === 1) {
                                 td = cellContent.split('<td>')[0];                                    
                             } else if (index % 4 === 2){                                                               
@@ -1224,8 +1227,8 @@ canvas.drawing, canvas.drawingBuffer {
                     tpl = tpl.replace('{table_content}', table_content);
                     $(tpl).appendTo($('#orderId'));
                     if (typeof(Storage) !== "undefined") {                    
-                        sessionStorage.table_content = table_content;                
-                        document.getElementById("result").innerHTML = sessionStorage.table_content;
+                        localStorage.table_content = table_content;                
+                        document.getElementById("result").innerHTML = localStorage.table_content;
                     } else {
                         document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
                     }
@@ -1286,7 +1289,7 @@ canvas.drawing, canvas.drawingBuffer {
                 // function testInput() {
                 //     $('#inputBarCode').val('11111');
                 // }
-                let itemCount = 0;
+                
                 function newRecordOrNewOrder() {
                     if (isBegun) {
                         $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
