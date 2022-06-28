@@ -1257,7 +1257,9 @@ canvas.drawing, canvas.drawingBuffer {
                             ++countResults;
                             lastResult = decodedText;
                             // console.log(`Scan result = ${decodedText}`, decodedResult);
+                            alert(decodedResult.val());
                             $('#inputBarCode').val(decodedResult.val());
+
                 
                             resultContainer.innerHTML += `<div>[${countResults}] - ${decodedText}</div>`;
                             
