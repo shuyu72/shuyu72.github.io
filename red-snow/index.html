@@ -1254,20 +1254,22 @@ canvas.drawing, canvas.drawingBuffer {
                         "qr-reader", { fps: 10, qrbox: 250 });
                     
                     function onScanSuccess(decodedText, decodedResult) {
-                        alert('aaaaaa');
-                        if (decodedText !== lastResult) {
-                            ++countResults;
-                            lastResult = decodedText;
-                            // console.log(`Scan result = ${decodedText}`, decodedResult);
-                            alert(decodedResult.val());
-                            $('#inputBarCode').val(decodedResult.val());
+                        alert(decodedText);
+                        alert(decodedResult);
+                        $('#inputBarCode').val(decodedResult.val());
+                        // if (decodedText !== lastResult) {
+                        //     ++countResults;
+                        //     lastResult = decodedText;
+                        //     // console.log(`Scan result = ${decodedText}`, decodedResult);
+                        //     alert(decodedResult.val());
+                        //     $('#inputBarCode').val(decodedResult.val());
 
                 
-                            resultContainer.innerHTML += `<div>[${countResults}] - ${decodedText}</div>`;
+                        //     resultContainer.innerHTML += `<div>[${countResults}] - ${decodedText}</div>`;
                             
-                            // Optional: To close the QR code scannign after the result is found
-                            html5QrcodeScanner.clear();
-                        }
+                        //     // Optional: To close the QR code scannign after the result is found
+                        //     html5QrcodeScanner.clear();
+                        // }
                     }
                     
                     // Optional callback for error, can be ignored.
