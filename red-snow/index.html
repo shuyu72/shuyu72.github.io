@@ -1075,8 +1075,7 @@ canvas.drawing, canvas.drawingBuffer {
                     // });
                 // })
 
-                $(function () {
-                    alert('testest');
+                $(function () {                    
                     initDB();
                     addObj();               
                     getObj(); 
@@ -1235,16 +1234,19 @@ canvas.drawing, canvas.drawingBuffer {
                     }
                 }
                 
-
-                function docReady(fn) {
-                    // see if DOM is already available
-                    if (document.readyState === "complete" || document.readyState === "interactive") {
-                        // call on next available tick
-                        setTimeout(fn, 1);
-                    } else {
-                        document.addEventListener("DOMContentLoaded", fn);
+                $(function() {
+                    function docReady(fn) {
+                        // see if DOM is already available
+                        if (document.readyState === "complete" || document.readyState === "interactive") {
+                            // call on next available tick
+                            setTimeout(fn, 1);
+                        } else {
+                            document.addEventListener("DOMContentLoaded", fn);
+                        }
                     }
-                } 
+                    alert('testest2');
+                });
+                 
 
                 docReady(function() {
                     var resultContainer = document.getElementById('qr-reader-results');
