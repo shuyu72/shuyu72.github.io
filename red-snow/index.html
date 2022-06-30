@@ -1075,7 +1075,8 @@ canvas.drawing, canvas.drawingBuffer {
                     // });
                 // })
 
-                $(function () {                    
+                $(function () {
+                    
                     initDB();
                     addObj();               
                     getObj(); 
@@ -1234,19 +1235,16 @@ canvas.drawing, canvas.drawingBuffer {
                     }
                 }
                 
-                $(function() {
-                    function docReady(fn) {
-                        // see if DOM is already available
-                        if (document.readyState === "complete" || document.readyState === "interactive") {
-                            // call on next available tick
-                            setTimeout(fn, 1);
-                        } else {
-                            document.addEventListener("DOMContentLoaded", fn);
-                        }
+
+                function docReady(fn) {
+                    // see if DOM is already available
+                    if (document.readyState === "complete" || document.readyState === "interactive") {
+                        // call on next available tick
+                        setTimeout(fn, 1);
+                    } else {
+                        document.addEventListener("DOMContentLoaded", fn);
                     }
-                    alert('testest2');
-                });
-                 
+                } 
 
                 docReady(function() {
                     var resultContainer = document.getElementById('qr-reader-results');
@@ -1256,6 +1254,7 @@ canvas.drawing, canvas.drawingBuffer {
                         "qr-reader", { fps: 10, qrbox: 250 });
                     
                     function onScanSuccess(decodedText, decodedResult) {
+                        alert('aaaaaa');
                         if (decodedText !== lastResult) {
                             ++countResults;
                             lastResult = decodedText;
