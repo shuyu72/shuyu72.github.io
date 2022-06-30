@@ -1254,9 +1254,7 @@ canvas.drawing, canvas.drawingBuffer {
                         "qr-reader", { fps: 10, qrbox: 250 });
                     
                     function onScanSuccess(decodedText, decodedResult) {
-                        alert(decodedText);
-                        alert(decodedResult);
-                        $('#inputBarCode').val(decodedResult.val());
+                        $('#inputBarCode').val(decodedText);
                         // if (decodedText !== lastResult) {
                         //     ++countResults;
                         //     lastResult = decodedText;
