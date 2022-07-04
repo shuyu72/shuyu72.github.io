@@ -911,7 +911,7 @@ canvas.drawing, canvas.drawingBuffer {
     </head>
     <body>
         <h1 id="result"></h1>
-        <input type="button" value="game" id="game"><input type="button" value="update" id="update">
+        <!-- <input type="button" value="game" id="game"><input type="button" value="update" id="update"> -->
         <div id="data"></div>
         <div id="panel"></div>
         <div class="container">
@@ -1202,10 +1202,11 @@ canvas.drawing, canvas.drawingBuffer {
                 var isStarted = false;
                 var isBegun = false;
                 var itemCount = 0;
-                function start() {
+                $(function() {
                     isStarted = true;
-                    $('input:text').attr('placeholder','掃描或輸入單號');
-                }
+                    $('#orderId').html() = thisOrderId;
+                    // $('input:text').attr('placeholder','掃描或輸入單號');
+                });
                 // $(function() {
                 //     // document.getElementById("result").innerHTML = sessionStorage.table_content;
                 //     sessionStorage.removeItem('table_content');
@@ -1254,9 +1255,30 @@ canvas.drawing, canvas.drawingBuffer {
                         var yyyy = currentDay.getFullYear();
                         var currentDay = yyyy + '/' + mm + '/' + dd;
                         var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                        index++;
+                        let toDownload = false;
                         if (currentDay != today) {
-                            var index = 0;                                            
-                        }                                 
+                            for (var i = 0; i < localStorage.length; i++){
+                                let t = localStorage.getItem(localStorage.key(i));
+                                if (t.hasDownloaded === false && t.recordDate === today) {
+                                    let userChoice = confirm('昨日的工作紀錄尚未下載，是否下載?');
+                                    if (userChoice === true) {
+                                        toDownload = true;
+                                        break;
+                                    }
+                                }
+                            }    
+                            index = 0;                                          
+                        }           
+                        data = "";                      
+                        if (toDownload) {
+                            for (var i = 0; i < localStorage.length; i++){
+                                let t = localStorage.getItem(localStorage.key(i));
+                                if (t.recordDate === today) {
+                                    data += t.table_content;
+                                }
+                            }
+                        }
                         var thisOrderId = currentDaytodayWithoutSlash + index.toString();               
                         
                         let prevDate = today.setDate(today.getDate() - 5);
