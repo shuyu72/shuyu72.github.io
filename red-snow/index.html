@@ -919,7 +919,7 @@ canvas.drawing, canvas.drawingBuffer {
             <!-- <div class="col-md-3"></div>        
             <div class="col-md-3"></div>
             <div class="col-md-3">                 -->
-                <div class="btn btn-success" onclick="start()">開始</div>                    
+                <!-- <div class="btn btn-success" onclick="start()">開始</div>                     -->
             <!-- </div>
             <div class="col-md-3"></div>         -->
         </div>
@@ -973,7 +973,7 @@ canvas.drawing, canvas.drawingBuffer {
                 <div class="btn btn-info" onclick="clearTable()">重置</div>
             </div>
             <div class="col-3 col-md-3">                
-                <div class="btn btn-danger" onclick="end()">結束</div>
+                <div class="btn btn-danger" onclick="end()">完成</div>
             </div>
             <div class="col-3 col-md-3"></div>        
         </div>
@@ -1075,122 +1075,129 @@ canvas.drawing, canvas.drawingBuffer {
                     // });
                 // })
 
-                $(function () {
+                // $(function () {
                     
-                    initDB();
-                    addObj();               
-                    getObj(); 
-                    function initDB () {
+                //     initDB();
+                //     addObj();               
+                //     getObj(); 
+                //     function initDB () {
 
-                        var db;
-                        var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
-                        var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+                //         var db;
+                //         var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+                //         var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
 
-                        var req = indexedDB.open("mydb", 5);
+                //         var req = indexedDB.open("mydb", 5);
 
-                        req.onsuccess = function (e) {
-                            console.log("open");
-                            db = e.target.result;
-                        };
+                //         req.onsuccess = function (e) {
+                //             console.log("open");
+                //             db = e.target.result;
+                //         };
 
-                        req.onerror = function () {
-                            console.log("error");
-                        };
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
 
-                        req.onupgradeneeded = function (e) {
-                            console.log("upgradeneeded");          
+                //         req.onupgradeneeded = function (e) {
+                //             console.log("upgradeneeded");          
 
-                            var db = e.target.result;
-                            var emp = { id: 1, name: "ray" };
-                            var store = db.createObjectStore("items", { keyPath: "id" });
+                //             var db = e.target.result;
+                //             var emp = { id: 1, name: "ray" };
+                //             var store = db.createObjectStore("items", { keyPath: "id" });
 
-                            store.add(emp);
-                        }
-                        return db;
-                    }
+                //             store.add(emp);
+                //         }
+                //         return db;
+                //     }
 
-                    function addObj() {                                    
-                        var db;// = initDB();
-                        var request = indexedDB.open("mydb", 3);  
-                        request.onsuccess = function (evt) {
-                            db = request.result; 
-                            var txn = db.transaction("items", "readwrite");
-                            var store = txn.objectStore("items");
+                //     function addObj() {                                    
+                //         var db;// = initDB();
+                //         var request = indexedDB.open("mydb", 3);  
+                //         request.onsuccess = function (evt) {
+                //             db = request.result; 
+                //             var txn = db.transaction("items", "readwrite");
+                //             var store = txn.objectStore("items");
 
-                            var emp2 = { id: 2, name: "vivid" };
+                //             var emp2 = { id: 2, name: "vivid" };
 
-                            var req = store.add(emp2);
-                            req.onsuccess = function (e) {
-                                console.log("add");
-                            }
+                //             var req = store.add(emp2);
+                //             req.onsuccess = function (e) {
+                //                 console.log("add");
+                //             }
 
-                            req.onerror = function () {
-                                console.log("error");
-                            };
-                        }
-                    }
+                //             req.onerror = function () {
+                //                 console.log("error");
+                //             };
+                //         }
+                //     }
 
-                    function getObj() {
-                        var db;// = initDB();
-                        var request = indexedDB.open("mydb", 3);  
-                        request.onsuccess = function (evt) {
-                            db = request.result; 
-                            var txn = db.transaction("items", "readwrite");
-                            var store = txn.objectStore("items");
+                //     function getObj() {
+                //         var db;// = initDB();
+                //         var request = indexedDB.open("mydb", 3);  
+                //         request.onsuccess = function (evt) {
+                //             db = request.result; 
+                //             var txn = db.transaction("items", "readwrite");
+                //             var store = txn.objectStore("items");
 
-                            var req = store.get(1);
+                //             var req = store.get(1);
 
-                            req.onsuccess = function (e) {
-                                console.log("get");
+                //             req.onsuccess = function (e) {
+                //                 console.log("get");
 
-                                var emp = e.target.result;
-                                document.getElementById("result").innerHTML =
-                                    emp.id + ", " + emp.name;
-                            }
+                //                 var emp = e.target.result;
+                //                 document.getElementById("result").innerHTML =
+                //                     emp.id + ", " + emp.name;
+                //             }
 
-                            req.onerror = function () {
-                                console.log("error");
-                            };
-                        }
-                    }
+                //             req.onerror = function () {
+                //                 console.log("error");
+                //             };
+                //         }
+                //     }
 
-                    function deleteObj() {
-                        var db = initDB();
-                        var txn = db.transaction("items", "readwrite");
-                        var store = txn.objectStore("items");
+                //     function deleteObj() {
+                //         var db = initDB();
+                //         var txn = db.transaction("items", "readwrite");
+                //         var store = txn.objectStore("items");
 
-                        var req = store.delete(1);
+                //         var req = store.delete(1);
 
-                        req.onsuccess = function (e) {
-                            console.log("delete");
-                        }
+                //         req.onsuccess = function (e) {
+                //             console.log("delete");
+                //         }
 
-                        req.onerror = function () {
-                            console.log("error");
-                        };
-                    }
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
+                //     }
 
-                    function updateObj() {
-                        var db = initDB();
-                        var txn = db.transaction("items", "readwrite");
-                        var store = txn.objectStore("items");
+                //     function updateObj() {
+                //         var db = initDB();
+                //         var txn = db.transaction("items", "readwrite");
+                //         var store = txn.objectStore("items");
 
-                        var emp2 = { id: 2, name: "kevin" };
+                //         var emp2 = { id: 2, name: "kevin" };
 
-                        var req = store.put(emp2);
-                        req.onsuccess = function (e) {
-                            console.log("put");
-                        }
+                //         var req = store.put(emp2);
+                //         req.onsuccess = function (e) {
+                //             console.log("put");
+                //         }
 
-                        req.onerror = function () {
-                            console.log("error");
-                        };
-                    }
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
+                //     }
 
                     
-                });
+                // });
 
-                
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                var today = yyyy + '/' + mm + '/' + dd;
+                var todayWithoutSlash = yyyy + mm + dd;
+                var index = 0;                
+                var thisOrderId = todayWithoutSlash + index.toString();
                 
                 var isStarted = false;
                 var isBegun = false;
@@ -1207,34 +1214,80 @@ canvas.drawing, canvas.drawingBuffer {
                 function end() {
                     isStarted = false;
                     isBegun = false;
-                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}">下載此訂單</a>';
+                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}" onclick="updateHasDownloaded($("#orderId").html())">下載此訂單</a>';
                     var table_content = '';
                         
-                        $.each($("td"), function (index, cell) {
-                            var cellContent = cell.innerHTML;
-                            var td = '';
-                            if (index % 4 === 0 || index % 4 === 1) {
-                                td = cellContent.split('<td>')[0];                                    
-                            } else if (index % 4 === 2){                                                               
-                                td = $('#field' + (Math.trunc(index / 4)).toString()).val();
-                            }
-                            if (index % 4 === 0 || index % 4 === 1) {                                    
-                                table_content += td + '%2C'; //Need to return contents of cell                                
-                            } else if (index % 4 === 2){
-                                table_content += td + '%0A';
-                            }                                
-                        });
+                    $.each($("td"), function (index, cell) {
+                        var cellContent = cell.innerHTML;
+                        var td = '';
+                        if (index % 4 === 0 || index % 4 === 1) {
+                            td = cellContent.split('<td>')[0];                                    
+                        } else if (index % 4 === 2){                                                               
+                            td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                        }
+                        if (index % 4 === 0 || index % 4 === 1) {                                    
+                            table_content += td + '%2C'; //Need to return contents of cell                                
+                        } else if (index % 4 === 2){
+                            table_content += td + '%0A';
+                        }                                
+                    });
 
+                        
+                    var order = new Object();
                     tpl = tpl.replace('{table_content}', table_content);
                     $(tpl).appendTo($('#orderId'));
-                    if (typeof(Storage) !== "undefined") {                    
-                        localStorage.table_content = table_content;                
+                    if (typeof(Storage) !== "undefined") { 
+                        var _lsTotal = 0,
+                            _xLen, _x;
+                        for (_x in localStorage) {
+                            if (!localStorage.hasOwnProperty(_x)) {
+                                continue;
+                            }
+                            _xLen = ((localStorage[_x].length + _x.length) * 2);
+                            _lsTotal += _xLen;
+                            console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+                        };
+                        
+                        var currentDay = new Date();
+                        var dd = String(currentDay.getDate()).padStart(2, '0');
+                        var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        var yyyy = currentDay.getFullYear();
+                        var currentDay = yyyy + '/' + mm + '/' + dd;
+                        var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                        if (currentDay != today) {
+                            var index = 0;                                            
+                        }                                 
+                        var thisOrderId = currentDaytodayWithoutSlash + index.toString();               
+                        
+                        let prevDate = today.setDate(today.getDate() - 5);
+                        if ((_lsTotal / 1024).toFixed(2) >= 4096) {                        
+                            prevDate = today.setDate(today.getDate() - 4);  
+                        } 
+                        for (var i = 0; i < localStorage.length; i++){
+                            let t = localStorage.getItem(localStorage.key(i));
+                            if (t.recordDate.getTime() <= prevDate.getTime()) {
+                                localStorage.removeItem(t.orderId);
+                            }
+                        }
+                                                
+                        order.orderId = $('#orderId').html();
+                        order.recordDate = today;
+                        order.hasDownloaded = false;                 
+                        order.table_content = table_content;                
+                        localStorage.setItem($('#orderId').html(), order.toString());
                         document.getElementById("result").innerHTML = localStorage.table_content;
                     } else {
                         document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
                     }
                 }
                 
+                function updateHasDownloaded(orderId) {                    
+                    let order = localStorage.getItem(orderId);
+                    let updatedOrder = new Object(order);
+                    updatedOrder.hasDownloaded = true; 
+                    localStorage.setItem(order, updatedOrder);
+                    alert(updatedOrder.hasDownloaded);
+                }
 
                 function docReady(fn) {
                     // see if DOM is already available
