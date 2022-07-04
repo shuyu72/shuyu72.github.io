@@ -1227,7 +1227,7 @@ canvas.drawing, canvas.drawingBuffer {
                 function end() {
                     isStarted = false;
                     isBegun = false;
-                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}" onclick="updateHasDownloaded($("#orderId").html())">下載此訂單</a>';
+                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}" onclick="return updateHasDownloaded($("#orderId").html())">下載此訂單</a>';
                     var table_content = '';
                         
                     $.each($("td"), function (index, cell) {
@@ -1309,14 +1309,14 @@ canvas.drawing, canvas.drawingBuffer {
                         order.hasDownloaded = false;                 
                         order.table_content = table_content;                
                         localStorage.setItem($('#orderId').html(), order.toString());
-                        document.getElementById("result").innerHTML = localStorage.table_content;
-                        $('#orderId').html("");
+                        document.getElementById("result").innerHTML = localStorage.table_content;                    
                     } else {
                         document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
                     }
                 }
                 
                 function updateHasDownloaded(orderId) {                    
+                    $('#orderId').html("");
                     let order = localStorage.getItem(orderId);
                     let updatedOrder = new Object(order);
                     updatedOrder.hasDownloaded = true; 
