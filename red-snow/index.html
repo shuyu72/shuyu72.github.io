@@ -1196,8 +1196,9 @@ canvas.drawing, canvas.drawingBuffer {
                 var yyyy = today.getFullYear();
                 var today = yyyy + '/' + mm + '/' + dd;
                 var todayWithoutSlash = yyyy + mm + dd;
-                var index = 0;                
-                var thisOrderId = todayWithoutSlash + index.toString();
+                var index = 0;
+                var indexStr = prefixWithZero(index);                
+                var thisOrderId = todayWithoutSlash + indexStr;
                 
                 var isStarted = false;
                 var isBegun = false;
@@ -1211,6 +1212,16 @@ canvas.drawing, canvas.drawingBuffer {
                 //     // document.getElementById("result").innerHTML = sessionStorage.table_content;
                 //     sessionStorage.removeItem('table_content');
                 // })
+
+                function prefixWithZero(index) {
+                    if (index.toString.length === 1) {
+                        return '00' + index.toString();
+                    } else if (index.toString.length === 2) {
+                        return '0' + index.toString();
+                    } else {
+                        return index.toString();
+                    }
+                }
 
                 function end() {
                     isStarted = false;
@@ -1279,7 +1290,7 @@ canvas.drawing, canvas.drawingBuffer {
                                 }
                             }
                         }
-                        var thisOrderId = currentDaytodayWithoutSlash + index.toString();               
+                        thisOrderId = currentDaytodayWithoutSlash + indexStr;
                         
                         let prevDate = today.setDate(today.getDate() - 5);
                         if ((_lsTotal / 1024).toFixed(2) >= 4096) {                        
