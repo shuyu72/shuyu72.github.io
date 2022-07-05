@@ -1206,7 +1206,7 @@ canvas.drawing, canvas.drawingBuffer {
                 var yyyy = today.getFullYear();
                 var today = yyyy + '/' + mm + '/' + dd;
                 var todayWithoutSlash = yyyy + mm + dd;                            
-                
+                var needRefresh = true;
                 const table_header = "no,code,hint";
                 var index;
                 var isStarted = false;
@@ -1272,7 +1272,7 @@ canvas.drawing, canvas.drawingBuffer {
                                             }
                                         }
 
-                                        function pad2(n) { return n < 10 ? '0' + n : n }
+                                        
 
                                         let date = new Date();
                                             
@@ -1314,6 +1314,8 @@ canvas.drawing, canvas.drawingBuffer {
                 // $(function() {
                 //     localStorage.clear();
                 // })
+                function pad2(n) { return n < 10 ? '0' + n : n }
+
                 function isJsonString(str) {
                     try {
                         JSON.parse(str);
