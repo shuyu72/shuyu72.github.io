@@ -915,11 +915,11 @@ canvas.drawing, canvas.drawingBuffer {
         <!-- <div id="data"></div> -->
         <div class="row">
             
-            <div class="col-2 col-xs-2"></div>            
-            <div class="col-2 col-xs-2">
+            <div class="col-2 col-xs-1"></div>            
+            <div class="col-2 col-xs-4">
                 <select class="form-control" id="daySelect" onchange="selectDownloadDate()"></select>
             </div>
-            <div class="col-2 col-xs-2"></div>
+            <div class="col-2 col-xs-1"></div>
             <div class="col-2 col-xs-2"></div>
             <div class="btn btn-info px-1 text-center col-2 col-xs-2" id="manualInputOrderId" onclick="orderIdInputByManual()">單號手動輸入</div>
             <div class="col-2 col-xs-2"></div>
@@ -1276,9 +1276,15 @@ canvas.drawing, canvas.drawingBuffer {
                                             }
                                         }
 
+                                        function pad2(n) { return n < 10 ? '0' + n : n }
+
+                                        let date = new Date();
+                                            
+                                        let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
                                         let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
                                         var link = document.createElement("a");
-                                        link.download = localStorage.todayWithoutSlash + (new Date()).toDateString();
+                                        link.download = localStorage.todayWithoutSlash + "-" + oprationDate;
                                         link.href = csvContent;
                                         link.click();
                                         
@@ -1590,9 +1596,13 @@ canvas.drawing, canvas.drawingBuffer {
                                 }
                             }
                         }
+                        let date = new Date();
+                                            
+                        let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
                         let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
                         var link = document.createElement("a");
-                        link.download = localStorage.todayWithoutSlash + (new Date()).toDateString();
+                        link.download = localStorage.todayWithoutSlash + "-" + oprationDate;
                         link.href = csvContent;
                         link.click();
                     }
