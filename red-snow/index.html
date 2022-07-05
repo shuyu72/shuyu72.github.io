@@ -912,7 +912,20 @@ canvas.drawing, canvas.drawingBuffer {
     <body>
         <h1 id="result"></h1>
         <!-- <input type="button" value="game" id="game"><input type="button" value="update" id="update"> -->
-        <div id="data"></div>
+        <!-- <div id="data"></div> -->
+        <div class="row">
+            
+            <div class="col-2 col-xs-2"></div>            
+            <div class="col-2 col-xs-2">
+                <select class="form-control" id="daySelect" onchange="selectDownloadDate()"></select>
+            </div>
+            <div class="col-2 col-xs-2"></div>
+            <div class="col-2 col-xs-2"></div>
+            <div class="btn btn-info px-1 text-center col-2 col-xs-2" id="manualInputOrderId" onclick="orderIdInputByManual()">單號手動輸入</div>
+            <div class="col-2 col-xs-2"></div>
+            
+            
+        </div>
         <div id="panel"></div>
         <div class="container">
         <div class="text-center my-5">
@@ -925,7 +938,7 @@ canvas.drawing, canvas.drawingBuffer {
         </div>
         <div class="text-center justify-content-center my-2 row">
             <div class="mx-0 input-group col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <input type="text" class="form-control" placeholder="掃描或輸入單號" id="inputBarCode"/>
+                <input type="text" class="form-control" placeholder="掃描或輸入條碼" id="inputBarCode"/>
                 <div class="input-group-append">                
                     <div class="btn btn-danger px-1 reset-input" onclick="clearInput('inputBarCode')">×</div>
                 </div>
@@ -1190,34 +1203,207 @@ canvas.drawing, canvas.drawingBuffer {
                     
                 // });
 
+
                 var today = new Date();
-                var dd = String(today.getDate()).padStart(2, '0');
+                var dd = String(today.getDate()).padStart(2, '0');                
                 var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
                 var yyyy = today.getFullYear();
                 var today = yyyy + '/' + mm + '/' + dd;
-                var todayWithoutSlash = yyyy + mm + dd;
-                var index = 0;
-                var indexStr = prefixWithZero(index);                
-                var thisOrderId = todayWithoutSlash + indexStr;
+                var todayWithoutSlash = yyyy + mm + dd;                            
                 
+                const table_header = "no,code,hint";
+                var index;
                 var isStarted = false;
                 var isBegun = false;
                 var itemCount = 0;
-                $(function() {
-                    isStarted = true;
-                    isBegun = true;
-                    $('#orderId').html(thisOrderId);
-                    // $('input:text').attr('placeholder','掃描或輸入單號');
+                var thisOrderId;
+                var confirmPopup = false;
+                var hasConfirmed = false;
+                $(function () {                  
+                    $(window).blur(function() {
+                        // localStorage.today = "2022/07/04";
+                        needRefresh = true;
+                        confirmReset = false;
+                                                
+                    })                    
+
+                    
+                    function reload () {
+                        window.location.hash = 'reload';
+                        window.location.reload();
+                    }  
+                    $(window).focus(function() {      
+                        // alert(new Date());                        
+                        if (needRefresh) { 
+                            if (!hasConfirmed && !confirmReset) {                   
+                                reload();
+                                
+                                needRefresh = false;
+                                var currentDay = new Date();
+                                var dd = String(currentDay.getDate()).padStart(2, '0');
+                                var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                var yyyy = currentDay.getFullYear();
+                                var currentDay = yyyy + '/' + mm + '/' + '06';
+                                var v = null;
+                                if (localStorage.today !== currentDay) {
+                                    // confirmPopup = false;                                                                
+                                    for (var i = 0; i < localStorage.length; i++){
+                                        let t = localStorage.getItem(localStorage.key(i));
+                                        if (isJsonString(t)) {                            
+                                            v = JSON.parse(t);                
+                                            if (v["recordDate"] === localStorage.today) {
+                                                let userChoice = confirm('日前的工作紀錄尚未下載，是否下載?');
+                                                hasConfirmed = true;
+                                                if (userChoice === true) {                           
+                                                    confirmPopup = true;
+                                                    break;
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                    let data = "";
+                                    // alert(confirmPopup);
+                                    if (confirmPopup) {                                        
+                                        for (var i = 0; i < localStorage.length; i++){
+                                            let t = localStorage.getItem(localStorage.key(i));
+                                            if (isJsonString(t)) {                            
+                                                v = JSON.parse(t);                
+                                                if (v["recordDate"] === localStorage.today) {                                    
+                                                    // alert(v["table_content"]);
+                                                    data += v["table_content"];                                            
+                                                }
+                                            }
+                                        }
+
+                                        let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+                                        var link = document.createElement("a");
+                                        link.download = localStorage.todayWithoutSlash + (new Date()).toDateString();
+                                        link.href = csvContent;
+                                        link.click();
+                                        
+                                    }
+
+                                    // localStorage.index = 0;   
+                                    localStorage.today = currentDay; 
+                                    localStorage.todayWithoutSlash = currentDaytodayWithoutSlash;                                      
+                                            
+                                }
+                            } else if (!hasConfirmed && confirmReset) {
+                                confirmReset = false;
+                            }   
+                            onReload();            
+                        }         
+                        // alert(localStorage.lastUsedDate);                                                                            
+                        // $('input:text').attr('placeholder','掃描或輸入單號');
+                    });                                        
+                });
+                var isManual = false;
+                function orderIdInputByManual () {
+                    $('#inputBarCode').focus();
+                    isManual = true;
+                }
+                
+                $(document).ready(function () {
+                    if (window.location.hash === '#reload') {
+                        onReload();                        
+                    }                    
                 });
                 // $(function() {
-                //     // document.getElementById("result").innerHTML = sessionStorage.table_content;
-                //     sessionStorage.removeItem('table_content');
+                //     localStorage.clear();
                 // })
+                function isJsonString(str) {
+                    try {
+                        JSON.parse(str);
+                    } catch (e) {
+                        return false;
+                    }
+                    return true;
+                }
+                var dateSet = new Set();
+
+                function onReload () {                    
+                    if (typeof(localStorage.index) === "undefined") {
+                        localStorage.index = 0;
+                    }
+                    // console.log(localStorage.getItem("20220705000"));
+                    if (typeof(localStorage.getItem("lastUsedDate")) === "undefined") {
+                            localStorage.setItem(lastUsedDate, today);
+                            // alert(localStorage.getItem("lastUsedDate"));                                                           
+                    } else {                        
+                        var currentDay = new Date();
+                        var dd = String(currentDay.getDate()).padStart(2, '0');
+                        var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        var yyyy = currentDay.getFullYear();
+                        var currentDay = yyyy + '/' + mm + '/' + dd;
+                        var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                        thisOrderId = currentDaytodayWithoutSlash + indexStr;
+
+                        let todayDate = new Date(today);                            
+
+                        if (typeof(Storage) !== "undefined") { 
+                            var _lsTotal = 0,
+                                _xLen, _x;
+                            for (_x in localStorage) {
+                                if (!localStorage.hasOwnProperty(_x)) {
+                                    continue;
+                                }
+                                _xLen = ((localStorage[_x].length + _x.length) * 2);
+                                _lsTotal += _xLen;
+                                console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+                            }
+                            let prevDate = todayDate.setDate(todayDate.getDate() - 5);
+                            if ((_lsTotal / 1024).toFixed(2) >= 4096) {                        
+                                prevDate = todayDate.setDate(todayDate.getDate() - 4);  
+                            }                             
+                            
+                            for (var i = 0; i < localStorage.length; i++) {                                    
+                                let t = localStorage.getItem(localStorage.key(i));
+                                if (isJsonString(t)) {
+                                    t = JSON.parse(t);
+                                    if (new Date(t["recordDate"]) <= new Date(prevDate)) {
+                                        localStorage.removeItem(t.orderId);
+                                    } else {
+                                        if (typeof(t['recordDate']) !== "undefined") {
+                                        dateSet.add(t['recordDate']);                                                                                    
+                                        }
+                                    }
+                                }
+                            }
+                            
+                            // document.getElementById("result").innerHTML = localStorage.table_content;                    
+                        }   
+                        let dataArr = Array.from(dateSet);                            
+                        
+                        daySelect.options[daySelect.options.length] = new Option('---請選擇要下載的日期---', 'defaultOption');
+                        for (let s = 0; s < dataArr.length; s++) {
+                                daySelect = document.getElementById('daySelect');
+                                daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
+                        }                         
+                    
+                        index = localStorage.index;
+                        var indexStr = prefixWithZero(index);                
+                        thisOrderId = todayWithoutSlash + indexStr;
+                        // alert(thisOrderId);
+                        isStarted = true;
+                        isBegun = true;
+                        localStorage.today = today;
+                        localStorage.todayWithoutSlash = todayWithoutSlash;
+                        $('#orderId').html(thisOrderId);
+                    }
+                    if (typeof(localStorage.index) === "undefined") {
+
+                        localStorage.index = 0;                        
+                    }
+                
+                }
+
+                
 
                 function prefixWithZero(index) {
-                    if (index.toString.length === 1) {
+                    if (index.toString().length === 1) {
                         return '00' + index.toString();
-                    } else if (index.toString.length === 2) {
+                    } else if (index.toString().length === 2) {
                         return '0' + index.toString();
                     } else {
                         return index.toString();
@@ -1227,7 +1413,7 @@ canvas.drawing, canvas.drawingBuffer {
                 function end() {
                     isStarted = false;
                     isBegun = false;
-                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_content}" onclick="return updateHasDownloaded($("#orderId").html())">下載此訂單</a>';
+                    var tpl = '<a download="' + $('#orderId').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a>';
                     var table_content = '';
                         
                     $.each($("td"), function (index, cell) {
@@ -1245,83 +1431,50 @@ canvas.drawing, canvas.drawingBuffer {
                         }                                
                     });
 
-                        
-                    var order = new Object();
+                            
+
+                    var order = new Object(); 
+                    order.orderId = $('#orderId').html();
+                    order.recordDate = localStorage.today;
+                    order.hasDownloaded = false;                 
+                    order.table_content = table_content;
+                    console.log("order::");
+                    console.log(order.orderId); 
+                    console.log(order.table_content);                
+                    localStorage.setItem($('#orderId').html(), JSON.stringify(order));    
+
+                    
+                    var currentDay = new Date();
+                    var dd = String(currentDay.getDate()).padStart(2, '0');
+                    var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    var yyyy = currentDay.getFullYear();
+                    var currentDay = yyyy + '/' + mm + '/' + dd;
+                    var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                    localStorage.index++;              
+                    thisOrderId = currentDaytodayWithoutSlash + localStorage.index;
+                    
+                    
+                    tpl = tpl.replace('{table_header}', table_header);
                     tpl = tpl.replace('{table_content}', table_content);
+                    console.log(tpl);
                     $(tpl).appendTo($('#orderId'));
-                    if (typeof(Storage) !== "undefined") { 
-                        var _lsTotal = 0,
-                            _xLen, _x;
-                        for (_x in localStorage) {
-                            if (!localStorage.hasOwnProperty(_x)) {
-                                continue;
-                            }
-                            _xLen = ((localStorage[_x].length + _x.length) * 2);
-                            _lsTotal += _xLen;
-                            console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
-                        };
-                        
-                        var currentDay = new Date();
-                        var dd = String(currentDay.getDate()).padStart(2, '0');
-                        var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
-                        var yyyy = currentDay.getFullYear();
-                        var currentDay = yyyy + '/' + mm + '/' + dd;
-                        var currentDaytodayWithoutSlash = yyyy + mm + dd;
-                        index++;
-                        let toDownload = false;
-                        if (currentDay != today) {
-                            for (var i = 0; i < localStorage.length; i++){
-                                let t = localStorage.getItem(localStorage.key(i));
-                                if (t.hasDownloaded === false && t.recordDate === today) {
-                                    let userChoice = confirm('昨日的工作紀錄尚未下載，是否下載?');
-                                    if (userChoice === true) {
-                                        toDownload = true;
-                                        break;
-                                    }
-                                }
-                            }    
-                            index = 0;                                          
-                        }           
-                        data = "";                      
-                        if (toDownload) {
-                            for (var i = 0; i < localStorage.length; i++){
-                                let t = localStorage.getItem(localStorage.key(i));
-                                if (t.recordDate === today) {
-                                    data += t.table_content;
-                                }
-                            }
-                        }
-                        thisOrderId = currentDaytodayWithoutSlash + indexStr;
-                        
-                        let prevDate = today.setDate(today.getDate() - 5);
-                        if ((_lsTotal / 1024).toFixed(2) >= 4096) {                        
-                            prevDate = today.setDate(today.getDate() - 4);  
-                        } 
-                        for (var i = 0; i < localStorage.length; i++){
-                            let t = localStorage.getItem(localStorage.key(i));
-                            if (t.recordDate.getTime() <= prevDate.getTime()) {
-                                localStorage.removeItem(t.orderId);
-                            }
-                        }
-                                                
-                        order.orderId = $('#orderId').html();
-                        order.recordDate = today;
-                        order.hasDownloaded = false;                 
-                        order.table_content = table_content;                
-                        localStorage.setItem($('#orderId').html(), order.toString());
-                        document.getElementById("result").innerHTML = localStorage.table_content;                    
-                    } else {
-                        document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
-                    }
+                    
+                    // } else {
+                    //     document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+                    // }
                 }
                 
-                function updateHasDownloaded(orderId) {                    
-                    $('#orderId').html("");
+                function updateThisStatus(orderId) {                   
+                    // $('#orderId').html("");
+                    
                     let order = localStorage.getItem(orderId);
                     let updatedOrder = new Object(order);
                     updatedOrder.hasDownloaded = true; 
                     localStorage.setItem(order, updatedOrder);
-                    alert(updatedOrder.hasDownloaded);
+
+                    $('#orderId').html("");
+                    $('#orderId').html(thisOrderId);
+                    // alert(updatedOrder.hasDownloaded);
                 }
 
                 function docReady(fn) {
@@ -1385,11 +1538,16 @@ canvas.drawing, canvas.drawingBuffer {
                 // }
                 
                 function newRecordOrNewOrder() {
+                    if (isManual) {
+                        $("#orderId").html($("#inputBarCode").val());
+                        localStorage.orderId = $("#inputBarCode").val();                    
+                    }
                     if (isBegun) {
                         $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
                         $('#inputBarCode').val('');
                         itemCount++;
-                    }
+                    } 
+
                     // } else if (!isBegun && isStarted) {
                     //     if ($('#inputBarCode').val()) {
                     //         $('#orderId').html($('#inputBarCode').val());                    
@@ -1403,20 +1561,47 @@ canvas.drawing, canvas.drawingBuffer {
                     // }
 
                 }
-
+                var confirmReset = false;
                 function clearTable() {
-                    if (!isStarted) {
+                    confirmReset = true;
+                    // if (!isStarted) {
                         if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
-                            $('#orderId').html('')
+                            $('#orderId').html('');
                             $('tr td').remove();
+                            localStorage.removeItem(thisOrderId);
+                            localStorage.index--;
                             itemCount = 0;
                         } 
-                    } else {
-                        if (confirm("刪除此筆訂單目前的資料嗎?")) {
-                            $('tr td').remove();                        
-                            itemCount = 0;
+                    // } else {
+                    //     if (confirm("刪除此筆訂單目前的資料嗎?")) {
+                    //         $('tr td').remove();                        
+                    //         itemCount = 0;
+                    //     }
+                    // }    
+                }
+
+                function selectDownloadDate() {
+                    let select = document.getElementById("daySelect");
+                    let chosen = select.options[select.selectedIndex].text;
+                    console.log(chosen);
+                    let data = "";
+                    if (chosen !== '---請選擇要下載的日期---') {
+                        for (var i = 0; i < localStorage.length; i++){
+                            let t = localStorage.getItem(localStorage.key(i));
+                            if (isJsonString(t)) {                            
+                                v = JSON.parse(t);                
+                                if (v["recordDate"] === chosen) {                                    
+                                    // alert(v["table_content"]);
+                                    data += v["table_content"];                                            
+                                }
+                            }
                         }
-                    }    
+                        let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+                        var link = document.createElement("a");
+                        link.download = localStorage.todayWithoutSlash + (new Date()).toDateString();
+                        link.href = csvContent;
+                        link.click();
+                    }
                 }
 
         </script>
@@ -1439,3 +1624,4 @@ canvas.drawing, canvas.drawingBuffer {
 </html>
 
 
+            
