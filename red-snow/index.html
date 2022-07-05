@@ -1379,23 +1379,17 @@ canvas.drawing, canvas.drawingBuffer {
                         for (let s = 0; s < dataArr.length; s++) {
                                 daySelect = document.getElementById('daySelect');
                                 daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
-                        }                         
-                    
-                        index = localStorage.index;
-                        var indexStr = prefixWithZero(index);                
-                        thisOrderId = todayWithoutSlash + indexStr;
-                        // alert(thisOrderId);
-                        isStarted = true;
-                        isBegun = true;
-                        localStorage.today = today;
-                        localStorage.todayWithoutSlash = todayWithoutSlash;
-                        $('#orderId').html(thisOrderId);
-                    }
-                    if (typeof(localStorage.index) === "undefined") {
-
-                        localStorage.index = 0;                        
-                    }
-                
+                        }                                                 
+                    }                
+                    index = localStorage.index;
+                    var indexStr = prefixWithZero(index);                
+                    thisOrderId = todayWithoutSlash + indexStr;
+                    // alert(thisOrderId);
+                    isStarted = true;
+                    isBegun = true;
+                    localStorage.today = today;
+                    localStorage.todayWithoutSlash = todayWithoutSlash;
+                    $('#orderId').html(thisOrderId);
                 }
 
                 
