@@ -918,7 +918,8 @@ canvas.drawing, canvas.drawingBuffer {
                 <select class="form-control" id="daySelect" onchange="selectDownloadDate()"></select>
             </div>
             <div class="btn btn-info px-1 text-center col-2 col-xs-2" id="orderIdInputBtn" onclick="orderIdInput()">單號手動輸入</div> -->
-            <div class="btn btn-success" id="todayDataDownload">當前資料下載</div>
+            <div class="col-2 col-xs-2"></div>
+            <div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(todayWithoutSlash)">當前資料下載</div>
             <div class="col-2 col-xs-2"></div>
             
             
@@ -996,7 +997,7 @@ canvas.drawing, canvas.drawingBuffer {
         <div class="row text-center my-5 mx-0 inline-block">
             <div class="col-3 col-md-3"></div>        
             <div class="col-3 col-md-3">
-                <div class="btn btn-info" onclick="clearTable()">重置</div>
+                <div class="btn btn-info" onclick="confirmClearThis()">重置</div>
             </div>
             <div class="col-3 col-md-3">                
                 <div class="btn btn-danger" onclick="end()">完成</div>
@@ -1255,7 +1256,7 @@ canvas.drawing, canvas.drawingBuffer {
                                 var dd = String(currentDay.getDate()).padStart(2, '0');
                                 var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
                                 var yyyy = currentDay.getFullYear();
-                                var currentDay = yyyy + '/' + mm + '/' + '07';
+                                var currentDay = yyyy + '/' + mm + '/' + dd;
                                 var v = null;
                                 if (localStorage.today !== currentDay) {
                                     // confirmPopup = false;                                                                
@@ -1399,18 +1400,22 @@ canvas.drawing, canvas.drawingBuffer {
                             
                             // document.getElementById("result").innerHTML = localStorage.table_content;                    
                         }   
-                        let dataArr = Array.from(dateSet);                            
+                        let dateArr = Array.from(dateSet);                            
                         
                         // daySelect.options[daySelect.options.length] = new Option('---請選擇要下載的日期---', 'defaultOption');
                         // for (let s = 0; s < dataArr.length; s++) {
                         //         daySelect = document.getElementById('daySelect');
                         //         daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
                         // }                         
-                        for (let s = 0; s < dataArr.length; s++) {
+                        for (let s = 0; s < dateArr.length; s++) {
                                 // daySelect = document.getElementById('daySelect');
                                 // daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
-                            tpl = '<div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(dataArr[s])">' + dataArr[s] + '</div>';
-                            $('btnGrp').append($(tpl));
+                                // let theDate = new Date(dataArr[s]);
+                            if (dateArr[s] != today) {    
+                                tpl = '<div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(' + dateArr[s].replaceAll('/', '') + ')">' + dateArr[s] + '</div>';
+                                $('#btnGrp').append($(tpl));
+                            }
+                            // alert(dataArr[s]);
                         }                        
                     }                
 
@@ -1593,32 +1598,38 @@ canvas.drawing, canvas.drawingBuffer {
                 }
 
                 var confirmReset = false;
-                function clearTable() {
+
+                function confirmClearThis() {
                     confirmReset = true;
                     // if (!isStarted) {
                     if (!isFinished) {
                         if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
-                            
                             localStorage.removeItem(thisOrderId);
-                            alert(thisOrderId);
-                            isFinished = false;          
-                            itemCount = 0;
+                            // isFinished = false;                                      
                         } 
+                    } else {
+                        if (confirm("刪除此筆訂單目前的資料嗎?")) {
+                            $('tr td').remove();                        
+                            itemCount = 0;
+                        }
                     }
+                    clearTable();
+                }
+
+                function clearTable() {
+                    isFinished = false;
                     $('#orderId').html('');
                     $('tr td').remove();
-                    // } else {
-                    //     if (confirm("刪除此筆訂單目前的資料嗎?")) {
-                    //         $('tr td').remove();                        
-                    //         itemCount = 0;
-                    //     }
-                    // }    
+                    itemCount = 0;                        
                 }
 
                 function downloadDateClickEvent(chosenDate) {
                     // let select = document.getElementById("daySelect");
                     // let chosen = select.options[select.selectedIndex].text;
                     // console.log(chosen);
+                    
+                    chosenDate = chosenDate.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1/$2/$3');
+                    // alert(chosenDate);
                     let data = "";
                     // if (chosen !== '---請選擇要下載的日期---') {
                         for (var i = 0; i < localStorage.length; i++){
@@ -1637,6 +1648,7 @@ canvas.drawing, canvas.drawingBuffer {
 
                         let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
                         var link = document.createElement("a");
+                        // alert(chosenDate);
                         chosenDate = chosenDate.replaceAll('/', '');
                         link.download = chosenDate + "-" + oprationDate;                        
                         link.href = csvContent;
