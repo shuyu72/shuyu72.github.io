@@ -1226,7 +1226,7 @@ canvas.drawing, canvas.drawingBuffer {
                 var today = yyyy + '/' + mm + '/' + dd;
                 var todayWithoutSlash = yyyy + mm + dd;                            
                 var needRefresh = false;
-                const table_header = "no,code,hint";
+                const table_header = "no,orderId,code,hint,date";
                 var isStarted = false;
                 var isBegun = false;
                 var itemCount = 0;
@@ -1250,8 +1250,7 @@ canvas.drawing, canvas.drawingBuffer {
                         // alert(new Date());                        
                         if (needRefresh) { 
                             if (!hasConfirmed && !confirmReset) {                   
-                                reload();
-                                
+                                reload();                                
                                 needRefresh = false;
                                 var currentDay = new Date();
                                 var dd = String(currentDay.getDate()).padStart(2, '0');
@@ -1392,12 +1391,15 @@ canvas.drawing, canvas.drawingBuffer {
                                 if (isJsonString(t)) {
                                     t = JSON.parse(t);
                                     if (new Date(t["recordDate"]) <= new Date(prevDate)) {
-                                        localStorage.removeItem(t.orderId);
+                                        localStorage.removeItem(t["orderId"]);
                                     } else {
                                         if (typeof(t['recordDate']) !== "undefined") {
                                         dateSet.add(t['recordDate']);                                                                                    
                                         }
                                     }
+                                }
+                                if (!t["table_content"].match(/,/g) || [].length % 4 !== 0) {
+                                    localStorage.removeItem(t["orderId"]);
                                 }
                             }
                             
@@ -1439,16 +1441,20 @@ canvas.drawing, canvas.drawingBuffer {
                         
                     $.each($("td"), function (index, cell) {
                         var cellContent = cell.innerHTML;
-                        var td = '';
+                        var td = '';                        
                         if (index % 4 === 0 || index % 4 === 1) {
-                            td = cellContent.split('<td>')[0];                                    
-                        } else if (index % 4 === 2){                                                               
+                            td = cellContent.split('<td>')[0];                                                                
+                        } else if (index % 4 === 2) {                                                               
                             td = $('#field' + (Math.trunc(index / 4)).toString()).val();
                         }
-                        if (index % 4 === 0 || index % 4 === 1) {                                    
+                        if (index % 4 === 0) {
+                            table_content += td + '%2C'; //Need to return contents of cell
+                            table_content += $('#orderIdH5').html() + '%2C';                                    
+                        } else if (index % 4 === 1) {
                             table_content += td + '%2C'; //Need to return contents of cell                                
-                        } else if (index % 4 === 2){
-                            table_content += td + '%0A';
+                        } else if (index % 4 === 2) {                            
+                            table_content += td + '%2C';
+                            table_content += today + '%0A';
                         }                                
                     });
 
