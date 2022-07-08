@@ -1394,12 +1394,16 @@ canvas.drawing, canvas.drawingBuffer {
                                         localStorage.removeItem(t["orderId"]);
                                     } else {
                                         if (typeof(t['recordDate']) !== "undefined") {
-                                        dateSet.add(t['recordDate']);                                                                                    
+                                            let test = t["table_content"].split('%0A')[0];
+                                            // alert(test);
+                                            // alert((test.match(new RegExp("%2C", "g") || []).length));
+                                            if ((test.match(new RegExp("%2C", "g") || []).length) !== 4) {
+                                                localStorage.removeItem(t["orderId"]);
+                                            } else {
+                                                dateSet.add(t['recordDate']);
+                                            }
                                         }
-                                    }
-                                }
-                                if (!t["table_content"].match(/,/g) || [].length % 4 !== 0) {
-                                    localStorage.removeItem(t["orderId"]);
+                                    }                                                                        
                                 }
                             }
                             
