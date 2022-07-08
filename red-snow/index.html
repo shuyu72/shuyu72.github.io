@@ -1233,7 +1233,7 @@ canvas.drawing, canvas.drawingBuffer {
                 var thisOrderId;
                 var confirmPopup = false;
                 var hasConfirmed = false;
-                $(function () {                  
+                $(function () {                                      
                     $(window).blur(function() {
                         // localStorage.today = "2022/07/04";
                         needRefresh = true;
@@ -1356,6 +1356,8 @@ canvas.drawing, canvas.drawingBuffer {
 
                 function onReload () {                    
                     // console.log(localStorage.getItem("20220705000"));
+                    $('#orderIdInput').focus();
+
                     if (typeof(localStorage.getItem("lastUsedDate")) === "undefined") {
                             localStorage.setItem(lastUsedDate, today);
                             // alert(localStorage.getItem("lastUsedDate"));                                                           
@@ -1478,6 +1480,7 @@ canvas.drawing, canvas.drawingBuffer {
                     // } else {
                     //     document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
                     // }
+                    
                 }
                 
                 function updateThisStatus() {                   
@@ -1511,8 +1514,8 @@ canvas.drawing, canvas.drawingBuffer {
                     
                     var html5QrcodeScanner = new Html5QrcodeScanner(
                         "qr-reader", { fps: 10, qrbox: 250 });
-                    if ($('#orderId').html() === "") {
-                        $('#orderId').html(thisOrderId);
+                    if ($('#orderIdInput').focus()) {
+                        $('#orderIdInput').html(thisOrderId);
                     }
                     function onScanSuccess(decodedText, decodedResult) {
                         $('#inputBarCode').val(decodedText);
@@ -1582,7 +1585,7 @@ canvas.drawing, canvas.drawingBuffer {
                         //     alert('請掃描或輸入單號!');                    
                         // }
                     // }
-
+                    $('#inputBarCode').focus();
                 }
 
                 function newOrder() {
@@ -1592,6 +1595,7 @@ canvas.drawing, canvas.drawingBuffer {
                     $('#orderIdH5').html($('#orderIdInput').val());
                     $('#orderIdH5').attr("hidden", false);
                     $("#orderIdclear").attr("hidden", false);
+                    $('#inputBarCode').focus();
                 }
 
                 function modifyOrderId() {                    
