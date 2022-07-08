@@ -1516,8 +1516,8 @@ canvas.drawing, canvas.drawingBuffer {
                         "qr-reader", { fps: 10, qrbox: 250 });
                     
                     function onScanSuccess(decodedText, decodedResult) {
-                        if ($('#orderIdInput').html() === "") {
-                            $('#orderIdInput').html(decodedText);
+                        if ($('#orderIdInput').val() === "") {
+                            $('#orderIdInput').val(decodedText);
                         } else {
                             $('#inputBarCode').val(decodedText);
                         }
