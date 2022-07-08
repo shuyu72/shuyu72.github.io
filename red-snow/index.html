@@ -1514,7 +1514,7 @@ canvas.drawing, canvas.drawingBuffer {
                     
                     var html5QrcodeScanner = new Html5QrcodeScanner(
                         "qr-reader", { fps: 10, qrbox: 250 });
-                    if ($('#orderIdInput').focus()) {
+                    if ($('#orderIdInput').html() === "") {
                         $('#orderIdInput').html(thisOrderId);
                     }
                     function onScanSuccess(decodedText, decodedResult) {
