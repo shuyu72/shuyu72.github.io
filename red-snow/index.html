@@ -1409,6 +1409,7 @@ canvas.drawing, canvas.drawingBuffer {
                             
                             // document.getElementById("result").innerHTML = localStorage.table_content;                    
                         }   
+                        localStorage.today = today;
                         let dateArr = Array.from(dateSet);                            
                         
                         // daySelect.options[daySelect.options.length] = new Option('---請選擇要下載的日期---', 'defaultOption');
@@ -1420,7 +1421,7 @@ canvas.drawing, canvas.drawingBuffer {
                                 // daySelect = document.getElementById('daySelect');
                                 // daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
                                 // let theDate = new Date(dataArr[s]);
-                            if (dateArr[s] != today) {    
+                            if (dateArr[s] !== today) {    
                                 tpl = '<div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(' + dateArr[s].replaceAll('/', '') + ')">' + dateArr[s] + '</div>';
                                 $('#btnGrp').append($(tpl));
                             }
@@ -1430,7 +1431,7 @@ canvas.drawing, canvas.drawingBuffer {
 
                     isStarted = true;
                     // isBegun = true;
-                    localStorage.today = today;
+                    
                     localStorage.todayWithoutSlash = todayWithoutSlash;
                 }
 
@@ -1679,10 +1680,7 @@ canvas.drawing, canvas.drawingBuffer {
                 function showScanner() {
                     $('#qr-reader').attr("hidden", false);
                 }
-
-                function clearOrderId() {
-                    $()
-                }
+            
         </script>
         <style>
             .table-wrapper {
