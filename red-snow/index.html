@@ -370,17 +370,18 @@
         }
 
         function newOrder() {
+            thisOrderId = $('#orderIdInput').val();
+            clearTable();                    
+            $('#orderIdInput').attr("hidden", true);                                        
+            $('#ensureOrderIdBtn').attr("hidden", true);
+            $('#scanOrderIdBtn').attr("hidden", true);    
+            $('#orderIdH5').html($('#orderIdInput').val());
+            $('#orderIdH5').attr("hidden", false);
+            $("#orderIdclear").attr("hidden", false);
+            $('#inputBarCode').focus();                    
             if (localStorage.getItem($('#orderIdInput').val()) !== null) {
                 if (confirm('此筆訂單已經存在，要繼續編輯嗎?')) {
-                    thisOrderId = $('#orderIdInput').val();
-                    clearTable();                    
-                    $('#orderIdInput').attr("hidden", true);                                        
-                    $('#ensureOrderIdBtn').attr("hidden", true);
-                    $('#scanOrderIdBtn').attr("hidden", true);    
-                    $('#orderIdH5').html($('#orderIdInput').val());
-                    $('#orderIdH5').attr("hidden", false);
-                    $("#orderIdclear").attr("hidden", false);
-                    $('#inputBarCode').focus();                    
+                    
                     let data = JSON.parse(localStorage.getItem($('#orderIdInput').val()));    
                     let table_content = data["table_content"];
 
