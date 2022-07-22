@@ -53,7 +53,7 @@
                     <div class="btn btn-danger px-1 reset-input" onclick="clearInput('inputBarCode')">×</div>
                 </div>
                 <div class="input-group-append">                
-                    <div class="btn btn-primary px-3" onclick="newRecord()">確認</div>
+                    <div class="btn btn-primary px-3" id="ensureNewRecord" onclick="newRecord()">確認</div>
                 </div>                
             </div>        
         <!-- </div> -->
@@ -103,10 +103,10 @@
         var isStarted = false;
         // var isBegun = false;
         var itemCount = 0;
-        var thisOrderId;
+        var thisOrderId = "";
         var confirmPopup = false;
         var hasConfirmed = false;        
-        window.onload=function(){
+        window.onload=function(){                                    
             var dateSet = new Set();
             var currentDay = new Date();
             var dd = String(currentDay.getDate()).padStart(2, '0');
@@ -242,7 +242,7 @@
         function end() {
             isFinished = true;
             isStarted = false;
-            var tpl = '<a download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a>';
+            var tpl = '<div class="btn btn-info" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
             var table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
             $.each($("td"), function (index, cell) {
@@ -274,7 +274,7 @@
             console.log("order::");
             console.log(order.orderId); 
             console.log(order.table_content);                
-            localStorage.setItem($('#orderIdH5').html(), JSON.stringify(order));    
+            localStorage.setItem($('#orderIdH5').html(), JSON.stringify(JSON.stringify(order)));    
 
             
             var currentDay = new Date();
@@ -287,8 +287,9 @@
             tpl = tpl.replace('{table_header}', table_header);
             tpl = tpl.replace('{table_content}', table_content);
             console.log(tpl);
-            $(tpl).appendTo($('#orderIdGrp'));
+            $(tpl).appendTo($('#btnGrp'));
             clearTable();
+            modifyOrderId();            
             
         }
         
@@ -299,7 +300,6 @@
             let order = localStorage.getItem($('#orderIdH5').html());
             console.log($('#orderIdH5').html());
             // let updatedOrder = new Object(order);
-            console.log('ooo');
             updatedOrder = JSON.parse(order);
             updatedOrder["hasDownloaded"] = true; 
             localStorage.setItem($('#orderIdH5').html(), updatedOrder);
@@ -368,7 +368,7 @@
             $('#orderIdH5').attr("hidden", false);
             $("#orderIdclear").attr("hidden", false);
             $('#inputBarCode').focus();
-     
+            thisOrderId = $('#orderIdInput').val();
         }
         document.getElementById("orderIdInput").addEventListener("keyup", function(event) {
         // var orderIdElement = document.getElementById('orderIdInput');
@@ -376,8 +376,19 @@
    
             event.preventDefault();
             if (event.keyCode === 13) {
-                alert('ooo');
+                thisOrderId = $('#orderIdInput').val();
                 $("#ensureOrderIdBtn").click();
+   
+            }
+        });
+
+        document.getElementById("inputBarCode").addEventListener("keyup", function(event) {
+        // var orderIdElement = document.getElementById('orderIdInput');
+        //     var isOrderIdFocused = (document.activeElement === orderIdElement);
+   
+            event.preventDefault();
+            if (event.keyCode === 13) {
+                $("#ensureNewRecord").click();
    
             }
         });
@@ -399,6 +410,7 @@
             if (!isFinished) {
                 if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
                     localStorage.removeItem(thisOrderId);
+
                     // isFinished = false;                                      
                     let count = 0;
                     for (var i = 0; i < localStorage.length; i++){
@@ -423,14 +435,13 @@
                 }
             }
             clearTable();
+            modifyOrderId();
+            $('#orderIdInput').val("");                                        
+            $('#orderIdH5').html("");  
+            $('#downloadThisOrderBtn').remove();                      
         }
 
-        function clearTable() {
-            isFinished = false;
-            $('#orderId').html('');
-            $('tr td').remove();
-            itemCount = 0;                        
-        }
+
 
         
         function showScanner() {
@@ -523,9 +534,8 @@
 
         function clearTable() {
             isFinished = false;
-            $('#orderId').html('');
             $('tr td').remove();
-            itemCount = 0;                        
+            itemCount = 0;                                    
         }
 
         
