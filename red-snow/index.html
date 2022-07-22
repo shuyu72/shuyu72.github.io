@@ -242,7 +242,7 @@
         function end() {
             isFinished = true;
             isStarted = false;
-            var tpl = '<div class="btn btn-info" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
+            var tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
             var table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
             $.each($("td"), function (index, cell) {
@@ -541,6 +541,10 @@
         
         function showScanner() {
             $('#qr-reader').attr("hidden", false);
+        }
+
+        function removeDownloadThisOrderBtn() {
+            $("#downloadThisOrderBtn").remove();
         }
     </script>
 </body>
