@@ -242,10 +242,14 @@
         function end() {
             isFinished = true;
             isStarted = false;
+            if ($('#orderIdH5').html() === "") {
+                alert('此訂單無資料');
+                return;
+            }
             var tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
             var table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
-            $.each($("td"), function (index, cell) {
+            $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
                 var td = '';                        
                 if (index % 4 === 0 || index % 4 === 1) {
@@ -253,18 +257,24 @@
                 } else if (index % 4 === 2) {                                                               
                     td = $('#field' + (Math.trunc(index / 4)).toString()).val();
                 }
+                
                 if (index % 4 === 0) {
                     table_content += td + '%2C'; //Need to return contents of cell
                     table_content += $('#orderIdH5').html() + '%2C';                                    
                 } else if (index % 4 === 1) {
+                    
                     table_content += td + '%2C'; //Need to return contents of cell                                
                 } else if (index % 4 === 2) {                            
+                    alert(td);
                     table_content += td + '%2C';
                     table_content += today + '%0A';
                 }                                
             });
 
-                    
+            if (table_content === "") {
+                alert('此訂單無資料');
+                return;
+            }        
 
             var order = new Object(); 
             order.orderId = $('#orderIdH5').html();
