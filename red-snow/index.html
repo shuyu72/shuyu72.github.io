@@ -159,19 +159,28 @@
                 localStorage.todayWithoutSlash = currentDaytodayWithoutSlash;                                      
                 
                 $('#orderIdInput').focus();
-                if (typeof(localStorage.getItem("lastUsedDate")) === "undefined") {
-                        localStorage.setItem(lastUsedDate, today);
-                } else {                        
-                    var currentDay = new Date();
-                    var dd = String(currentDay.getDate()).padStart(2, '0');
-                    var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
-                    var yyyy = currentDay.getFullYear();
-                    var currentDay = yyyy + '/' + mm + '/' + dd;
-                    var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                // if (typeof(localStorage.getItem("lastUsedDate")) === "undefined") {
+                //         localStorage.setItem(lastUsedDate, today);
+                // } else {                        
+                    
+                                
 
-                    let todayDate = new Date(today);                            
+                isStarted = true;                    
+                localStorage.todayWithoutSlash = todayWithoutSlash;
+            }
 
-                    if (typeof(Storage) !== "undefined") { 
+            var currentDay = new Date();
+            var dd = String(currentDay.getDate()).padStart(2, '0');
+            var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+            var yyyy = currentDay.getFullYear();
+            var currentDay = yyyy + '/' + mm + '/' + dd;
+            var currentDaytodayWithoutSlash = yyyy + mm + dd;
+
+            let todayDate = new Date(today);                            
+
+
+            if (typeof(Storage) !== "undefined") { 
+                        
                         var _lsTotal = 0,
                             _xLen, _x;
                         for (_x in localStorage) {
@@ -188,6 +197,7 @@
                         }                             
                         
                         for (var i = 0; i < localStorage.length; i++) {                                    
+                            
                             let t = localStorage.getItem(localStorage.key(i));
                             if (isJsonString(t)) {
                                 t = JSON.parse(t);
@@ -198,17 +208,16 @@
                                         let test = t["table_content"].split('%0A')[0];
                                         // alert(test);
                                         // alert((test.match(new RegExp("%2C", "g") || []).length));
-                                        if ((test.match(new RegExp("%2C", "g") || []).length) !== 4) {
-                                            localStorage.removeItem(t["orderId"]);
-                                        } else {
+                                        // if ((test.match(new RegExp("%2C", "g") || []).length) !== 4) {
+                                        //     localStorage.removeItem(t["orderId"]);
+                                        // } else {
                                             dateSet.add(t['recordDate']);
-                                        }
+                                        // }
                                     }
                                 }                                                                        
                             }
                         }                        
-                    }   
-                    
+                    // }   
                     localStorage.today = today;
                     
                     let dateArr = Array.from(dateSet);                                                
@@ -218,11 +227,8 @@
                             $('#btnGrp').append($(tpl));
                         }
                     }                        
-                }                
+                }    
 
-                isStarted = true;                    
-                localStorage.todayWithoutSlash = todayWithoutSlash;
-            }
             let count = 0;
             for (var i = 0; i < localStorage.length; i++){
                 let t = localStorage.getItem(localStorage.key(i));
@@ -234,6 +240,7 @@
                     }                    
                 }
             }
+            
             if (count > 0) {
                 $('#todayDataDownload').attr("hidden", false);   
             }                        
@@ -246,8 +253,8 @@
                 alert('此訂單無資料');
                 return;
             }
-            var tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
-            var table_content = '';
+            let tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
+            let table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
@@ -282,8 +289,11 @@
             order.table_content = table_content;
             console.log("order::");
             console.log(order.orderId); 
-            console.log(order.table_content);                
-            localStorage.setItem($('#orderIdH5').html(), JSON.stringify(JSON.stringify(order)));    
+            console.log(order.table_content);            
+            let tmpStr = JSON.stringify(JSON.stringify(order)).replaceAll('\\', '');
+            tmpStr = tmpStr.substring(1, tmpStr.length-1);    
+
+            localStorage.setItem($('#orderIdH5').html(), tmpStr);    
 
             
             var currentDay = new Date();
@@ -363,12 +373,17 @@
                 alert('單號未輸入!');
                 return;
             }            
+            if (isUpdated) {
+                itemCount = incrementCount;
+                isUpdated = false;                
+            }
             $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
             $('#inputBarCode').val('');
             itemCount++;
             $('#inputBarCode').focus();
         }
-
+        var isUpdated = false;
+        var incrementCount = 0;
         function newOrder() {
             thisOrderId = $('#orderIdInput').val();
             clearTable();                    
@@ -381,7 +396,7 @@
             $('#inputBarCode').focus();                    
             if (localStorage.getItem($('#orderIdInput').val()) !== null) {
                 if (confirm('此筆訂單已經存在，要繼續編輯嗎?')) {
-                    
+                    isUpdated = true;
                     let data = JSON.parse(localStorage.getItem($('#orderIdInput').val()));    
                     let table_content = data["table_content"];
 
@@ -392,22 +407,29 @@
                         data = JSON.parse(data);
                         table_content = data.table_content;
                     }
-                    let tableArr = table_content.split('%2C');
+                    let tableArr = splitMulti(table_content, ['%2C', '%0A']);
                     let barcode = '';
                     let hint = '';
                     let itemCount = 1;
+                    let tpl = '';
                     for (let j = 0; j < tableArr.length; j++) {
-                        if (j % 0 === 0) {
+                        if (j % 5 === 0) {
                             itemCount = tableArr[j];
-                        } if (j % 4 === 2) {
+                            tpl += '<tr><td>' + (itemCount).toString() + '</td>';                            
+                        } else if (j % 5 === 2) {
                             barcode = tableArr[j];
-                        } else if (j % 4 === 3) {
+                            tpl += '<td class="barcode">' + barcode + '</td>';
+                        } else if (j % 5 === 3) {
                             hint = tableArr[j];
-                        } 
-
-                    }
-                    $('table').find('tbody').append('<tr><td>' + (itemCount).toString() + '</td><td class="barcode">' + barcode + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + parseInt(itemCount - 1).toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + parseInt(itemCount - 1).toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
-                    $('field' + parseInt(itemCount - 1).toString()).val(hint);
+                            $('field' + parseInt(itemCount - 1).toString()).val(hint);
+                            tpl += '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + parseInt(itemCount - 1).toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + parseInt(itemCount - 1).toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>';
+                        }                             
+                    }   
+                    
+                    $('table').find('tbody').append(tpl);
+                    
+                    incrementCount = parseInt(tableArr.length / 5);             
+                    // alert(incrementCount);
                 }
                         
             } 
@@ -569,6 +591,14 @@
             localStorage.setItem(thisOrderId, JSON.stringify(JSON.parse(localStorage.getItem(thisOrderId))));
             $('#orderIdH5').html("");            
             $("#downloadThisOrderBtn").remove();
+        }
+        function splitMulti(str, tokens){
+           var tempChar = tokens[0]; // We can use the first token as a temporary join character
+            for(var i = 1; i < tokens.length; i++){
+                str = str.split(tokens[i]).join(tempChar);
+            }
+            str = str.split(tempChar);
+            return str;
         }
     </script>
 </body>
