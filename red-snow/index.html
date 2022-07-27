@@ -106,7 +106,7 @@
         var today = yyyy + '/' + mm + '/' + dd;
         var todayWithoutSlash = yyyy + mm + dd;                            
         var needRefresh = false;
-        const table_header = "no,orderId,code,hint,date";
+        const table_header = "項次,訂單編號,條碼,暗記,日期";
         var isStarted = false;
         // var isBegun = false;
         var itemCount = 0;
@@ -252,15 +252,38 @@
                 $('#todayDataDownload').attr("hidden", false);   
             }                        
         }
+        Number.prototype.padLeft = function(base,chr){
+            var  len = (String(base || 10).length - String(this).length)+1;
+            return len > 0? new Array(len).join(chr || '0')+this : this;
+        }
+
+        var now = new Date();
+        var nowStr =
+        ("00" + (now.getMonth() + 1)).slice(-2) +
+        ("00" + now.getDate()).slice(-2) +
+        now.getFullYear() +
+        ("00" + now.getHours()).slice(-2) +
+        ("00" + now.getMinutes()).slice(-2) +
+        ("00" + now.getSeconds()).slice(-2);
+        
         var isFinished = false;
-        function end() {
+        function end() {            
+            var now = new Date();
+            var nowStr =
+            ("00" + (now.getMonth() + 1)).slice(-2) +
+            ("00" + now.getDate()).slice(-2) +
+            now.getFullYear() +
+            ("00" + now.getHours()).slice(-2) +
+            ("00" + now.getMinutes()).slice(-2) +
+            ("00" + now.getSeconds()).slice(-2);
+            console.log(nowStr);
             isFinished = true;
             isStarted = false;
             if ($('#orderIdH5').html() === "") {
                 alert('此訂單無資料');
                 return;
             }
-            let tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a></div>';
+            let tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">' + nowStr + '掃描紀錄' + '</div></a></div>';
             let table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
             $.each($("td"), function (index, cell) {                
@@ -387,8 +410,16 @@
             }
             $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">×</div></td></tr>');
             $('#inputBarCode').val('');
+            
+            $('#field' + (itemCount).toString()).focus();
+            document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
+                event.preventDefault();
+                if (event.keyCode === 13) {
+                    $('#inputBarCode').focus();
+    
+                }
+            });
             itemCount++;
-            $('#inputBarCode').focus();
         }
         var isUpdated = false;
         var incrementCount = 0;
