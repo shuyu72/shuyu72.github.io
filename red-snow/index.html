@@ -300,8 +300,7 @@
             let tmpStr = JSON.stringify(JSON.stringify(order)).replaceAll('\\', '');
             tmpStr = tmpStr.substring(1, tmpStr.length-1);    
 
-            localStorage.setItem($('#orderIdH5').html(), tmpStr);    
-
+            localStorage.setItem($('#orderIdH5').html(), tmpStr);               
             
             var currentDay = new Date();
             var dd = String(currentDay.getDate()).padStart(2, '0');
@@ -315,6 +314,7 @@
             console.log(tpl);
             $(tpl).appendTo($('#btnGrp'));
             clearTable();
+            $('#orderIdInput').val('');
             modifyOrderId();            
             
         }
@@ -328,7 +328,8 @@
             // let updatedOrder = new Object(order);
             updatedOrder = JSON.parse(order);
             updatedOrder["hasDownloaded"] = true; 
-            localStorage.setItem($('#orderIdH5').html(), updatedOrder);
+            // localStorage.setItem($('#orderIdH5').html(), updatedOrder);
+            localStorage.setItem(thisOrderId, JSON.stringify(JSON.parse(localStorage.getItem(thisOrderId))));
             isFinished = false;
             // alert(updatedOrder.hasDownloaded);
         }
@@ -384,7 +385,7 @@
                 itemCount = incrementCount;
                 isUpdated = false;                
             }
-            $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
+            $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">×</div></td></tr>');
             $('#inputBarCode').val('');
             itemCount++;
             $('#inputBarCode').focus();
@@ -410,7 +411,9 @@
                     if (typeof(table_content) === 'undefined') {
                         data = localStorage.getItem($('#orderIdInput').val());
                         data = data.replaceAll("\\", "");
-                        data = data.substring(1, data.length - 1);
+                        if (data[0] !== '{') {
+                            data = data.substring(1, data.length - 1);
+                        }
                         data = JSON.parse(data);
                         table_content = data.table_content;
                     }
@@ -419,10 +422,13 @@
                     let hint = '';
                     let itemCount = 1;
                     let tpl = '';
+                    incrementCount = parseInt(tableArr.length / 5);             
                     for (let j = 0; j < tableArr.length; j++) {
                         if (j % 5 === 0) {
                             itemCount = tableArr[j];
-                            tpl += '<tr><td>' + (itemCount).toString() + '</td>';                            
+                            if (itemCount !== "") {
+                                tpl += '<tr><td>' + (itemCount).toString() + '</td>';                            
+                            }
                         } else if (j % 5 === 2) {
                             barcode = tableArr[j];
                             tpl += '<td class="barcode">' + barcode + '</td>';
@@ -435,7 +441,7 @@
                     
                     $('table').find('tbody').append(tpl);
                     
-                    incrementCount = parseInt(tableArr.length / 5);             
+                    
                     // alert(incrementCount);
                 }
                         
@@ -594,8 +600,8 @@
             $('#qr-reader').attr("hidden", false);
         }
 
-        function removeDownloadThisOrderBtn() {
-            localStorage.setItem(thisOrderId, JSON.stringify(JSON.parse(localStorage.getItem(thisOrderId))));
+        function removeDownloadThisOrderBtn() {            
+            localStorage.setItem(thisOrderId, JSON.stringify(JSON.parse(localStorage.getItem(thisOrderId))));//JSON.parse
             $('#orderIdH5').html("");            
             $("#downloadThisOrderBtn").remove();
         }
