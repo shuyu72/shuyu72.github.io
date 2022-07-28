@@ -18,6 +18,9 @@
         <div class="row" id="btnGrp">            
             <div class="col-2 col-xs-2"></div>
             <div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(todayWithoutSlash)" hidden="true">當前資料下載</div>
+            <label class="checkbox mx-2">
+                <input type="checkbox" id="enableAuto" checked="true" />三秒後自動送出enter
+            </label>
             <div class="col-2 col-xs-2"></div>  
         </div>
         <div id="panel"></div>
@@ -299,12 +302,12 @@
                 
                 if (index % 4 === 0) {
                     table_content += td + '%2C'; //Need to return contents of cell
-                    table_content += $('#orderIdH5').html() + '%2C';                                    
+                    table_content += $('#orderIdH5').html() + '\t' + '%2C';                                    
                 } else if (index % 4 === 1) {
                     
-                    table_content += td + '%2C'; //Need to return contents of cell                                
+                    table_content += td + '\t' + '%2C'; //Need to return contents of cell                                
                 } else if (index % 4 === 2) {                            
-                    table_content += td + '%2C';
+                    table_content += td + '\t' + '%2C';
                     table_content += today + '%0A';
                 }                                
             });
@@ -416,16 +419,22 @@
             }
             $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">×</div></td></tr>');
             $('#inputBarCode').val('');
-            
             $('#field' + (itemCount).toString()).focus();
+            if ($('#enableAuto').is(":checked")) {            
+                setTimeout(() => {
+                    if ($('#field' + (itemCount).toString()).val() !== '') {
+                        $('#inputBarCode').focus();                    
+                    }
+                    itemCount++;    
+                    }, "3000");
+            }
             document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
                 event.preventDefault();
                 if (event.keyCode === 13) {
                     $('#inputBarCode').focus();
     
                 }
-            });
-            itemCount++;
+            });            
         }
         var isUpdated = false;
         var incrementCount = 0;
