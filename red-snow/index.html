@@ -403,6 +403,10 @@
             if ($('#orderIdH5').html() === '') {
                 alert('單號未輸入!');
                 return;
+            }
+            if ($('#inputBarCode').val() === '') {
+                alert('條碼未輸入!');
+                return;
             }            
             if (isUpdated) {
                 itemCount = incrementCount;
