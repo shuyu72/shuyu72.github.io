@@ -417,7 +417,7 @@
                 itemCount = incrementCount;
                 isUpdated = false;                
             }
-            $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">×</div></td></tr>');
+            $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/></td><td><div class="btn btn-danger delete">×</div></td></tr>');//<div class="input-group"> <div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div><div class="input-group-append"></div></div>
             $('#inputBarCode').val('');
             $('#field' + (itemCount).toString()).focus();
             // if ($('#enableAuto').is(":checked")) {            
@@ -428,7 +428,7 @@
             //         itemCount++;    
             //         }, "3000");
             // } else {
-                itemCount++;    
+                
             // }
 
             document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
@@ -437,7 +437,8 @@
                     $('#inputBarCode').focus();
     
                 }
-            });            
+            }); 
+            itemCount++;               
         }
         var isUpdated = false;
         var incrementCount = 0;
@@ -459,7 +460,7 @@
 
                     if (typeof(table_content) === 'undefined') {
                         data = localStorage.getItem($('#orderIdInput').val());
-                        data = data.replaceAll("\\", "");
+                        // data = data.replaceAll("\\", "");
                         if (data[0] !== '{') {
                             data = data.substring(1, data.length - 1);
                         }
@@ -480,11 +481,11 @@
                             }
                         } else if (j % 5 === 2) {
                             barcode = tableArr[j];
-                            tpl += '<td class="barcode">' + barcode + '</td>';
+                            tpl += '<td class="barcode">' + barcode.slice(0, -1) + '</td>';
                         } else if (j % 5 === 3) {
-                            hint.push(tableArr[j]);
+                            hint.push(tableArr[j].slice(0, -1));
                             // $('#field' + (parseInt(itemCount - 1)).toString()).val(hint); // v1.0.1 修改再次編輯時會帶入暗記
-                            tpl += '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + parseInt(itemCount - 1).toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + parseInt(itemCount - 1).toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">×</div></td></tr>';
+                            tpl += '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + parseInt(itemCount - 1).toString() + '" class="form-control memo"/></td><td><div class="btn btn-danger delete">×</div></td></tr>';//<div class="input-group">   <div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + parseInt(itemCount - 1).toString() + '\')">×</div></div></div>
                         }                             
                     }   
                     $('table').find('tbody').append(tpl);
