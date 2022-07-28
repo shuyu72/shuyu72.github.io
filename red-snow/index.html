@@ -153,13 +153,14 @@
                     let date = new Date();
                         
                     let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
-
-                    let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+                    const universalBOM = "\uFEFF";
+                    let csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM + table_header) + "%0A" + data;// v1.0.2 改中文編碼
+                    
+                    // "data:text/csv;charset=utf-8,%EF%BB%BF" + encodeURIComponent(csvContent);
                     var link = document.createElement("a");
                     link.download = localStorage.todayWithoutSlash + "-" + oprationDate;
                     link.href = csvContent;
                     link.click();
-                    
                 }
 
                 localStorage.today = currentDay; 
@@ -283,7 +284,8 @@
                 alert('此訂單無資料');
                 return;
             }
-            let tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">' + nowStr + '掃描紀錄' + '</div></a></div>';
+            const universalBOM = "\uFEFF";
+            let tpl = '<div class="btn btn-info" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,' + universalBOM + '{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">' + nowStr + '掃描紀錄' + '</div></a></div>';  // v1.0.2 改中文編碼
             let table_content = '';
             $('#todayDataDownload').attr("hidden", false);    
             $.each($("td"), function (index, cell) {                
@@ -617,12 +619,15 @@
                                 
             let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-            let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+            // let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+            const universalBOM = "\uFEFF";
+            let csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM + table_header) + "%0A" + data;// v1.0.2 改中文編碼
+            
             var link = document.createElement("a");
             chosenDate = chosenDate.replaceAll('/', '');
             link.download = chosenDate + "-" + oprationDate;                        
             link.href = csvContent;
-            link.click();
+            link.click();            
         }
         
 
