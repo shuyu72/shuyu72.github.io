@@ -259,7 +259,7 @@
 
         var now = new Date();
         var nowStr =
-        now.getFullYear() +
+        now.getFullYear() + //v1.0.2 調整，將年往前提
         ("00" + (now.getMonth() + 1)).slice(-2) +
         ("00" + now.getDate()).slice(-2) +        
         ("00" + now.getHours()).slice(-2) +
@@ -270,7 +270,7 @@
         function end() {            
             var now = new Date();
             var nowStr =
-            now.getFullYear() +
+            now.getFullYear() + //v1.0.2 調整，將年往前提
             ("00" + (now.getMonth() + 1)).slice(-2) +
             ("00" + now.getDate()).slice(-2) +            
             ("00" + now.getHours()).slice(-2) +
