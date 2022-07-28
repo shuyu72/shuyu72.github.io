@@ -427,7 +427,10 @@
                     }
                     itemCount++;    
                     }, "3000");
+            } else {
+                itemCount++;    
             }
+
             document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
                 event.preventDefault();
                 if (event.keyCode === 13) {
