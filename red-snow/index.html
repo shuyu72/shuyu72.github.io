@@ -311,11 +311,12 @@
                     table_content += today + '%0A';
                 }                                
             });
-
+            
             if (table_content === "") {
                 alert('此訂單無資料');
                 return;
-            }        
+            }  
+                  
 
             var order = new Object(); 
             order.orderId = $('#orderIdH5').html();
@@ -328,7 +329,42 @@
             let tmpStr = JSON.stringify(JSON.stringify(order)).replaceAll('\\', '');
             tmpStr = tmpStr.substring(1, tmpStr.length-1);    
 
-            localStorage.setItem($('#orderIdH5').html(), tmpStr);               
+            tpl = tpl.replace('{table_header}', table_header);
+            tpl = tpl.replace('{table_content}', table_content);
+            console.log(tpl);
+            $(tpl).appendTo($('#btnGrp'));
+            
+            
+            $.each($("td"), function (index, cell) {                
+                var cellContent = cell.innerHTML;
+                var td = '';                        
+                if (index % 4 === 0 || index % 4 === 1) {
+                    td = cellContent.split('<td>')[0];                                                                
+                } else if (index % 4 === 2) {                                                               
+                    td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                }
+                
+                if (index % 4 === 0) {
+                    table_content += td + '%2C'; //Need to return contents of cell
+                    table_content += $('#orderIdH5').html() + '%2C';                                    
+                } else if (index % 4 === 1) {
+                    
+                    table_content += td + '%2C'; //Need to return contents of cell                                
+                } else if (index % 4 === 2) {                            
+                    table_content += td + '%2C';
+                    table_content += today + '%0A';
+                }                                
+            });
+
+            let orderWithoutTab = new Object(); 
+            orderWithoutTab.orderId = $('#orderIdH5').html();
+            orderWithoutTab.recordDate = localStorage.today;
+            orderWithoutTab.hasDownloaded = false;                 
+            orderWithoutTab.table_content = table_content;
+            let tmpStrWithoutTab = JSON.stringify(JSON.stringify(orderWithoutTab)).replaceAll('\\', '');
+            tmpStrWithoutTab = tmpStrWithoutTab.substring(1, tmpStrWithoutTab.length - 1);    
+
+            localStorage.setItem($('#orderIdH5').html(), tmpStrWithoutTab);               
             
             var currentDay = new Date();
             var dd = String(currentDay.getDate()).padStart(2, '0');
@@ -337,10 +373,7 @@
             var currentDay = yyyy + '/' + mm + '/' + dd;
             var currentDaytodayWithoutSlash = yyyy + mm + dd;
             
-            tpl = tpl.replace('{table_header}', table_header);
-            tpl = tpl.replace('{table_content}', table_content);
-            console.log(tpl);
-            $(tpl).appendTo($('#btnGrp'));
+            
             clearTable();
             $('#orderIdInput').val('');
             modifyOrderId();            
