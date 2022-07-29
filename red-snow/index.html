@@ -334,7 +334,7 @@
             console.log(tpl);
             $(tpl).appendTo($('#btnGrp'));
             
-            
+            table_content = '';
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
                 var td = '';                        
@@ -514,9 +514,9 @@
                             }
                         } else if (j % 5 === 2) {
                             barcode = tableArr[j];
-                            tpl += '<td class="barcode">' + barcode.slice(0, -1) + '</td>';
+                            tpl += '<td class="barcode">' + barcode + '</td>';//.slice(0, -1)
                         } else if (j % 5 === 3) {
-                            hint.push(tableArr[j].slice(0, -1));
+                            hint.push(tableArr[j]);//.slice(0, -1));
                             // $('#field' + (parseInt(itemCount - 1)).toString()).val(hint); // v1.0.1 修改再次編輯時會帶入暗記
                             tpl += '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + parseInt(itemCount - 1).toString() + '" class="form-control memo"/></td><td><div class="btn btn-danger delete">×</div></td></tr>';//<div class="input-group">   <div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + parseInt(itemCount - 1).toString() + '\')">×</div></div></div>
                         }                             
