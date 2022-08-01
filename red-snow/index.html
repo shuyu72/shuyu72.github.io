@@ -148,7 +148,17 @@
                         if (isJsonString(t)) {                            
                             v = JSON.parse(t);                
                             if (v["recordDate"] === localStorage.today) {                                                                    
-                                data += v["table_content"];                                            
+                                // data += v["table_content"];                                            
+                                let arr = v["table_content"].split("%0A");                        
+                                for (let j = 0; j < arr.length - 1; j++) {
+                                    if (typeof(arr[j]) !== 'undefined') {
+                                        let arr2 = arr[j].split('%2C');
+                                        for (let k = 0; k < arr2.length; k++) {
+                                        data += arr2[k] + '\t' + '%2C';
+                                        }                             
+                                        data += '%0A';
+                                    }                                        
+                                }      
                             }
                         }
                     }
@@ -241,12 +251,12 @@
                 }    
 
             let count = 0;
-            for (var i = 0; i < localStorage.length; i++){
+            for (let i = 0; i < localStorage.length; i++){
                 let t = localStorage.getItem(localStorage.key(i));
                 if (isJsonString(t)) {                            
                     v = JSON.parse(t);                
                     if (v["recordDate"] === today) {                                    
-                        data += v["table_content"];                                            
+                        // data += v["table_content"];                                                      
                         count++;
                     }                    
                 }
@@ -651,7 +661,18 @@
                 if (isJsonString(t)) {                            
                     v = JSON.parse(t);                
                     if (v["recordDate"] === chosenDate) {                                    
-                        data += v["table_content"];                                            
+                        // data += v["table_content"]; 
+                        let arr = v["table_content"].split("%0A");
+                        
+                        for (let j = 0; j < arr.length - 1; j++) {
+                            if (typeof(arr[j]) !== 'undefined') {
+                                let arr2 = arr[j].split('%2C');
+                                for (let k = 0; k < arr2.length; k++) {
+                                data += arr2[k] + '\t' + '%2C';
+                                }                             
+                                data += '%0A';
+                            }                                        
+                        }      
                         count++;
                     }                    
                 }
