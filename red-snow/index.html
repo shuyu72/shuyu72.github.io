@@ -173,6 +173,8 @@
                                                 }
                                                 data += productNumber + '\t' + '%2C';
                                                 data += ean + '\t' + '%2C'; 
+                                                productNumber = '';
+                                                ean = '';
                                             } 
                                         }                             
                                         data += '%0A';
@@ -339,13 +341,15 @@
                     for (let i = 0; i < product_obj.length; i++) {
                         if (product_obj[i].ProductName === td) {
                             productNumber = product_obj[i].ProductNumber;
-                            ean = product_obj[i].EAN;                            
+                            ean = product_obj[i].EAN;                                                        
                             break;
                         } 
                     }
                 } else if (index % 4 === 2) {                            
                     table_content += productNumber + '\t' + '%2C';                             
                     table_content += ean + '\t' + '%2C';
+                    productNumber = '';
+                    ean = '';
                 } else if (index % 4 === 3) {
                     table_content += hint + '\t' + '%2C';           
                     table_content += today + '%0A';
@@ -493,9 +497,10 @@
             let productName = '';
             let hint = '';
             for (let i = 0; i < product_obj.length; i++) {
-                if (product_obj[i].ProductNumber === $('#inputBarCode').val().split('-')[0]) {                    
+                let barcode = $('#inputBarCode').val().replace('-' + $('#inputBarCode').val().split('-')[$('#inputBarCode').val().split('-').length - 1], '');                
+                if (product_obj[i].ProductNumber === barcode) {                    
                     productName = product_obj[i].ProductName;                    
-                    hint = $('#inputBarCode').val().split('-')[1];                     
+                    hint = $('#inputBarCode').val().split('-')[$('#inputBarCode').val().split('-').length - 1];                     
                     break;
                 } else if (product_obj[i].EAN === $('#inputBarCode').val()) {
                     productName = product_obj[i].ProductName;
@@ -724,6 +729,8 @@
                                         }
                                         data += productNumber + '\t' + '%2C';
                                         data += ean + '\t' + '%2C'; 
+                                        productNumber = '';
+                                        ean = '';
                                     } 
                                 }                             
                                 data += '%0A';
