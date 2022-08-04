@@ -457,7 +457,7 @@
                     "qr-reader", { fps: 10, qrbox: 250 });
                 
                 function onScanSuccess(decodedText, decodedResult) {
-                    if ($('#orderIdInput').val() === "") {
+                    if ($('#orderIdInput').val().trim() === "") {
                         $('#orderIdInput').val(decodedText);
                     } else {
                         $('#inputBarCode').val(decodedText);
@@ -486,7 +486,8 @@
                 alert('單號未輸入!');
                 return;
             }
-            if ($('#inputBarCode').val() === '') {
+            let inputBarCode = $('#inputBarCode').val().trim();
+            if (inputBarCode === '') {
                 alert('條碼未輸入!');
                 return;
             }            
@@ -497,17 +498,42 @@
             let productName = '';
             let hint = '';
             for (let i = 0; i < product_obj.length; i++) {
-                let barcode = $('#inputBarCode').val().replace('-' + $('#inputBarCode').val().split('-')[$('#inputBarCode').val().split('-').length - 1], '');                
+                let barcode = inputBarCode.replace('-' + inputBarCode.split('-')[inputBarCode.split('-').length - 1], '');                
                 if (product_obj[i].ProductNumber === barcode) {                    
                     productName = product_obj[i].ProductName;                    
-                    hint = $('#inputBarCode').val().split('-')[$('#inputBarCode').val().split('-').length - 1];                     
+                    hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];                     
                     break;
-                } else if (product_obj[i].EAN === $('#inputBarCode').val()) {
+                } else if (product_obj[i].EAN === inputBarCode) {
                     productName = product_obj[i].ProductName;
                     break;
                 } else {
-                    productName = $('#inputBarCode').val();
+                    if (inputBarCode.split('-').length > 1) {
+                        productName = inputBarCode.replace('-' + inputBarCode.split('-')[inputBarCode.split('-').length - 1], '');                    
+                        hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];
+                    } else {
+                        productName = inputBarCode;
+                    }
                 }                
+            }
+            let _productName = '';
+            let _hint = '';
+            let isTheSame = false; 
+            $.each($("td"), function (index, cell) {                
+                var cellContent = cell.innerHTML;                                        
+                if (index % 4 === 1) {
+                    _productName = cellContent.split('<td>')[0];                                                                
+                } else if (index % 4 === 2) {                                                               
+                    _hint = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                }
+                if (_productName === productName && _hint === hint) {
+                    alert('已輸入相同產品!');
+                    isTheSame = true;                    
+                    return false;
+                }
+            });
+            if (isTheSame) {
+                $('#inputBarCode').val('');
+                return;
             }
             $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '<td class="productName">' + productName + '</td>' + '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo" value="' + hint + '"/></td><td><div class="btn btn-danger delete">×</div></td></tr>');//<div class="input-group"> <div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div><div class="input-group-append"></div></div>
             $('#inputBarCode').val('');
@@ -535,23 +561,23 @@
         var isUpdated = false;
         var incrementCount = 0;
         function newOrder() {
-            thisOrderId = $('#orderIdInput').val();
+            thisOrderId = $('#orderIdInput').val().trim();
             clearTable();                    
             $('#orderIdInput').attr("hidden", true);                                        
             $('#ensureOrderIdBtn').attr("hidden", true);
             $('#scanOrderIdBtn').attr("hidden", true);    
-            $('#orderIdH5').html($('#orderIdInput').val());
+            $('#orderIdH5').html(thisOrderId);
             $('#orderIdH5').attr("hidden", false);
             $("#orderIdclear").attr("hidden", false);
             $('#inputBarCode').focus();                    
-            if (localStorage.getItem($('#orderIdInput').val()) !== null) {
+            if (localStorage.getItem(thisOrderId) !== null) {
                 if (confirm('此筆訂單已經存在，要繼續編輯嗎?')) {
                     isUpdated = true;
-                    let data = JSON.parse(localStorage.getItem($('#orderIdInput').val()));    
+                    let data = JSON.parse(localStorage.getItem(thisOrderId));    
                     let table_content = data["table_content"];
 
                     if (typeof(table_content) === 'undefined') {
-                        data = localStorage.getItem($('#orderIdInput').val());
+                        data = localStorage.getItem(thisOrderId);
                         // data = data.replaceAll("\\", "");
                         if (data[0] !== '{') {
                             data = data.substring(1, data.length - 1);
@@ -597,7 +623,7 @@
    
             event.preventDefault();
             if (event.keyCode === 13) {
-                thisOrderId = $('#orderIdInput').val();
+                thisOrderId = $('#orderIdInput').val().trim();
                 $("#ensureOrderIdBtn").click();
    
             }
@@ -628,38 +654,43 @@
         function confirmClearThis() {
             confirmReset = true;
             // if (!isStarted) {
+            
             if (!isFinished) {
-                if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
-                    localStorage.removeItem(thisOrderId);
-
+                if (confirm("您確定要重置此筆訂單的所有資料嗎?")) {
+                    // localStorage.removeItem(thisOrderId);
+                    clearTable();
+                    modifyOrderId();
+                    $('#orderIdInput').val("");                                        
+                    $('#orderIdH5').html("");  
+                    $('#downloadThisOrderBtn').remove();                      
+                    
                     // isFinished = false;                                      
-                    let count = 0;
-                    for (var i = 0; i < localStorage.length; i++){
-                        let t = localStorage.getItem(localStorage.key(i));
-                        if (isJsonString(t)) {                            
-                            v = JSON.parse(t);                
-                            if (v["recordDate"] === today) {                                    
-                                data += v["table_content"];                                            
-                                count++;
-                            }                    
-                        }
-                    }                    
-                    if (count === 0) {                        
-                        $('#todayDataDownload').attr("hidden", true);
-                    }
+                    // let count = 0;
+                    // for (var i = 0; i < localStorage.length; i++){
+                    //     let t = localStorage.getItem(localStorage.key(i));
+                    //     if (isJsonString(t)) {                            
+                    //         v = JSON.parse(t);                
+                    //         if (v["recordDate"] === today) {                                    
+                    //             data += v["table_content"];                                            
+                    //             count++;
+                    //         }                    
+                    //     }
+                    // }                    
+                    // if (count === 0) {                        
+                    //     $('#todayDataDownload').attr("hidden", true);
+                    // }
                     
                 } 
             } else {
                 if (confirm("刪除此筆訂單目前的資料嗎?")) {
-                    $('tr td').remove();                        
-                    itemCount = 0;
+                    clearTable();
+                    modifyOrderId();
+                    $('#orderIdInput').val("");                                        
+                    $('#orderIdH5').html("");  
+                    $('#downloadThisOrderBtn').remove();                      
                 }
             }
-            clearTable();
-            modifyOrderId();
-            $('#orderIdInput').val("");                                        
-            $('#orderIdH5').html("");  
-            $('#downloadThisOrderBtn').remove();                      
+            
         }
 
 
