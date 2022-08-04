@@ -319,7 +319,7 @@
                 return;
             }
             const universalBOM = "\uFEFF";
-            let tpl = '<div class="btn btn-info mx-1" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,' + universalBOM + '{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">' + nowStr + '掃描紀錄' + '</div></a></div>';  // v1.0.2 改中文編碼
+            let tpl = '<div class="btn btn-info mx-1" onclick="removeDownloadThisOrderBtn()" id="downloadThisOrderBtn"><a class="text-light" download="' + nowStr + '掃描紀錄' + '.csv" href="data:application/csv;charset=utf-8,' + universalBOM + '{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">' + nowStr + '掃描紀錄' + '</div></a></div>';  // v1.0.2 改中文編碼
             let table_content = '';
             $('#todayDataDownload').attr("hidden", false);                
             let productNumber = '';
