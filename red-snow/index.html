@@ -537,7 +537,18 @@
             }
             $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '<td class="productName">' + productName + '</td>' + '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo" value="' + hint + '"/></td><td><div class="btn btn-danger delete">×</div></td></tr>');//<div class="input-group"> <div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div><div class="input-group-append"></div></div>
             $('#inputBarCode').val('');
-            $('#field' + (itemCount).toString()).focus();
+            if ($('#field' + (itemCount).toString()).val() !== '') {
+                $('#inputBarCode').focus();
+            } else {
+                $('#field' + (itemCount).toString()).focus();
+                    document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
+                    event.preventDefault();
+                    if (event.keyCode === 13) {
+                        $('#inputBarCode').focus();
+        
+                    }
+                }); 
+            }
             // if ($('#enableAuto').is(":checked")) {            
             //     setTimeout(() => {
             //         if ($('#field' + (itemCount).toString()).val() !== '') {
@@ -548,14 +559,6 @@
             // } else {
                 
             // }
-
-            document.getElementById('field' + (itemCount).toString()).addEventListener("keyup", function(event) {
-                event.preventDefault();
-                if (event.keyCode === 13) {
-                    $('#inputBarCode').focus();
-    
-                }
-            }); 
             itemCount++;               
         }
         var isUpdated = false;
