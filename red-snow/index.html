@@ -325,13 +325,62 @@
             let productNumber = '';
             let ean = '';
             let hint = '';
+            let hasUsed = [];
+
+            for (let i = 0; i <= $('table tr').length; i++) {
+                hasUsed.push(false);
+                console.log($('#field' + (i).toString()).val());
+            }
+            let skip = false;
+            
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
-                var td = '';                        
-                if (index % 4 === 0 || index % 4 === 1) {
-                    td = cellContent.split('<td>')[0];                                                                
-                } else if (index % 4 === 2) {                                                               
-                    hint = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                var td = '';                  
+                
+                if (index % 4 === 0) {
+                    console.log(cellContent);
+                    // if (!$('#tr_' + Math.trunc(index / 4).toString()).is(":visible")) {
+                    //     skip = true;
+                    // } else {
+                        td = cellContent.split('<td>')[0];   
+                    //     skip = false;
+                    // }
+                    // console.log($(cell).css("display"));
+                    // if (!$(cell).is(":visible")) {
+                    //     console.log('xxxxx');
+                    //     // skip = true;
+                    // } else {
+                    //     console.log('pppppp');
+                                                                                     
+                        // skip = false;
+                    // }
+                } else if (index % 4 === 1) {
+                    td = cellContent.split('<td>')[0];                                                                                        
+                } else if (index % 4 === 2) {                                          
+                    if (document.contains(document.getElementById('field' + (Math.trunc(index / 4).toString()))) && !hasUsed[(Math.trunc(index / 4))]) {
+                        hasUsed[(Math.trunc(index / 4))] = true;
+                        console.log((Math.trunc(index / 4)));
+                        hint = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                    } else {
+                        let x = Math.trunc(index / 4);
+                        while (x <= $('table tr').length) {
+                            console.log(x);                            
+                            console.log('document.contains(document.getElementById("field" + (x).toString()))' + (document.contains(document.getElementById('field' + (x).toString()))).toString());
+                            console.log(hasUsed[x]);
+                            if (x !== lastHideIndex && document.contains(document.getElementById('field' + (x).toString())) && hasUsed[x] === false) {
+                                hasUsed[x] = true;
+                                console.log(hasUsed[x]);
+                                break;
+                            } else if (x === parseInt(lastHideIndex) + 1 && hasUsed[x] === false) {
+                                hasUsed[x] = true;
+                                break;
+                            }
+                            else
+                                x++;                                
+                        }
+                        hint = $('#field' + (x).toString()).val();
+                    }
+                    console.log(hint);
                 }
                 if (index % 4 === 0) {
                     table_content += td + '%2C'; //Need to return contents of cell
@@ -345,12 +394,12 @@
                             break;
                         } 
                     }
-                } else if (index % 4 === 2) {                            
+                } else if (index % 4 === 2 && !skip) {                            
                     table_content += productNumber + '\t' + '%2C';                             
                     table_content += ean + '\t' + '%2C';
                     productNumber = '';
                     ean = '';
-                } else if (index % 4 === 3) {
+                } else if (index % 4 === 3 && !skip) {
                     table_content += hint + '\t' + '%2C';           
                     table_content += today + '%0A';
                 }                
@@ -508,8 +557,12 @@
                     break;
                 } else {
                     if (inputBarCode.split('-').length > 1) {
-                        productName = inputBarCode.replace('-' + inputBarCode.split('-')[inputBarCode.split('-').length - 1], '');                    
-                        hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];
+                        if ((inputBarCode.split('-')[inputBarCode.split('-').length - 1]).length > 4) {
+                            productName = inputBarCode.replace('-' + inputBarCode.split('-')[inputBarCode.split('-').length - 1], '');                    
+                            hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];                            
+                        } else {
+                            productName = inputBarCode;                    
+                        }                        
                     } else {
                         productName = inputBarCode;
                     }
@@ -525,7 +578,7 @@
                 } else if (index % 4 === 2) {                                                               
                     _hint = $('#field' + (Math.trunc(index / 4)).toString()).val();
                 }
-                if (_productName === productName && _hint === hint) {
+                if (_productName === productName && _hint === hint && _hint !== '') {
                     alert('已輸入相同產品!');
                     isTheSame = true;                    
                     return false;
@@ -535,7 +588,7 @@
                 $('#inputBarCode').val('');
                 return;
             }
-            $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '<td class="productName">' + productName + '</td>' + '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo" value="' + hint + '"/></td><td><div class="btn btn-danger delete">×</div></td></tr>');//<div class="input-group"> <div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div><div class="input-group-append"></div></div>
+            $('table').find('tbody').append('<tr id="tr_' + (itemCount).toString() + '"><td>' + (itemCount + 1).toString() + '<td class="productName_' + (itemCount).toString() + '">' + productName + '</td>' + '<td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo" value="' + hint + '"/></td><td><div class="btn btn-danger delete">×</div></td></tr>');//<div class="input-group"> <div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div><div class="input-group-append"></div></div>
             $('#inputBarCode').val('');
             if ($('#field' + (itemCount).toString()).val() !== '') {
                 $('#inputBarCode').focus();
@@ -714,9 +767,11 @@
             }
             return true;
         }
-
+        var lastHideIndex = 0;
         $(document).on("click", ".delete", function(){                                
-            $(this).parents("tr").remove();                 
+            $(this).parents("tr").hide();
+            lastHideIndex = $(this).parents("tr").attr('id').replace('tr_', "");
+            console.log(lastHideIndex);                 
         });
 
         function clearInput(id) {
