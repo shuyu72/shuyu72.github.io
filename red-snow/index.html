@@ -427,6 +427,11 @@
             console.log(tpl);
             $(tpl).appendTo($('#btnGrp'));
             
+            for (let i = 0; i <= $('table tr').length; i++) {
+                hasUsed[i] = false;
+                console.log($('#field' + (i).toString()).val());
+            }
+
             table_content = '';
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
@@ -434,7 +439,31 @@
                 if (index % 4 === 0 || index % 4 === 1) {
                     td = cellContent.split('<td>')[0];                                                                
                 } else if (index % 4 === 2) {                                                               
-                    td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                    // td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                    if (document.contains(document.getElementById('field' + (Math.trunc(index / 4).toString()))) && !hasUsed[(Math.trunc(index / 4))]) {
+                        hasUsed[(Math.trunc(index / 4))] = true;
+                        console.log((Math.trunc(index / 4)));
+                        td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                    } else {
+                        let x = Math.trunc(index / 4);
+                        while (x <= $('table tr').length) {
+                            console.log(x);                            
+                            console.log('document.contains(document.getElementById("field" + (x).toString()))' + (document.contains(document.getElementById('field' + (x).toString()))).toString());
+                            console.log(hasUsed[x]);
+                            if (x !== lastHideIndex && document.contains(document.getElementById('field' + (x).toString())) && hasUsed[x] === false) {
+                                hasUsed[x] = true;
+                                console.log(hasUsed[x]);
+                                break;
+                            } else if (x === parseInt(lastHideIndex) + 1 && hasUsed[x] === false) {
+                                hasUsed[x] = true;
+                                break;
+                            }
+                            else
+                                x++;                                
+                        }
+                        td = $('#field' + (x).toString()).val();
+                    }
+                    console.log(hint);                    
                 }
                 
                 if (index % 4 === 0) {
