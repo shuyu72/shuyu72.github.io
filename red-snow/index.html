@@ -365,7 +365,7 @@
                         let x = Math.trunc(index / 4);
                         while (x <= $('table tr').length) {
                             console.log(x);                            
-                            console.log('document.contains(document.getElementById("field" + (x).toString()))' + (document.contains(document.getElementById('field' + (x).toString()))).toString());
+                            // console.log('document.contains(document.getElementById("field" + (x).toString()))' + (document.contains(document.getElementById('field' + (x).toString()))).toString());
                             console.log(hasUsed[x]);
                             if (x !== lastHideIndex && document.contains(document.getElementById('field' + (x).toString())) && hasUsed[x] === false) {
                                 hasUsed[x] = true;
@@ -579,7 +579,10 @@
                 let barcode = inputBarCode.replace('-' + inputBarCode.split('-')[inputBarCode.split('-').length - 1], '');                
                 if (product_obj[i].ProductNumber === barcode) {                    
                     productName = product_obj[i].ProductName;                    
-                    hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];                     
+                    if (inputBarCode.split('-').length - 1 !== 0)
+                        hint = inputBarCode.split('-')[inputBarCode.split('-').length - 1];  
+                    else
+                        hint = '';                   
                     break;
                 } else if (product_obj[i].EAN === inputBarCode) {
                     productName = product_obj[i].ProductName;
@@ -593,7 +596,7 @@
                             productName = inputBarCode;                    
                         }                        
                     } else {
-                        productName = inputBarCode;
+                        productName = inputBarCode;                        
                     }
                 }                
             }
