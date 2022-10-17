@@ -218,7 +218,7 @@
         <div>
             <div class="row">
                 <div class="col">
-                    <div id="carousel" class="carousel slide" data-ride="carousel">
+                    <div id="carousel" class="carousel slide" style="margin-bottom:1rem" data-ride="carousel">
                         <div class="carousel-inner">
                         <div class="carousel-item active">
                             <img src="pics/1.jpg" class="d-block" style="margin-left: 20%; margin-top: 0%; height: 10%; width: auto;" alt="...">
@@ -314,14 +314,8 @@
                 </div>
             </div>
         </div>
-        <style>            
-            #carousel{
-                border-radius: 0%;
-            }
-        </style>
         <script type="text/javascript">
-            
-
+                
             $(function() {
                 
             })
@@ -355,7 +349,7 @@
             var ml=randMl;//移動的長度
             var w=15;//矩形的寬
             var h=15;//矩形的高
-            var cw=900;//getWidth();//畫布的寬
+            var cw=getWidth()+1500;//畫布的寬
             var ch=getHeight();//document.body.clientHeight;//畫布的高
 
             function initMXMY(size){
