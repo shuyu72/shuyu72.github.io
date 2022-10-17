@@ -1,27 +1,1704 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, 
+        initial-scale=1.0">
+        <title>移動方塊</title>
+        <canvas id="canvas"></canvas>
+    </head>
+    <body>
+        <script type="text/javascript">
+            function callCamera() {
+                if ('mediaDevices' in navigator && 'getUserMedia' in navigator.mediaDevices) {
+                    console.log("Let's get this party started")
+                }
+                navigator.mediaDevices.getUserMedia({
+                    video: {
+                        minAspectRatio: 1.333,
+                        minFrameRate: 60,
+                        width: 640,
+                        heigth: 480
+                    }
+                })
+                navigator.mediaDevices.getUserMedia( MediaStreamConstraints )
+                .then( MediaStream => {
+                    /*assuming that there is a video tag having
+                    an id 'video' in the index.html*/
+                    const videoElem = document.getElementById( 'video');
+                    
+                    /*it is important to use the srcObject
+                    attribute and not the src attribute
+                    because, the src attribute does not
+                    support the mediaStream as a value*/
+                    videoElem.srcObject = mediaStream;
+                    
+                    //Don't forget to set the autoplay attribute to true
+                    video.autoplay = true;
+                    
+                }).catch( error => {
+                    //code to handle the error
+                });
+                
+            //Or using async/await —
+
+            async function accessCamera() {
+                const videoElem = document.getElementById( 'video');
+                let stream = null;
+                try{
+                    stream = await navigator.mediaDevices.getUserMedia(
+                            MediaStreamConstraints );
+
+                    //adding the received stream to the source of the video element
+                    videoElem.srcObject = stream;
+                
+                    videoElem.autoplay = true;
+                }catch(err) {
+                    //code to handle the error
+                }
+            }
+            
+
+            /* This constraints object tells the browser to use the camera
+            having resolution between 1200 X 720 and 1600 X 1080 resolution
+            if available otherwise the returned promise is rejected with
+            "NotFoundError" */
+            // const constraints = {
+            // //disables the audio media content in the resulting media stream
+            //     audio: false,
+            //     video: {
+            //         width: {
+            //             min: 1200,
+            //             max: 1600
+            //         },
+            //         height: {
+            //             min: 720,
+            //             max: 1080
+            //         }
+            //     }
+            // }; // Inherently sets video content to true or "required"
+
+
+        
+        const videoElem = document.getElementById('video');
+        const errorElem = document.getElementById('error');
+        //Declare the MediaStreamConstraints object    
+  
+            function openCamera() {
+    //Ask the User for the access of the device camera and microphone
+                navigator.mediaDevices.getUserMedia(constraints)
+                    .then(mediaStream => {
+                        /* The received mediaStream contains both the 
+                        video and audio media data*/
+    
+    /*Add the mediaStream directly to the source of the video element
+                        using the srcObject attribute*/
+                        videoElem.srcObject = mediaStream;
+    
+                    }).catch(err => {
+                        // handling the error if any
+                        errorElem.innerHTML = err;
+                        errorElem.style.display = "block";
+                    });
+    
+            }
+
+
+            //             //initializing the deviceId with null
+            // let deviceId = null;
+
+            //returns a promise that resolves to a list of
+            //connected devices
+            navigator.mediaDevices.enumerateDevices()
+            .then( devices => {
+                devices.forEach(device => {
+                    //if the device is a video input
+                    //then get its deviceId
+                    if(device.kind === 'videoinput'){
+                        deviceId = device.deviceId;
+                    }
+                });
+            })
+            .catch(err => {
+                //handle the error
+            });
+
+            /* This constraints object tells the browser to
+            use the camera having the given deviceId if
+            available otherwise use other available devices*/
+            const constraints = {
+            //disables the audio media content in the resulting media stream
+                audio: false,
+                video: {
+                    deviceId: deviceId
+                }
+            }; // Inherently sets video content to true or "required"
+
+            
+            function draw (id){            
+            //獲取畫布id
+            var canvas =document.getElementById(id);
+            canvas.width  = document.body.clientWidth;//window.innerWidth;//getWidth();
+  			canvas.height = getHeight();//document.body.clientHeight;//window.innerHeight;
+            if(canvas==null)
+                return false;
+            //獲取上下文
+            var  cxt =canvas.getContext("2d");            
+            // randTime = Math.floor(Math.random() * 10 + 10);
+            //var interval=setInterval(function(){move(cxt);},randTime);
+            (function loop() {
+                var randTime = Math.floor(Math.random() * 100 + 5);
+                // var rand = Math.round(Math.random() * (3000 - 500)) + 500;
+                    setTimeout(function() {
+                    move(cxt);
+                    loop();  
+                }, randTime);
+            }());
+            }
+            randX = 0;//Math.floor(Math.random() * getWidth());
+            randY = 0;//Math.floor(Math.random() * getHeight());
+            randMl= Math.floor(Math.random() * 10);
+            var x=[];//randX;//矩形的x座標
+            var y=[];//randY;//矩形的y座標
+            var mx=[];//值為0向右，值為0向左
+            var my=[];//值為0向下，值為0向上
+            var ml=randMl;//移動的長度
+            var w=20;//矩形的寬
+            var h=20;//矩形的高
+            var cw=document.body.clientWidth;//getWidth();//畫布的寬
+            var ch=getHeight();//document.body.clientHeight;//畫布的高
+
+            function initMXMY(size){
+                for(i=0;i<size;i++){
+                    mx.push(0);
+                    my.push(0);
+                }
+            }
+
+            function genXYArr(size){
+                for(i=0;i<size;i++){
+                    x.push(Math.floor(Math.random() * document.body.clientWidth));
+                    y.push(Math.floor(Math.random() * getHeight()));
+                }
+            }
+            
+            function getWidth() {
+                return Math.max(
+                    document.body.scrollWidth,
+                    document.documentElement.scrollWidth,
+                    document.body.offsetWidth,
+                    document.documentElement.offsetWidth,
+                    document.documentElement.clientWidth
+                );
+            }
+
+            function getHeight() {
+                return Math.max(
+                    document.body.scrollHeight,
+                    document.documentElement.scrollHeight,
+                    document.body.offsetHeight,
+                    document.documentElement.offsetHeight,
+                    document.documentElement.clientHeight
+                );
+            }
+           
+           function move(cxt){               
+               cxt.clearRect(0,0,getWidth(),getHeight());//在給定的矩形內清除所有的畫素為透明
+               cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
+               cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
+               cxt.fillStyle="red";//把矩形設定為紅色
+               var size=50;
+               initMXMY(size);
+               genXYArr(size);
+               for(i=0;i<size;i++){
+                    cxt.fillRect(x[i],y[i],w,h);//繪製矩形                
+                    //判斷是否到達邊緣
+                    if(mx[i]==0){
+                        x[i]=x[i]+ml;//x座標加上移動長度
+                        if(x[i]>cw-w){
+                            mx[i]=1;
+                        }
+                    }else{
+                        x[i]=x[i]-ml;
+                        if(x[i]<=0){
+                            mx[i]=0;                       
+                        }
+                    }
+                    if(my[i]==0){
+                        y[i]=y[i]+ml;
+                        if(y[i]>ch-h){
+                            my[i]=1;
+                        }
+                    }else{
+                        y[i]=y[i]-ml;
+                        if(y[i]<=0){
+                            my[i]=0;                       
+                        }
+                    }
+           }
+        }              
+           window.addEventListener("DOMContentLoaded",draw("canvas"),true);
+           callCamera();
+        </script>
+        
+    <style>
+        body {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+          
+        video {
+            background-color: black;
+            margin-bottom: 1rem;
+        }
+          
+        #error {
+            color: red;
+            padding: 0.6rem;
+            background-color: rgb(236 157 157);
+            margin-bottom: 0.6rem;
+            display: none;
+        }
+    </style>
+
+  
+<body>
+    <h1> WebRTC getUserMedia() demo</h1>
+    <video id='video'
+           width="600"
+            height="300" 
+            autoplay playsinline>
+        Sorry, video element not supported in your browser
+    </video>
+    <div id="error"></div>
+    <button onclick="openCamera()"> Open Camera</button>
+    
+    </body>
+</html> -->
+
+
+
+
+
+<!-- <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <title>加好友</title>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="index.css" />  
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width,
+	initial-scale=1.0">
+	<style>
+		body {
+			text-align: center;
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+		}
+		
+		video {
+			background-color: black;
+			margin-bottom: 1rem;
+		}
+		
+		#error {
+			color: red;
+			padding: 0.6rem;
+			background-color: rgb(236 157 157);
+			margin-bottom: 0.6rem;
+			display: none;
+		}
+	</style>
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
+	<title>GetUserMedia demo</title>
+</head>
+
+<body>
+	<h1> WebRTC getUserMedia() demo</h1>
+
+	<!-- If you use the playsinline attribute then
+	the video is played "inline". If you omit this
+	attribute then it works normal in the desktop
+	browsers, but for the mobile browsers, the video
+	takes the fullscreen by default. And don't forget
+	to use the autoplay attribute
+	<video id='video'
+		width="600"
+			height="300"
+			autoplay playsinline>
+		Sorry, video element not supported in your browser
+	</video>
+	<div id="error"></div>
+	<button onclick="openCamera()"> Open Camera</button>
+	<script>
+		const videoElem = document.getElementById('video');
+		const errorElem = document.getElementById('error');
+		//Declare the MediaStreamConstraints object
+		const constraints = {
+			audio: false,
+			video: {
+           facingMode: "environment" //prefers front camera if available
+// or facingMode: "environment"   perfers rear camera if available
+      }
+		}
+
+		function openCamera() {
+//Ask the User for the access of the device camera and microphone
+			navigator.mediaDevices.getUserMedia(constraints)
+				.then(mediaStream => {
+					/* The received mediaStream contains both the
+					video and audio media data*/
+
+/*Add the mediaStream directly to the source of the video element
+					using the srcObject attribute*/
+					videoElem.srcObject = mediaStream;
+
+				}).catch(err => {
+					// handling the error if any
+					errorElem.innerHTML = err;
+					errorElem.style.display = "block";
+				});
+
+		}
+	</script>
+</body>
+
+</html> -->
+<!-- <html>
+<head>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="crossorigin="anonymous"></script>
+    <script  src="https://cdnjs.cloudflare.com/ajax/libs/quagga/0.12.1/quagga.min.js"></script>
 </head>
 <body>
-    <div class="container">
-        <div class="card">
-            <div class="card-body">                
-                <div id="display"></div>
-                <h3 class="card-title">還沒連到資料庫，沒辦法加朋友啦</h3>
+<section id="container" class="container">
+    <div class="controls">
+        <fieldset class="input-group">
+            <button class="stop">Stop</button>
+        </fieldset>
+        <fieldset class="reader-config-group">
+           <label>
+                <span>Barcode-Type</span>
+                <select name="decoder_readers">
+                    <option value="code_128" selected="selected">Code 128</option>
+                    <option value="code_39">Code 39</option>
+                    <option value="code_39_vin">Code 39 VIN</option>
+                    <option value="ean">EAN</option>
+                    <option value="ean_extended">EAN-extended</option>
+                    <option value="ean_8">EAN-8</option>
+                    <option value="upc">UPC</option>
+                    <option value="upc_e">UPC-E</option>
+                    <option value="codabar">Codabar</option>
+                    <option value="i2of5">I2of5</option>
+                </select>
+            </label>
+            <label>
+                <span>Resolution (long side)</span>
+                <select name="input-stream_constraints">
+                    <option value="320x240">320px</option>
+                    <option selected="selected" value="640x480">640px</option>
+                    <option value="800x600">800px</option>
+                    <option value="1280x720">1280px</option>
+                    <option value="1600x960">1600px</option>
+                    <option value="1920x1080">1920px</option>
+                </select>
+            </label>
+            <label>
+                <span>Patch-Size</span>
+                <select name="locator_patch-size">
+                    <option value="x-small">x-small</option>
+                    <option value="small">small</option>
+                    <option selected="selected" value="medium">medium</option>
+                    <option value="large">large</option>
+                    <option value="x-large">x-large</option>
+                </select>
+            </label>
+            <label>
+                <span>Half-Sample</span>
+                <input type="checkbox" checked="checked" name="locator_half-sample" />
+            </label>
+            <label>
+                <span>Workers</span>
+                <select name="numOfWorkers">
+                    <option value="0">0</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option selected="selected" value="4">4</option>
+                    <option value="8">8</option>
+                </select>
+            </label>
+            <label>
+                <span>Camera</span>
+                <select name="input-stream_constraints" id="deviceSelection">
+                </select>
+            </label>
+        </fieldset>
+    </div>
+    <div id="result_strip">
+        <ul class="thumbnails"></ul>
+    </div>
+    <div id="interactive" class="viewport"></div>
+</section>
+<script>
+    /**Quagga initialiser starts here*/
+
+$(function() {
+    var value;
+    var App = {
+        init : function() {
+            Quagga.init(this.state, function(err) {
+                if (err) {
+                    console.log(err);
+                    return;
+                }
+                App.attachListeners();
+                Quagga.start();
+            });
+        },
+        initCameraSelection: function(){
+            var streamLabel = Quagga.CameraAccess.getActiveStreamLabel();
+
+            return Quagga.CameraAccess.enumerateVideoDevices()
+            .then(function(devices) {
+                function pruneText(text) {
+                    return text.length > 30 ? text.substr(0, 30) : text;
+                }
+                var $deviceSelection = document.getElementById("deviceSelection");
+                while ($deviceSelection.firstChild) {
+                    $deviceSelection.removeChild($deviceSelection.firstChild);
+                }
+                devices.forEach(function(device) {
+                    var $option = document.createElement("option");
+                    $option.value = device.deviceId || device.id;
+                    $option.appendChild(document.createTextNode(pruneText(device.label || device.deviceId || device.id)));
+                    $option.selected = streamLabel === device.label;
+                    $deviceSelection.appendChild($option);
+                });
+            });
+        },
+            querySelectedReaders: function() {
+        return Array.prototype.slice.call(document.querySelectorAll('.readers input[type=checkbox]'))
+            .filter(function(element) {
+                return !!element.checked;
+            })
+            .map(function(element) {
+                return element.getAttribute("name");
+            });
+    },
+        attachListeners: function() {
+            var self = this;
+
+            self.initCameraSelection();
+            $(".controls").on("click", "button.stop", function(e) {
+                e.preventDefault();
+                Quagga.stop();
+            });
+
+            $(".controls .reader-config-group").on("change", "input, select", function(e) {
+                e.preventDefault();
+                var $target = $(e.target);
+                   // value = $target.attr("type") === "checkbox" ? $target.prop("checked") : $target.val(),
+                   value =  $target.attr("type") === "checkbox" ? this.querySelectedReaders() : $target.val();
+                  var  name = $target.attr("name"),
+                    state = self._convertNameToState(name);
+
+                console.log("Value of "+ state + " changed to " + value);
+                self.setState(state, value);
+            });
+        },
+        _accessByPath: function(obj, path, val) {
+            var parts = path.split('.'),
+                depth = parts.length,
+                setter = (typeof val !== "undefined") ? true : false;
+
+            return parts.reduce(function(o, key, i) {
+                if (setter && (i + 1) === depth) {
+                    if (typeof o[key] === "object" && typeof val === "object") {
+                        Object.assign(o[key], val);
+                    } else {
+                        o[key] = val;
+                    }
+                }
+                return key in o ? o[key] : {};
+            }, obj);
+        },
+        _convertNameToState: function(name) {
+            return name.replace("_", ".").split("-").reduce(function(result, value) {
+                return result + value.charAt(0).toUpperCase() + value.substring(1);
+            });
+        },
+        detachListeners: function() {
+            $(".controls").off("click", "button.stop");
+            $(".controls .reader-config-group").off("change", "input, select");
+        },
+        setState: function(path, value) {
+            var self = this;
+
+            if (typeof self._accessByPath(self.inputMapper, path) === "function") {
+                value = self._accessByPath(self.inputMapper, path)(value);
+            }
+
+            self._accessByPath(self.state, path, value);
+
+            console.log(JSON.stringify(self.state));
+            App.detachListeners();
+            Quagga.stop();
+            App.init();
+        },
+        inputMapper: {
+            inputStream: {
+                constraints: function(value){
+                    if (/^(\d+)x(\d+)$/.test(value)) {
+                        var values = value.split('x');
+                        return {
+                            width: {min: parseInt(values[0])},
+                            height: {min: parseInt(values[1])}
+                        };
+                    }
+                    return {
+                        deviceId: value
+                    };
+                }
+            },
+            numOfWorkers: function(value) {
+                return parseInt(value);
+            },
+            decoder: {
+                readers: function(value) {
+                    if (value === 'ean_extended') {
+                        return [{
+                            format: "ean_reader",
+                            config: {
+                                supplements: [
+                                    'ean_5_reader', 'ean_2_reader'
+                                ]
+                            }
+                        }];
+                    }
+                    console.log("value before format :"+value);
+                    return [{
+                        format: value + "_reader",
+                        config: {}
+                    }];
+                }
+            }
+        },
+        state: {
+            inputStream: {
+                type : "LiveStream",
+                constraints: {
+                    width: {min: 640},
+                    height: {min: 480},
+                    aspectRatio: {min: 1, max: 100},
+                    facingMode: "environment" // or user
+                }
+            },
+            locator: {
+                patchSize: "large",
+                halfSample: true
+            },
+            numOfWorkers: 4,
+            decoder: {
+                readers : ["code_39_reader","code_128_reader"]
+            },
+            locate: true,
+            multiple:true
+        },
+        lastResult : null
+    };
+    
+                   //value =  App.querySelectedReaders() ;
+    App.init();
+
+    Quagga.onProcessed(function(result) {
+        var drawingCtx = Quagga.canvas.ctx.overlay,
+            drawingCanvas = Quagga.canvas.dom.overlay;
+
+        if (result) {
+            if (result.boxes) {
+                drawingCtx.clearRect(0, 0, parseInt(drawingCanvas.getAttribute("width")), parseInt(drawingCanvas.getAttribute("height")));
+                result.boxes.filter(function (box) {
+                    return box !== result.box;
+                }).forEach(function (box) {
+                    Quagga.ImageDebug.drawPath(box, {x: 0, y: 1}, drawingCtx, {color: "green", lineWidth: 2});
+                });
+            }
+
+            if (result.box) {
+                Quagga.ImageDebug.drawPath(result.box, {x: 0, y: 1}, drawingCtx, {color: "#00F", lineWidth: 2});
+            }
+
+            if (result.codeResult && result.codeResult.code) {
+                Quagga.ImageDebug.drawPath(result.line, {x: 'x', y: 'y'}, drawingCtx, {color: 'red', lineWidth: 3});
+            }
+        }
+    });
+
+    Quagga.onDetected(function(result) {
+        var code = result.codeResult.code;
+        console.log(code);
+
+        if (App.lastResult !== code) {
+            App.lastResult = code;
+            var $node = null, canvas = Quagga.canvas.dom.image;
+
+            $node = $('<li><div class="thumbnail"><div class="imgWrapper"><img /></div><div class="caption"><h4 class="code"></h4></div></div></li>');
+            $node.find("img").attr("src", canvas.toDataURL());
+            $node.find("h4.code").html(code);
+            $("#result_strip ul.thumbnails").prepend($node);
+        }
+        Quagga.offDetected();
+    });
+    
+});
+</script>
+<style>
+    @charset "UTF-8";
+
+.collapsable-source pre {
+    font-size: small;
+}
+
+.input-field {
+    display: flex;
+    align-items: center;
+    width: 260px;
+}
+
+.input-field label {
+    flex: 0 0 auto;
+    padding-right: 0.5rem;
+}
+
+.input-field input {
+    flex: 1 1 auto;
+    height: 20px;
+}
+
+.input-field button {
+    flex: 0 0 auto;
+    height: 28px;
+    font-size: 20px;
+    width: 40px;
+}
+
+.icon-barcode {
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0idXRmLTgiPz48IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDEuMS8vRU4iICJodHRwOi8vd3d3LnczLm9yZy9HcmFwaGljcy9TVkcvMS4xL0RURC9zdmcxMS5kdGQiPjxzdmcgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHBhdGggZD0iTTAgNGg0djIwaC00ek02IDRoMnYyMGgtMnpNMTAgNGgydjIwaC0yek0xNiA0aDJ2MjBoLTJ6TTI0IDRoMnYyMGgtMnpNMzAgNGgydjIwaC0yek0yMCA0aDF2MjBoLTF6TTE0IDRoMXYyMGgtMXpNMjcgNGgxdjIwaC0xek0wIDI2aDJ2MmgtMnpNNiAyNmgydjJoLTJ6TTEwIDI2aDJ2MmgtMnpNMjAgMjZoMnYyaC0yek0zMCAyNmgydjJoLTJ6TTI0IDI2aDR2MmgtNHpNMTQgMjZoNHYyaC00eiI+PC9wYXRoPjwvc3ZnPg==);
+}
+
+.overlay {
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.3);
+}
+
+.overlay__content {
+    top: 50%;
+    position: absolute;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 90%;
+    max-height: 90%;
+    max-width: 800px;
+}
+
+.overlay__close {
+    position: absolute;
+    right: 0;
+    padding: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    line-height: 2rem;
+    text-align: center;
+    background-color: white;
+    cursor: pointer;
+    border: 3px solid black;
+    font-size: 1.5rem;
+    margin: -1rem;
+    border-radius: 2rem;
+    z-index: 100;
+    box-sizing: content-box;
+}
+
+.overlay__content video {
+    width: 100%;
+    height: 100%;
+}
+
+.overlay__content canvas {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+}
+
+#interactive.viewport {
+    position: relative;
+}
+
+#interactive.viewport > canvas, #interactive.viewport > video {
+    max-width: 100%;
+    width: 100%;
+}
+
+canvas.drawing, canvas.drawingBuffer {
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+/* line 16, ../sass/_viewport.scss */
+.controls fieldset {
+  border: none;
+}
+/* line 19, ../sass/_viewport.scss */
+.controls .input-group {
+  float: left;
+}
+/* line 21, ../sass/_viewport.scss */
+.controls .input-group input, .controls .input-group button {
+  display: block;
+}
+/* line 25, ../sass/_viewport.scss */
+.controls .reader-config-group {
+  float: right;
+}
+/* line 28, ../sass/_viewport.scss */
+.controls .reader-config-group label {
+  display: block;
+}
+/* line 30, ../sass/_viewport.scss */
+.controls .reader-config-group label span {
+  width: 11rem;
+  display: inline-block;
+  text-align: right;
+}
+/* line 37, ../sass/_viewport.scss */
+.controls:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* line 22, ../sass/_viewport.scss */
+#result_strip {
+  margin: 10px 0;
+  border-top: 1px solid #EEE;
+  border-bottom: 1px solid #EEE;
+  padding: 10px 0;
+}
+/* line 28, ../sass/_viewport.scss */
+#result_strip ul.thumbnails {
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+  width: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+}
+/* line 37, ../sass/_viewport.scss */
+#result_strip ul.thumbnails > li {
+  display: inline-block;
+  vertical-align: middle;
+  width: 160px;
+}
+/* line 41, ../sass/_viewport.scss */
+#result_strip ul.thumbnails > li .thumbnail {
+  padding: 5px;
+  margin: 4px;
+  border: 1px dashed #CCC;
+}
+/* line 46, ../sass/_viewport.scss */
+#result_strip ul.thumbnails > li .thumbnail img {
+  max-width: 140px;
+}
+/* line 49, ../sass/_viewport.scss */
+#result_strip ul.thumbnails > li .thumbnail .caption {
+  white-space: normal;
+}
+/* line 51, ../sass/_viewport.scss */
+#result_strip ul.thumbnails > li .thumbnail .caption h4 {
+  text-align: center;
+  word-wrap: break-word;
+  height: 40px;
+  margin: 0px;
+}
+/* line 61, ../sass/_viewport.scss */
+#result_strip ul.thumbnails:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+@media (max-width: 603px) {
+  /* line 2, ../sass/phone/_core.scss */
+  #container {
+    margin: 10px auto;
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+  }
+}
+@media (max-width: 603px) {
+  /* line 5, ../sass/phone/_viewport.scss */
+  #interactive.viewport {
+    width: 100%;
+    height: auto;
+    overflow: hidden;
+  }
+
+  /* line 20, ../sass/phone/_viewport.scss */
+  #result_strip {
+    margin-top: 5px;
+    padding-top: 5px;
+  }
+
+  #result_strip ul.thumbnails {
+    width: 100%;
+    height: auto;
+  }
+
+  /* line 24, ../sass/phone/_viewport.scss */
+  #result_strip ul.thumbnails > li {
+    width: 150px;
+  }
+  /* line 27, ../sass/phone/_viewport.scss */
+  #result_strip ul.thumbnails > li .thumbnail .imgWrapper {
+    width: 130px;
+    height: 130px;
+    overflow: hidden;
+  }
+  /* line 31, ../sass/phone/_viewport.scss */
+  #result_strip ul.thumbnails > li .thumbnail .imgWrapper img {
+    margin-top: -25px;
+    width: 130px;
+    height: 180px;
+  }
+}
+</style>
+</body>
+
+</html> -->
+
+<html lang="zh-TW" manifest="index.manifest">
+    <head>        
+        <meta name="viewport" content="width=100%, initial-scale=1.1, user-scalable=no" />
+        <script src="html5-qrcode.min.js"></script>
+        <script src="index.js"></script>
+        <script src="https://raw.githubusercontent.com/mebjas/html5-qrcode/master/minified/html5-qrcode.min.js"></script>
+        <!-- <script  src="html5-qrcode.min.js"></script>                 -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+        <!-- <link rel="stylesheet" type="text/css" href="index.css" />   -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>      
+        
+        <!-- <script src="html5-qrcode-demo.js"></script> -->        
+    </head>
+    <body>
+        <h1 id="result"></h1>
+        <!-- <input type="button" value="game" id="game"><input type="button" value="update" id="update"> -->
+        <!-- <div id="data"></div> -->
+        <div class="row" id="btnGrp">            
+            <!-- <div class="col-8 col-xs-8">
+                <select class="form-control" id="daySelect" onchange="selectDownloadDate()"></select>
+            </div>
+            <div class="btn btn-info px-1 text-center col-2 col-xs-2" id="orderIdInputBtn" onclick="orderIdInput()">單號手動輸入</div> -->
+            <div class="col-2 col-xs-2"></div>
+            <div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(todayWithoutSlash)">當前資料下載</div>
+            <div class="col-2 col-xs-2"></div>
+            
+            
+        </div>
+        <div id="panel"></div>
+        <div class="container">
+        <div class="text-center my-5">
+            <!-- <div class="col-md-3"></div>        
+            <div class="col-md-3"></div>
+            <div class="col-md-3">                 -->
+                <!-- <div class="btn btn-success" onclick="start()">開始</div>                     -->
+            <!-- </div>
+            <div class="col-md-3"></div>         -->
+        </div>
+        <div class="row my-3 d-flex justify-content-center text-center">
+            <div id="orderIdGrp" class="row mx-1">
+                <h5 class="my-1 mx-1">單號:</h5>
+                <h5 class="my-1 mx-1" id="orderIdH5" hidden="true"></h5>
+                <div class="btn btn-danger px-3 reset-input" id="orderIdclear" onclick="modifyOrderId()" hidden="true">×</div>
+            </div>
+            <!-- <h5 id="orderId"></h5> -->
+            <!-- <h5 onclick="clearOrderId()">×</div> -->
+            <div class="text-center justify-content-center my-0 row">
+                <div class="mx-0 input-group col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">                    
+                        <input class="form-control mx-0" type="text" id="orderIdInput" placeholder="掃描或輸入單號"/>
+                        <div class="input-group-append">                
+                            <div class="btn btn-primary mx-0 px-1" id="ensureOrderIdBtn" onclick="newOrder()">確認</div>
+                        </div>
+                        <div class="input-group-append">                
+                            <div class="btn btn-warning mx-0 px-1" id="scanOrderIdBtn" onclick="showScanner()">掃描</div>
+                        </div>                    
+                </div>
             </div>
         </div>
-    </div>
-    <script>
-        $("#display").append('<img src="pics/heart_broken.gif" alt="red" width="150px" height="200px" " />')
-    </script>
-</body>
+        
+        <div class="d-flex text-center">
+            <!-- <div style="width: 100%" id="reader"></div> -->
+            <div id="qr-reader" class="col-xs-12" style="width:100%;" hidden="true"></div>
+            <div id="qr-reader-results"></div>
+        </div>
+        <div class="text-center justify-content-center my-2 row">
+            <div class="mx-0 input-group col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <input type="text" class="form-control" placeholder="掃描或輸入條碼" id="inputBarCode"/>
+                <div class="input-group-append">                
+                    <div class="btn btn-danger px-1 reset-input" onclick="clearInput('inputBarCode')">×</div>
+                </div>
+                <div class="input-group-append">                
+                    <div class="btn btn-primary px-3" onclick="newRecord()">確認</div>
+                </div>
+                <!-- <div class="input-group-append">                
+                    <div class="btn btn-warning px-1">掃描輸入</div>
+                </div> -->
+            </div>        
+        </div>
+        <div class="text-center">            
+        <div class="container">
+            <br>            
+              <div class="text-center table-wrapper">                                                  
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th class="col-xs-2">項次</th>
+                      <!-- <th class="col-xs-2">品號</th>
+                      <th class="col-xs-2">品名</th> -->
+                      <th class="col-xs-4">條碼</th>
+                      <th class="col-xs-4">暗記</th>                      
+                      <th class="col-xs-2">移除</th>
+                    </tr>
+                  </thead>
+                  <tbody>                    
+                  </tbody>
+                </table>
+              </div>
+            </div>    
+        </div>        
+        <div class="row text-center my-5 mx-0 inline-block">
+            <div class="col-3 col-md-3"></div>        
+            <div class="col-3 col-md-3">
+                <div class="btn btn-info" onclick="confirmClearThis()">重置</div>
+            </div>
+            <div class="col-3 col-md-3">                
+                <div class="btn btn-danger" onclick="end()">完成</div>
+            </div>
+            <div class="col-3 col-md-3"></div>        
+        </div>
+        </div>
+        <script>
+            // $(function() {
+            //     console.log(localStorage.table_content);                
+            // })
+            // document.getElementById('game').addEventListener('click', function(){
+            //     window.open("test642a.html", null, "height=480,width=640");
+            // }, false);
+            // document.getElementById('update').addEventListener('click', function(){
+            //     try {
+            //         applicationCache.update();
+            //     } catch(e) {
+            //         document.getElementById('panel').innerHTML += '<li>Error: ' + e + '</li>';
+            //     }
+            // }, false);
+            // document.getElementById('data').innerHTML = '<li>currentTime: ' + data.currentTime + '</li><li>currentPos: ' + data.currentPos + '</li>';
+            // document.getElementById('panel').innerHTML = '<li>' + window.applicationCache.status + '</li>';
+            // applicationCache.onchecking = function(){document.getElementById('panel').innerHTML += '<li>checking...</li>';};
+            // applicationCache.onerror = function(){document.getElementById('panel').innerHTML += '<li>error</li>';};
+            // applicationCache.onnoupdate = function(){document.getElementById('panel').innerHTML += '<li>noupdate</li>';};
+            // applicationCache.ondownloading = function(){document.getElementById('panel').innerHTML += '<li>downloading</li>';};
+            // applicationCache.onprogress = function(){document.getElementById('panel').innerHTML += '<li>progress</li>';};
+            // applicationCache.onupdateready = function(){document.getElementById('panel').innerHTML += '<li>updateready</li>';};
+            // applicationCache.oncached = function(){document.getElementById('panel').innerHTML += '<li>cached</li>';};
+            // applicationCache.onobsolete = function(){document.getElementById('panel').innerHTML += '<li>obsolete</li>';};
+            // window.ononline = function(){document.getElementById('panel').innerHTML += '<li>online</li>';};
+            // window.onoffline = function(){document.getElementById('panel').innerHTML += '<li>offline</li>';}
+            //     $(function() {
+            //         var cacheName = "core" // Whatever name
+            //         // Pass all assets here
+            //         // This example use a folder named «/core» in the root folder
+            //         // It is mandatory to add an icon (Important for mobile users)
+            //         var filesToCache = [
+            //             "/",
+            //             "/index.html",                    
+            //         ]
+
+            //         self.addEventListener("install", function(e) {
+            //         e.waitUntil(
+            //             caches.open(cacheName).then(function(cache) {
+            //             return cache.addAll(filesToCache)
+            //             })
+            //         )})
+
+            //         self.addEventListener("fetch", function(e) {
+            //         e.respondWith(
+            //             caches.match(e.request).then(function(response) {
+            //             return response || fetch(e.request)
+            //             })
+            //         )});
+            //     });
+
+            //     $(function () {
+            //         self.addEventListener('install', function (event) {
+            //         event.waitUntil(
+            //             caches.open('mysite-static-v3').then(function (cache) {
+            //             return cache.addAll([
+            //                 '/index.html'
+            //             ]);
+            //             }),
+            //         );
+            //         });
+            //         self.addEventListener('activate', function (event) {
+            //             event.waitUntil(
+            //                 caches.keys().then(function (cacheNames) {
+            //                 return Promise.all(
+            //                     cacheNames
+            //                     .filter(function (cacheName) {
+            //                         // Return true if you want to remove this cache,
+            //                         // but remember that caches are shared across
+            //                         // the whole origin
+            //                     })
+            //                     // .map(function (cacheName) {
+            //                     //     return caches.delete(cacheName);
+            //                     // }),
+            //                 );
+            //                 }),
+            //             );
+            //         });
+
+                    // document.querySelector('.cache-article').addEventListener('click', function (event) {
+                    //     event.preventDefault();
+
+                    //     var id = this.dataset.articleId;
+                    //     caches.open('mysite-article-' + id).then(function (cache) {
+                    //         fetch('/get-article-urls?id=' + id)
+                    //         .then(function (response) {
+                    //             // /get-article-urls returns a JSON-encoded array of
+                    //             // resource URLs that a given article depends on
+                    //             return response.json();
+                    //         })
+                    //         .then(function (urls) {
+                    //             cache.addAll(urls);
+                    //         });
+                    //     });
+                    // });
+                // })
+
+                // $(function () {
+                    
+                //     initDB();
+                //     addObj();               
+                //     getObj(); 
+                //     function initDB () {
+
+                //         var db;
+                //         var indexedDB = window.indexedDB || window.webkitIndexedDB || window.mozIndexedDB || window.msIndexedDB;
+                //         var IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction;
+
+                //         var req = indexedDB.open("mydb", 5);
+
+                //         req.onsuccess = function (e) {
+                //             console.log("open");
+                //             db = e.target.result;
+                //         };
+
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
+
+                //         req.onupgradeneeded = function (e) {
+                //             console.log("upgradeneeded");          
+
+                //             var db = e.target.result;
+                //             var emp = { id: 1, name: "ray" };
+                //             var store = db.createObjectStore("items", { keyPath: "id" });
+
+                //             store.add(emp);
+                //         }
+                //         return db;
+                //     }
+
+                //     function addObj() {                                    
+                //         var db;// = initDB();
+                //         var request = indexedDB.open("mydb", 3);  
+                //         request.onsuccess = function (evt) {
+                //             db = request.result; 
+                //             var txn = db.transaction("items", "readwrite");
+                //             var store = txn.objectStore("items");
+
+                //             var emp2 = { id: 2, name: "vivid" };
+
+                //             var req = store.add(emp2);
+                //             req.onsuccess = function (e) {
+                //                 console.log("add");
+                //             }
+
+                //             req.onerror = function () {
+                //                 console.log("error");
+                //             };
+                //         }
+                //     }
+
+                //     function getObj() {
+                //         var db;// = initDB();
+                //         var request = indexedDB.open("mydb", 3);  
+                //         request.onsuccess = function (evt) {
+                //             db = request.result; 
+                //             var txn = db.transaction("items", "readwrite");
+                //             var store = txn.objectStore("items");
+
+                //             var req = store.get(1);
+
+                //             req.onsuccess = function (e) {
+                //                 console.log("get");
+
+                //                 var emp = e.target.result;
+                //                 document.getElementById("result").innerHTML =
+                //                     emp.id + ", " + emp.name;
+                //             }
+
+                //             req.onerror = function () {
+                //                 console.log("error");
+                //             };
+                //         }
+                //     }
+
+                //     function deleteObj() {
+                //         var db = initDB();
+                //         var txn = db.transaction("items", "readwrite");
+                //         var store = txn.objectStore("items");
+
+                //         var req = store.delete(1);
+
+                //         req.onsuccess = function (e) {
+                //             console.log("delete");
+                //         }
+
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
+                //     }
+
+                //     function updateObj() {
+                //         var db = initDB();
+                //         var txn = db.transaction("items", "readwrite");
+                //         var store = txn.objectStore("items");
+
+                //         var emp2 = { id: 2, name: "kevin" };
+
+                //         var req = store.put(emp2);
+                //         req.onsuccess = function (e) {
+                //             console.log("put");
+                //         }
+
+                //         req.onerror = function () {
+                //             console.log("error");
+                //         };
+                //     }
+
+                    
+                // });
+
+
+                var today = new Date();
+                var dd = String(today.getDate()).padStart(2, '0');                
+                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var yyyy = today.getFullYear();
+                var today = yyyy + '/' + mm + '/' + dd;
+                var todayWithoutSlash = yyyy + mm + dd;                            
+                var needRefresh = false;
+                const table_header = "no,orderId,code,hint,date";
+                var isStarted = false;
+                // var isBegun = false;
+                var itemCount = 0;
+                var thisOrderId;
+                var confirmPopup = false;
+                var hasConfirmed = false;
+                $(function () {                                      
+                    $(window).blur(function() {
+                        // localStorage.today = "2022/07/04";
+                        needRefresh = true;
+                        confirmReset = false;
+                                                
+                    })                    
+
+                    
+                    // function reload () {
+                    //     window.location.hash = 'reload';
+                    //     window.location.reload();
+                    // }  
+                    $(window).focus(function() {      
+                        // alert(new Date());                        
+                        if (needRefresh) { 
+                            if (!hasConfirmed && !confirmReset) {                   
+                                reload();                                
+                                needRefresh = false;
+                                var currentDay = new Date();
+                                var dd = String(currentDay.getDate()).padStart(2, '0');
+                                var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                                var yyyy = currentDay.getFullYear();
+                                var currentDay = yyyy + '/' + mm + '/' + dd;
+                                var v = null;
+                                if (localStorage.today !== currentDay) {
+                                    // confirmPopup = false;                                                                
+                                    for (var i = 0; i < localStorage.length; i++){
+                                        let t = localStorage.getItem(localStorage.key(i));
+                                        if (isJsonString(t)) {                            
+                                            v = JSON.parse(t);                
+                                            if (v["recordDate"] === localStorage.today) {
+                                                let userChoice = confirm('日前的工作紀錄尚未下載，是否下載?');
+                                                hasConfirmed = true;
+                                                if (userChoice === true) {                           
+                                                    confirmPopup = true;
+                                                    break;
+                                                }
+                                                
+                                            }
+                                        }
+                                    }
+                                    let data = "";
+                                    // alert(confirmPopup);
+                                    if (confirmPopup) {                                        
+                                        for (var i = 0; i < localStorage.length; i++){
+                                            let t = localStorage.getItem(localStorage.key(i));
+                                            if (isJsonString(t)) {                            
+                                                v = JSON.parse(t);                
+                                                if (v["recordDate"] === localStorage.today) {                                    
+                                                    // alert(v["table_content"]);
+                                                    data += v["table_content"];                                            
+                                                }
+                                            }
+                                        }
+
+                                        
+
+                                        let date = new Date();
+                                            
+                                        let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+                                        let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+                                        var link = document.createElement("a");
+                                        link.download = localStorage.todayWithoutSlash + "-" + oprationDate;
+                                        link.href = csvContent;
+                                        link.click();
+                                        
+                                    }
+
+                                    localStorage.today = currentDay; 
+                                    localStorage.todayWithoutSlash = currentDaytodayWithoutSlash;                                      
+                                            
+                                }
+                            } else if (!hasConfirmed && confirmReset) {
+                                confirmReset = false;
+                            }   
+                            onReload();            
+                        }         
+                        // alert(localStorage.lastUsedDate);                                                                            
+                        // $('input:text').attr('placeholder','掃描或輸入單號');
+                    });                                        
+                });
+                // var isManual = false;
+                // var cancelManual = true;
+                // function orderIdInput () {
+                //     if (!isManual) {
+                //         $('#inputBarCode').focus();
+                //         $('#manualInputOrderId').text('取消手動輸入單號');
+                //         $('#orderId').html('');
+                //         isManual = true;
+                //     } else {
+                //         $('#inputBarCode').blur();
+                //         $('#manualInputOrderId').text('單號手動輸入');
+                //         $('#orderId').html(thisOrderId);
+                //         // cancelManual = true;
+                //         isManual = false;
+                //     }
+                // }
+                
+                $(document).ready(function () {
+                    if (window.location.hash === '#reload') {
+                        onReload();                        
+                    }                    
+                });
+                // $(function() {
+                //     localStorage.clear();
+                // })
+                function pad2(n) { return n < 10 ? '0' + n : n }
+
+                function isJsonString(str) {
+                    try {
+                        JSON.parse(str);
+                    } catch (e) {
+                        return false;
+                    }
+                    return true;
+                }
+                var dateSet = new Set();
+
+                function onReload () {                    
+                    // console.log(localStorage.getItem("20220705000"));
+                    $('#orderIdInput').focus();
+
+                    if (typeof(localStorage.getItem("lastUsedDate")) === "undefined") {
+                            localStorage.setItem(lastUsedDate, today);
+                            // alert(localStorage.getItem("lastUsedDate"));                                                           
+                    } else {                        
+                        var currentDay = new Date();
+                        var dd = String(currentDay.getDate()).padStart(2, '0');
+                        var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                        var yyyy = currentDay.getFullYear();
+                        var currentDay = yyyy + '/' + mm + '/' + dd;
+                        var currentDaytodayWithoutSlash = yyyy + mm + dd;
+
+                        let todayDate = new Date(today);                            
+
+                        if (typeof(Storage) !== "undefined") { 
+                            var _lsTotal = 0,
+                                _xLen, _x;
+                            for (_x in localStorage) {
+                                if (!localStorage.hasOwnProperty(_x)) {
+                                    continue;
+                                }
+                                _xLen = ((localStorage[_x].length + _x.length) * 2);
+                                _lsTotal += _xLen;
+                                console.log(_x.substr(0, 50) + " = " + (_xLen / 1024).toFixed(2) + " KB")
+                            }
+                            let prevDate = todayDate.setDate(todayDate.getDate() - 5);
+                            if ((_lsTotal / 1024).toFixed(2) >= 4096) {                        
+                                prevDate = todayDate.setDate(todayDate.getDate() - 4);  
+                            }                             
+                            
+                            for (var i = 0; i < localStorage.length; i++) {                                    
+                                let t = localStorage.getItem(localStorage.key(i));
+                                if (isJsonString(t)) {
+                                    t = JSON.parse(t);
+                                    if (new Date(t["recordDate"]) <= new Date(prevDate)) {
+                                        localStorage.removeItem(t["orderId"]);
+                                    } else {
+                                        if (typeof(t['recordDate']) !== "undefined") {
+                                            let test = t["table_content"].split('%0A')[0];
+                                            // alert(test);
+                                            // alert((test.match(new RegExp("%2C", "g") || []).length));
+                                            if ((test.match(new RegExp("%2C", "g") || []).length) !== 4) {
+                                                localStorage.removeItem(t["orderId"]);
+                                            } else {
+                                                dateSet.add(t['recordDate']);
+                                            }
+                                        }
+                                    }                                                                        
+                                }
+                            }
+                            
+                            // document.getElementById("result").innerHTML = localStorage.table_content;                    
+                        }   
+                        localStorage.today = today;
+                        let dateArr = Array.from(dateSet);                            
+                        
+                        // daySelect.options[daySelect.options.length] = new Option('---請選擇要下載的日期---', 'defaultOption');
+                        // for (let s = 0; s < dataArr.length; s++) {
+                        //         daySelect = document.getElementById('daySelect');
+                        //         daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
+                        // }                         
+                        for (let s = 0; s < dateArr.length; s++) {
+                                // daySelect = document.getElementById('daySelect');
+                                // daySelect.options[daySelect.options.length] = new Option(dataArr[s], 'day' + (s + 1).toString());
+                                // let theDate = new Date(dataArr[s]);
+                            if (dateArr[s] !== today) {    
+                                tpl = '<div class="btn btn-success" id="todayDataDownload" onclick="downloadDateClickEvent(' + dateArr[s].replaceAll('/', '') + ')">' + dateArr[s] + '</div>';
+                                $('#btnGrp').append($(tpl));
+                            }
+                            // alert(dataArr[s]);
+                        }                        
+                    }                
+
+                    isStarted = true;
+                    // isBegun = true;
+                    
+                    localStorage.todayWithoutSlash = todayWithoutSlash;
+                }
+
+                var isFinished = false;
+                function end() {
+                    isFinished = true;
+                    isStarted = false;
+                    // isBegun = false;
+                    // alert($('#orderIdH5').html());
+                    var tpl = '<a download="' + $('#orderIdH5').html() + '.csv" href="data:application/csv;charset=utf-8,{table_header}%0A{table_content}"><div id="downloadOrder" onclick="updateThisStatus()">下載此訂單</div></a>';
+                    var table_content = '';
+                        
+                    $.each($("td"), function (index, cell) {
+                        var cellContent = cell.innerHTML;
+                        var td = '';                        
+                        if (index % 4 === 0 || index % 4 === 1) {
+                            td = cellContent.split('<td>')[0];                                                                
+                        } else if (index % 4 === 2) {                                                               
+                            td = $('#field' + (Math.trunc(index / 4)).toString()).val();
+                        }
+                        if (index % 4 === 0) {
+                            table_content += td + '%2C'; //Need to return contents of cell
+                            table_content += $('#orderIdH5').html() + '%2C';                                    
+                        } else if (index % 4 === 1) {
+                            table_content += td + '%2C'; //Need to return contents of cell                                
+                        } else if (index % 4 === 2) {                            
+                            table_content += td + '%2C';
+                            table_content += today + '%0A';
+                        }                                
+                    });
+
+                            
+
+                    var order = new Object(); 
+                    order.orderId = $('#orderIdH5').html();
+                    order.recordDate = localStorage.today;
+                    order.hasDownloaded = false;                 
+                    order.table_content = table_content;
+                    console.log("order::");
+                    console.log(order.orderId); 
+                    console.log(order.table_content);                
+                    localStorage.setItem($('#orderIdH5').html(), JSON.stringify(order));    
+
+                    
+                    var currentDay = new Date();
+                    var dd = String(currentDay.getDate()).padStart(2, '0');
+                    var mm = String(currentDay.getMonth() + 1).padStart(2, '0'); //January is 0!
+                    var yyyy = currentDay.getFullYear();
+                    var currentDay = yyyy + '/' + mm + '/' + dd;
+                    var currentDaytodayWithoutSlash = yyyy + mm + dd;
+                    
+                    tpl = tpl.replace('{table_header}', table_header);
+                    tpl = tpl.replace('{table_content}', table_content);
+                    console.log(tpl);
+                    $(tpl).appendTo($('#orderIdGrp'));
+                    clearTable();
+                    // } else {
+                    //     document.getElementById("result").innerHTML = "Sorry, your browser does not support web storage...";
+                    // }
+                    
+                }
+                
+                function updateThisStatus() {                   
+                    // $('#orderId').html("");
+                    // alert($('#orderIdH5').html());
+                    console.log($('#orderIdH5').html());
+                    let order = localStorage.getItem($('#orderIdH5').html());
+                    console.log($('#orderIdH5').html());
+                    // let updatedOrder = new Object(order);
+                    console.log('ooo');
+                    updatedOrder = JSON.parse(order);
+                    updatedOrder["hasDownloaded"] = true; 
+                    localStorage.setItem($('#orderIdH5').html(), updatedOrder);
+                    isFinished = false;
+                    // alert(updatedOrder.hasDownloaded);
+                }
+
+                function docReady(fn) {
+                    // see if DOM is already available
+                    if (document.readyState === "complete" || document.readyState === "interactive") {
+                        // call on next available tick
+                        setTimeout(fn, 1);
+                    } else {
+                        document.addEventListener("DOMContentLoaded", fn);
+                    }
+                } 
+
+                docReady(function() {
+                    var resultContainer = document.getElementById('qr-reader-results');
+                    var lastResult, countResults = 0;
+                    
+                    var html5QrcodeScanner = new Html5QrcodeScanner(
+                        "qr-reader", { fps: 10, qrbox: 250 });
+                    
+                    function onScanSuccess(decodedText, decodedResult) {
+                        if ($('#orderIdInput').val() === "") {
+                            $('#orderIdInput').val(decodedText);
+                        } else {
+                            $('#inputBarCode').val(decodedText);
+                        }
+                        // if (decodedText !== lastResult) {
+                        //     ++countResults;
+                        //     lastResult = decodedText;
+                        //     // console.log(`Scan result = ${decodedText}`, decodedResult);
+                        //     alert(decodedResult.val());
+                        //     $('#inputBarCode').val(decodedResult.val());
+
+                
+                        //     resultContainer.innerHTML += `<div>[${countResults}] - ${decodedText}</div>`;
+                            
+                        //     // Optional: To close the QR code scannign after the result is found
+                        //     html5QrcodeScanner.clear();
+                        // }
+                    }
+                    
+                    // Optional callback for error, can be ignored.
+                    function onScanError(qrCodeError) {
+                        // This callback would be called in case of qr code scan error or setup error.
+                        // You can avoid this callback completely, as it can be very verbose in nature.
+                    }
+                    
+                    html5QrcodeScanner.render(onScanSuccess, onScanError);
+                });
+                $(document).on("click", ".delete", function(){                                
+                    $(this).parents("tr").remove();                 
+                });
+
+                // $(document).on("click", ".reset-input", function(){                                
+                //     $(this).parents("div").find('input').val("");                 
+                // });
+
+                function clearInput(id) {
+                    $("#" + id).val("");
+                }
+
+                // function testInput() {
+                //     $('#inputBarCode').val('11111');
+                // }
+                
+                function newRecord() {
+                    if ($('#orderIdH5').html() === '') {
+                        alert('單號未輸入!');
+                        return;
+                    }
+                    // if (isManual) {
+                    //     $("#orderId").html($("#inputBarCode").val());
+                    //     localStorage.orderId = $("#inputBarCode").val();  
+                    //     isManual = false;                  
+                    // }
+                    // if (isBegun) {
+                    $('table').find('tbody').append('<tr><td>' + (itemCount + 1).toString() + '</td><td class="barcode">' + $('#inputBarCode').val() + '</td><td class="col-4 col-xs-4 col-sm-4 col-md-4 col-lg-4"><div class="input-group"><input type="text" id="field' + itemCount.toString() + '" class="form-control memo"/><div class="input-group-append"><div class="btn btn-danger px-1 reset-input" onclick="clearInput(\'field' + itemCount.toString() + '\')">×</div></div></div></td><td><div class="btn btn-danger delete">移除</div></td></tr>');
+                    $('#inputBarCode').val('');
+                    itemCount++;
+                    // } 
+
+                    // } else if (!isBegun && isStarted) {
+                    //     if ($('#inputBarCode').val()) {
+                    //         $('#orderId').html($('#inputBarCode').val());                    
+                            
+                    //         isBegun = true;
+                            // $('input:text').attr('placeholder','掃描或輸入條碼');
+                            // $('#inputBarCode').val('');
+                        // } else {
+                        //     alert('請掃描或輸入單號!');                    
+                        // }
+                    // }
+                    $('#inputBarCode').focus();
+                }
+
+                function newOrder() {
+                    $('#orderIdInput').attr("hidden", true);                                        
+                    $('#ensureOrderIdBtn').attr("hidden", true);
+                    $('#scanOrderIdBtn').attr("hidden", true);    
+                    $('#orderIdH5').html($('#orderIdInput').val());
+                    $('#orderIdH5').attr("hidden", false);
+                    $("#orderIdclear").attr("hidden", false);
+                    $('#inputBarCode').focus();
+                }
+
+                function modifyOrderId() {                    
+                    $('#orderIdInput').attr("hidden", false);                                                            
+                    $('#ensureOrderIdBtn').attr("hidden", false);
+                    $('#scanOrderIdBtn').attr("hidden", false);
+                    $('#orderIdclear').attr("hidden", true);
+                    $('#orderIdH5').attr("hidden", true);
+                }
+
+                var confirmReset = false;
+
+                function confirmClearThis() {
+                    confirmReset = true;
+                    // if (!isStarted) {
+                    if (!isFinished) {
+                        if (confirm("您確定要刪除此筆訂單的所有資料嗎?")) {
+                            localStorage.removeItem(thisOrderId);
+                            // isFinished = false;                                      
+                        } 
+                    } else {
+                        if (confirm("刪除此筆訂單目前的資料嗎?")) {
+                            $('tr td').remove();                        
+                            itemCount = 0;
+                        }
+                    }
+                    clearTable();
+                }
+
+                function clearTable() {
+                    isFinished = false;
+                    $('#orderId').html('');
+                    $('tr td').remove();
+                    itemCount = 0;                        
+                }
+
+                function downloadDateClickEvent(chosenDate) {
+                    // let select = document.getElementById("daySelect");
+                    // let chosen = select.options[select.selectedIndex].text;
+                    // console.log(chosen);
+                    
+                    chosenDate = chosenDate.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1/$2/$3');
+                    // alert(chosenDate);
+                    let data = "";
+                    // if (chosen !== '---請選擇要下載的日期---') {
+                        for (var i = 0; i < localStorage.length; i++){
+                            let t = localStorage.getItem(localStorage.key(i));
+                            if (isJsonString(t)) {                            
+                                v = JSON.parse(t);                
+                                if (v["recordDate"] === chosenDate) {                                    
+                                    // alert(v["table_content"]);
+                                    data += v["table_content"];                                            
+                                }
+                            }
+                        }
+                        let date = new Date();
+                                            
+                        let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+                        let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+                        var link = document.createElement("a");
+                        // alert(chosenDate);
+                        chosenDate = chosenDate.replaceAll('/', '');
+                        link.download = chosenDate + "-" + oprationDate;                        
+                        link.href = csvContent;
+                        link.click();
+                }
+                
+                function showScanner() {
+                    $('#qr-reader').attr("hidden", false);
+                }
+            
+        </script>
+        <style>
+            .table-wrapper {
+                width: 200%;
+                overflow: auto;
+                display:inline-block;
+            }            
+            /* table {
+                max-height: 5rem;
+                width: 120%;
+                /* display: inline-block; */
+                /* overflow-x: auto;
+                white-space: nowrap; 
+            } */
+            
+        </style>        
+    </body>
 </html>
+
+
+            

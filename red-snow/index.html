@@ -12,6 +12,8 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>   
+        <!-- use the latest version -->
+        <script lang="javascript" src="https://cdn.sheetjs.com/xlsx-latest/package/dist/xlsx.full.min.js"></script>
     </head>
     <body>
         <h1 id="result"></h1>
@@ -247,14 +249,8 @@
                                     localStorage.removeItem(t["orderId"]);
                                 } else {
                                     if (typeof(t['recordDate']) !== "undefined") {
-                                        let test = t["table_content"].split('%0A')[0];
-                                        // alert(test);
-                                        // alert((test.match(new RegExp("%2C", "g") || []).length));
-                                        // if ((test.match(new RegExp("%2C", "g") || []).length) !== 4) {
-                                        //     localStorage.removeItem(t["orderId"]);
-                                        // } else {
-                                            dateSet.add(t['recordDate']);
-                                        // }
+                                        // let test = t["table_content"].split('%0A')[0];                                        
+                                        dateSet.add(t['recordDate']);                                                                                
                                     }
                                 }                                                                        
                             }
@@ -332,7 +328,9 @@
                 console.log($('#field' + (i).toString()).val());
             }
             let skip = false;
-            
+            let outputArr = [];
+            let rObj = {};
+            let itemIndex = 0;
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
                 var td = '';                  
@@ -383,29 +381,45 @@
                     console.log(hint);
                 }
                 if (index % 4 === 0) {
-                    table_content += td + '%2C'; //Need to return contents of cell
-                    table_content += $('#orderIdH5').html() + '\t' + '%2C';                                    
+                    // table_content += td + '%2C'; //Need to return contents of cell
+                    // table_content += $('#orderIdH5').html() + '\t' + '%2C';                                    
+                    rObj.項次 = ++itemIndex;                    
                 } else if (index % 4 === 1) {                    
-                    table_content += td + '\t' + '%2C'; //Need to return contents of cell                                                    
+                    // table_content += td + '\t' + '%2C'; //Need to return contents of cell                                                    
+                    rObj.品名 = td + '\t';
                     for (let i = 0; i < product_obj.length; i++) {
                         if (product_obj[i].ProductName === td) {
+                            // productNumber = product_obj[i].ProductNumber;
+                            // ean = product_obj[i].EAN;                                                        
                             productNumber = product_obj[i].ProductNumber;
                             ean = product_obj[i].EAN;                                                        
                             break;
                         } 
                     }
                 } else if (index % 4 === 2 && !skip) {                            
-                    table_content += productNumber + '\t' + '%2C';                             
-                    table_content += ean + '\t' + '%2C';
+                    // table_content += productNumber + '\t' + '%2C';                             
+                    // table_content += ean + '\t' + '%2C';
+                    rObj.產品編號 = productNumber + '\t'; 
+                    rObj.EAN = ean + '\t';                                                        
                     productNumber = '';
                     ean = '';
                 } else if (index % 4 === 3 && !skip) {
-                    table_content += hint + '\t' + '%2C';           
-                    table_content += today + '%0A';
+                    // table_content += hint + '\t' + '%2C';           
+                    // table_content += today + '%0A';
+                    rObj.暗記 = hint + '\t';
+                    console.log(rObj);
+                    outputArr.push(rObj);
+                    console.log(outputArr);
                 }                
             });
+            console.log(outputArr);
+            // if (table_content === "") {
+            //     alert('此訂單無資料');
+            //     return;
+            // }  
+
             
-            if (table_content === "") {
+            if (outputArr.length === 0) {
                 alert('此訂單無資料');
                 return;
             }  
@@ -422,6 +436,8 @@
             let tmpStr = JSON.stringify(JSON.stringify(order)).replaceAll('\\', '');
             tmpStr = tmpStr.substring(1, tmpStr.length-1);    
 
+            let memoArr = [];
+
             tpl = tpl.replace('{table_header}', table_header);
             tpl = tpl.replace('{table_content}', table_content);
             console.log(tpl);
@@ -433,6 +449,8 @@
             }
 
             table_content = '';
+            let rowObj = {};
+            itemIndex = 0;
             $.each($("td"), function (index, cell) {                
                 var cellContent = cell.innerHTML;
                 var td = '';                        
@@ -467,22 +485,33 @@
                 }
                 
                 if (index % 4 === 0) {
-                    table_content += td + '%2C'; //Need to return contents of cell
-                    table_content += $('#orderIdH5').html() + '%2C';                                    
+                    rowObj.項次 = ++itemIndex;                    
+                    // outputArr.push(td);
+                    // outputArr.push($('#orderIdH5').html());
+                    // table_content += td + '%2C'; //Need to return contents of cell
+                    // table_content += $('#orderIdH5').html() + '%2C';                                    
                 } else if (index % 4 === 1) {
-                    
-                    table_content += td + '%2C'; //Need to return contents of cell                                
-                } else if (index % 4 === 2) {                            
-                    table_content += td + '%2C';
-                    table_content += today + '%0A';
+                    rowObj.品名 = td;
+                    // outputArr.push(td);
+                    // table_content += td + '%2C'; //Need to return contents of cell                                
+                } else if (index % 4 === 2) {
+                    rowObj.暗記 = td;                    
+                    memoArr.push(rowObj);
+                    // outputArr.push(td);
+                    // outputArr.push(today);                            
+                    // table_content += td + '%2C';
+                    // table_content += today + '%0A';
                 }                                
             });
+
+            
 
             let orderWithoutTab = new Object(); 
             orderWithoutTab.orderId = $('#orderIdH5').html();
             orderWithoutTab.recordDate = localStorage.today;
             orderWithoutTab.hasDownloaded = false;                 
-            orderWithoutTab.table_content = table_content;
+            // orderWithoutTab.table_content = table_content;
+            orderWithoutTab.table_content = memoArr;
             let tmpStrWithoutTab = JSON.stringify(JSON.stringify(orderWithoutTab)).replaceAll('\\', '');
             tmpStrWithoutTab = tmpStrWithoutTab.substring(1, tmpStrWithoutTab.length - 1);    
 
@@ -495,7 +524,57 @@
             var currentDay = yyyy + '/' + mm + '/' + dd;
             var currentDaytodayWithoutSlash = yyyy + mm + dd;
             
-            
+            // raw_data = [
+            //     {                    
+            //         "name": {
+            //         "first": "George",
+            //         "last": "Johnson"
+            //         },
+            //         "bio": {
+            //         "birthday": "1732-01-22",
+            //         "gender": "M"
+            //         }
+            //     },{
+            //         "name": {
+            //         "first": "George",
+            //         "last": "Washington"
+            //         },
+            //         "bio": {
+            //         "birthday": "1732-02-22",
+            //         "gender": "M"
+            //         }
+            //     },{
+            //         "name": {
+            //         "first": "George",
+            //         "last": "Watson"
+            //         },
+            //         "bio": {
+            //         "birthday": "1732-02-12",
+            //         "gender": "M"
+            //         },
+            //     }
+            // ];
+            const out = outputArr;//.filter(row => row.terms.some(term => term.type === "prez"));
+            console.log(out);
+            const rows = out.map(row => ({
+                項次: row.項次,
+                訂單編號: $('#orderIdH5').html(),
+                品名: row.品名,
+                產品編號: row.產品編號,
+                EAN: row.EAN,
+                暗記: row.暗記,
+                日期: today,
+            }));
+
+        
+
+            const worksheet = XLSX.utils.json_to_sheet(rows);
+
+            const workbook = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(workbook, worksheet, "Dates");
+            XLSX.writeFile(workbook, "Presidents.xlsx");
+
+
             clearTable();
             $('#orderIdInput').val('');
             modifyOrderId();            
@@ -826,6 +905,10 @@
             chosenDate = chosenDate.toString().replace(/(\d{4})(\d{2})(\d{2})/g, '$1/$2/$3');
             let data = "";
             let count = 0;
+
+            
+
+
             for (var i = 0; i < localStorage.length; i++){
                 let t = localStorage.getItem(localStorage.key(i));
                 if (isJsonString(t)) {                            
@@ -861,24 +944,49 @@
                     }                    
                 }
             }
-
-            if (count === 0) {
-                alert("當前無資料");
-                return;
-            }
             let date = new Date();
-                                
             let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
 
-            // let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
-            const universalBOM = "\uFEFF";
-            let csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM + table_header) + "%0A" + data;// v1.0.2 改中文編碼
+            const workbook = new ExcelJs.Workbook(); // 創建試算表檔案
+            const sheet = workbook.addWorksheet('工作表'); //在檔案中新增工作表 參數放自訂名稱
+
+                sheet.addTable({ // 在工作表裡面指定位置、格式並用columsn與rows屬性填寫內容
+                name: 'table1',  // 表格內看不到的，讓你之後想要針對這個table去做額外設定的時候，可以指定到這個table
+                ref: 'A1', // 從A1開始
+                columns: [{name:'項次'},{name:'訂單編號'},{name:'品名'},{name:'產品編號'},{name:'EAN'},{name:'暗記'},{name:'日期'}],
+                rows: [['測試1','測試2','測試3','測試4','測試5','測試6','測試7']]
+                });
+
+            // 表格裡面的資料都填寫完成之後，訂出下載的callback function
+                // 異步的等待他處理完之後，創建url與連結，觸發下載
+                workbook.xlsx.writeBuffer().then((content) => {
+                    const link = document.createElement("a");
+                    const blobData = new Blob([content], {
+                    type: "application/vnd.ms-excel;charset=utf-8;"
+                    });
+                    link.download = '測試的試算表.xlsx';
+                    link.href = URL.createObjectURL(blobData);
+                    link.click();
+                });
             
-            var link = document.createElement("a");
-            chosenDate = chosenDate.replaceAll('/', '');
-            link.download = chosenDate + "-" + oprationDate;                        
-            link.href = csvContent;
-            link.click();            
+
+            // if (count === 0) {
+            //     alert("當前無資料");
+            //     return;
+            // }
+            // let date = new Date();
+                                
+            // let oprationDate = date.getFullYear().toString() + pad2(date.getMonth() + 1) + pad2(date.getDate()) + pad2(date.getHours()) + pad2(date.getMinutes()) + pad2(date.getSeconds());
+
+            // // let csvContent = "data:text/csv;charset=utf-8," + table_header + "%0A" + data;//.map(e => e.join(",")).join("\n");    
+            // const universalBOM = "\uFEFF";
+            // let csvContent = "data:text/csv;charset=utf-8," + encodeURIComponent(universalBOM + table_header) + "%0A" + data;// v1.0.2 改中文編碼
+            
+            // var link = document.createElement("a");
+            // chosenDate = chosenDate.replaceAll('/', '');
+            // link.download = chosenDate + "-" + oprationDate;                        
+            // link.href = csvContent;
+            // link.click();            
         }
         
 
