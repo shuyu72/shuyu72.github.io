@@ -275,7 +275,7 @@
 
                                         But coding is not identical to programming. I don't realized that philosophy until I begin to work. Making things running is coding, while programming is more complex. You should consider performances, situations, suitable scenarios, etc.
                                         
-                                        I am 29 years old. I am currently studying for in-service master's program in National Chung Cheng University（國立中正大學）.   I obtained the knowledge related cloud computing and IoT from this program. I plan to graduate from the university at January next year. It is not that easy, no one take one and a half years to get degree of this program ever. While I got above the average grades in this two semesters. I hope I could accomplish this goal.
+                                        I am currently studying for in-service master's program in National Chung Cheng University（國立中正大學）.   I obtained the knowledge related cloud computing and IoT from this program. I plan to graduate from the university at January next year. It is not that easy, no one take one and a half years to get degree of this program ever. While I got above the average grades in this two semesters. I hope I could accomplish this goal.
                                         
                                          I currently play the roles of SA and PM at Microsoft partner corporation. Assist with NPO and companies to build their CRM with Microsoft dynamic 365. 
                                          I have many hobbies. I like to learn languages, exercise, traveling around. Recently I am learning Korean. It's funny. Like BoPoMoFo in Chinese, assemble circles and strokes, and every part of elements have its pronunciation. I can also read very basic Japanese. My favorite sport is Taekwondo. I took a Taekwondo course in a semester. Taekwondo is not only a sport but also a martial art.
@@ -349,7 +349,7 @@
             var ml=randMl;//移動的長度
             var w=15;//矩形的寬
             var h=15;//矩形的高
-            var cw=document.body.clientWidth;//getWidth();//畫布的寬
+            var cw=getWidth();//畫布的寬
             var ch=getHeight();//document.body.clientHeight;//畫布的高
 
             function initMXMY(size){
@@ -367,18 +367,19 @@
             }
             
             function getWidth() {
-                return Math.max(
+                return "";
+                // return Math.max(
                     // document.body.scrollWidth,
                     // document.documentElement.scrollWidth,
                     // document.body.offsetWidth,
                     // document.documentElement.offsetWidth,
                     // document.documentElement.clientWidth
-                    document.body.scrollHeight,
-                    document.documentElement.scrollHeight,
-                    document.body.offsetHeight,
-                    document.documentElement.offsetHeight,
-                    document.documentElement.clientHeight
-                );
+                    // document.body.scrollHeight,
+                    // document.documentElement.scrollHeight,
+                    // document.body.offsetHeight,
+                    // document.documentElement.offsetHeight,
+                    // document.documentElement.clientHeight
+                // );
             }
 
             function getHeight() {
@@ -395,7 +396,7 @@
                cxt.clearRect(0,0,getWidth(),getHeight());//在給定的矩形內清除所有的畫素為透明
                cxt.fillStyle="#EEEEFF";//把填充顏色設定為指定的顏色
                cxt.fillRect(0,0,getWidth(),getHeight());//是用當前的填充風格填充指定的區域
-               cxt.fillStyle="red";//把矩形設定為紅色
+               cxt.fillStyle="#989898";//把矩形設定為紅色
                var size=50;
                initMXMY(size);
                genXYArr(size);
