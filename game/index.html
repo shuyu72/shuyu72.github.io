@@ -1,0 +1,135 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="tank" style="height: 12rem; width: 5rem; background-color:blue; z-index: 1; position: relative; margin-left: auto; margin-right: 0; position: absolute; right: 0rem; top: 35%;" ></div>
+        <!-- <div class="bullet" style="height: 1rem; width: 3rem; background-color:white; z-index: 2; float: right; margin-left: auto; margin-right: 5rem; position: absolute; right: 0rem; top: 50%; -ms-transform: translateY(-50%); transform: translateY(-50%);"></div> -->
+        <!-- <div class="bugs" style="background-color: yellow; "></div> -->
+        <div id="bugshome"></div>
+        <style>
+            html {
+                --units: 1.5vmax;
+                --brick1: #BB0000;
+                --brick2: #CC0000;
+                --lines: #565656;
+                --gp-ln: 50%/calc(var(--units) * 10) calc(var(--units) * 5);
+                --gp-cn: 50%/calc(var(--units) * 5) calc(var(--units) * 5);
+                height: 100vh;
+                background: 
+                    repeating-conic-gradient(from 90deg at 95% 55%, var(--lines) 0% 25%, #fff0 0% 100%) var(--gp-cn), 
+                    repeating-linear-gradient(180deg, var(--lines) 0 5%, #fff0 0 50%, var(--lines) 0 55%, var(--brick2) 0 100% ) var(--gp-ln), 
+                    repeating-linear-gradient(90deg, var(--brick1) 0 47.5%, var(--lines) 0 50%, var(--brick1) 0 97.5%, var(--lines) 0 100% ) var(--gp-ln);
+            }
+            html, body {margin: 0; height: 100%; overflow: hidden}
+            
+            #bugshome {
+                width: 0; 
+                height: 0; 
+                position: relative;
+                margin-top: 50vh;
+                border-top: 60px solid transparent;
+                border-bottom: 60px solid transparent;                
+                border-left: 60px solid yellowgreen;                
+            }
+        </style>
+        <script>
+            let id = 0;
+            let direct = '';
+            document.onkeydown = (e) => {                
+                let tpl = '<div id="bullet' + id.toString() + '" style="height: 1rem; width: 3rem; background-color:white; z-index: 2; float: right; margin-left: auto; margin-right: 5rem; position: absolute; right: 0rem; top: 35%;"></div>';            
+                e = e || window.event;
+                if (e.keyCode === 38) {
+                    // $('#tank').animate({
+                	// 	'marginTop' : "-=5px" 
+		            // });
+                    // $('#tank').height($('#tank').height() + 10);
+                    direct = 'u';
+                    $('#tank').css('margin-top', parseInt($('#tank').css('margin-top')) - 4);
+                    $('#tank').css('margin-bottom', parseInt($('#tank').css('margin-bottom')) - 4);
+                    
+                    $('#bullet' + id.toString()).css('margin-top', parseInt($('#bullet' + id.toString()).css('margin-top')) + 4);
+                    $('#bullet' + id.toString()).css('margin-bottom', parseInt($('#bullet' + id.toString()).css('margin-bottom')) + 4);
+                    // $('#tank').height($('#tank').height() + 10);
+                } else if (e.keyCode === 40) {
+                    // $('#tank').animate({
+		            //     'marginTop' : "+=5px" 
+		            // });
+                    // $('#tank').height($('#tank').height() - 10);
+                    direct = 'd';
+                    $('#tank').css('margin-top', parseInt($('#tank').css('marginTop')) + 10);
+                    $('#tank').css('margin-bottom', parseInt($('#tank').css('marginBottom')) + 10);
+                    $('#bullet' + id.toString()).css('margin-top', parseInt($('#bullet' + id.toString()).css('margin-top')) - 10);
+                    $('#bullet' + id.toString()).css('margin-bottom', parseInt($('#bullet' + id.toString()).css('margin-bottom')) - 10);                    
+                } else if (e.keyCode === 32) {
+                    // $('#tank').append(tpl);                    
+                    $('#tank').after(tpl);                    
+                    // $(tpl).eq(-1).before('#tank');
+                    shot(id.toString());
+                    id++;
+                }
+                bugshomeMove(direct);
+                direct = '';
+            }
+
+            $(function () {
+                // bugsFly();
+            });
+
+            function bugshomeMove (direct) {
+                let r = Math.floor(Math.random() * 4);
+                if (direct === 'u') {
+                    $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) + r);                                                                
+                    $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-top')) + r);
+                } else if (direct === 'd') {                    
+                    $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) - r);                                                                
+                    $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-bottom')) - r);
+                } else {
+                    if (r % 2 === 1) {
+                        $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) + r);                                                                
+                        $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-bottom')) + r);
+                    } else {
+                        $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) - r);                                                                
+                        $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-bottom')) - r);
+                    } 
+                    // else if ($('#bugshome').position().top <= 0) {
+                    //     $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) + r);                                                                
+                    //     $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-bottom')) + r);
+                    // } else if ($('#bugshome').position().top >= $(window).height()) {
+                    //     $('#bugshome').css('margin-top', parseInt($('#bugshome').css('margin-top')) - r);                                                                
+                    //     $('#bugshome').css('margin-bottom', parseInt($('#bugshome').css('margin-bottom')) - r);
+                    // }
+
+                }
+            }
+
+            function bugsFly() {
+                let id = 0;
+                let tpl = '<div id="bugs"' + id + ' style="background-color: yellow; height: 1rem; width: 1rem;"></div>';                
+                for(let i = 0; i < 100; i++) {
+                    setTimeout(function() {                             
+                        $('#bugshome').after(tpl);
+                        $('#bugs' + id.toString()).css('margin-top', parseInt($('#tank').css('margin-top')) + Math.random());                                                                
+                        $('#bugs' + id.toString()).css('margin-bottom', parseInt($('#tank').css('margin-bottom')) + Math.random());
+                    }, i * 1000);                            
+                }
+            }
+
+            function shot(id) {
+                $('#bullet' + id).css('margin-top', parseInt($('#tank').css('margin-top')) + 90);                                                                
+                $('#bullet' + id).css('margin-bottom', parseInt($('#tank').css('margin-bottom')) + 90);
+                for(let i = 0; i < $(window).width(); i++) {                
+                    setTimeout(function() {                             
+                        $('#bullet' + id).css('margin-left', parseInt($('#bullet' + id).css('margin-left')) + 1);
+                        $('#bullet' + id).css('margin-right', parseInt($('#bullet' + id).css('margin-right')) + 1);  
+                        // var p = $( "p" ).first();
+                        // var position = p.position();
+                        // $( "p" ).last().text( "left: " + position.left + ", top: " + position.top );                                                              
+                        // $('#bullet' + id).eq(-1).before('#tank');//.css('top', $('#bullet' + id).position.top); 
+                                                                                        
+                    }, i * 10);                            
+                }
+            }
+        </script>
+    </body>
+</html>
