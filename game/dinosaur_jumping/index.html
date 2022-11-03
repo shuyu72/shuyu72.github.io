@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    </head>
+    <body>
+        <div id="ctnr" style="height: 100vh; width: 100vw; z-index: 1;">
+            <img id="cat" src="pics/cat_walk.gif" style="z-index: 100; height: 10rem; width: auto; margin-top: 75vh;"/>
+        </div>
+        
+        
+        <style>
+            #ctnr {
+                position: absolute;
+                animation: linear infinite;
+                animation-name: run;
+                animation-duration: 10s;
+                --units: 1.5vmax;
+                --brick1: #BB0000;
+                --brick2: #CC0000;
+                --lines: #565656;
+                --gp-ln: 50%/calc(var(--units) * 10) calc(var(--units) * 5);
+                --gp-cn: 50%/calc(var(--units) * 5) calc(var(--units) * 5);
+                width: 250vw;
+                height: 100vh;
+                background:                                     
+                    repeating-conic-gradient(from 90deg at 95% 55%, var(--lines) 0% 25%, #fff0 0% 100%) var(--gp-cn), 
+                    repeating-linear-gradient(180deg, var(--lines) 0 5%, #fff0 0 50%, var(--lines) 0 55%, var(--brick2) 0 100% ) var(--gp-ln), 
+                    repeating-linear-gradient(90deg, var(--brick1) 0 47.5%, var(--lines) 0 50%, var(--brick1) 0 97.5%, var(--lines) 0 100% ) var(--gp-ln);
+            }            
+            @keyframes run {
+                /* 0% {
+                    right: 0;
+                }
+                50% {
+                    right: -10%;
+                }
+                100% {
+                    right: -20%;    
+                } */
+                from {
+                    background-position: 100% 0px; }
+
+                to {
+                    background-position: 0px 0px; } 
+            }
+            html, body {margin: 0; height: 100%; overflow: hidden}
+
+            
+        </style>
+        <script>
+            document.onkeydown = (e) => {                
+                e = e || window.event;
+                // if (e.keyCode === 37) {
+                //     $('#cat').css('margin-left', parseInt($('#cat').css('margin-left')) - 4);
+                //     $('#cat').css('margin-right', parseInt($('#cat').css('margin-right')) - 4);                                    
+                // } else if (e.keyCode === 39) {
+                //     $('#cat').css('margin-left', parseInt($('#cat').css('margin-left')) + 4);
+                //     $('#cat').css('margin-right', parseInt($('#cat').css('margin-right')) + 4);                
+                // } else 
+                if (e.keyCode === 32) {                    
+                    for(let i = 0; i < 10; i++) {
+                        setTimeout(function() {                             
+                            $('#cat').css('margin-top', parseInt($('#cat').css('margin-top')) - 10);
+                            $('#cat').css('margin-bottom', parseInt($('#cat').css('margin-bottom')) - 10);                
+                        }, i * 100);
+                    }
+                
+                    for(let i = 0; i < 10; i++) {
+                        setTimeout(function() {                             
+                            $('#cat').css('margin-top', parseInt($('#cat').css('margin-top')) + 10);
+                            $('#cat').css('margin-bottom', parseInt($('#cat').css('margin-bottom')) + 10);                
+                        }, i * 100 + 1000);                            
+                    }
+                
+                 
+                    
+                    
+                } 
+            }                
+            
+
+
+        </script>
+    </body>
+</html>
