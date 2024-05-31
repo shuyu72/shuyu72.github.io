@@ -1,0 +1,60 @@
+<head>
+    <title>CATAHOLIC GAME STUDIO</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/fork-awesome@1.1.7/css/fork-awesome.min.css" integrity="sha256-gsmEoJAws/Kd3CjuOQzLie5Q3yshhvmo7YNtBG7aaEY=" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="index.css" />  
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>  
+
+<body>  
+    <canvas id="canvas" class="float-left" style="bottom: 10px; height: 30rem;"></canvas>      
+    <div class="container v-100 h-100">
+        <div class="row">
+            <div class="col-8">                
+                <div class="row inline-block">            
+                    <div class="col-12 mx-auto">
+                        <div class="col-5" style="bottom: 10px; height: 30px;">
+                            <img src="cat_logo.png"/>
+                            <h1 class="col-7 ">CATAHOLIC GAME STUDIO</h1>
+                        </div>                
+                    </div>
+                </div>
+            </div>            
+            <div class="col-2 text-center my-5">
+                <h2>menu</h2>
+            </div>
+            <div class="col-2"></div>                    
+        </div>
+    </div>
+    <script>
+        let canvas = document.getElementById('canvas');
+        let context = canvas.getContext('2d');
+
+        for (i = 50; i > 5; i = i - 5) {
+            context.beginPath();
+            context.arc(50, 50, i, 0, 2 * Math.PI, false);
+            context.fillStyle = '#fcba03';
+            context.fill();
+            context.lineWidth = 2;
+            context.strokeStyle = '#fa8888';
+            context.stroke();
+        }
+/*
+        for (let i = window.screen.width; i > 5; i -= 50) {
+            for (let j = 5; j < window.screen.height; j += 50) {
+                context.beginPath();
+                context.fillStyle = 'yellow';
+                context.fill();
+                context.lineWidth = 2;
+                context.lineheight = 30;
+                context.moveTo(window.screen.width - i * 200, j * 200);
+                context.lineTo(j, i);
+                context.stroke();
+            }
+        }
+*/    </script>
+</body>

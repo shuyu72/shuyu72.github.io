@@ -17,7 +17,7 @@
         <canvas id="canvas" class="float-left v-100" style="height: 30rem; bottom: 0rem; top: 20rem;"></canvas>
         <div class="container h-100 v-100">
             <div class="row">
-                <div class="col-7">
+                <div class="col-8">
                     <div class="col-12">
                         <div class="col-5" style="top:20rem; bottom: 0rem;height: 10rem;">
                             <img src="cat_logo.png" style="height: 100%; width: auto;" />
@@ -25,9 +25,9 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-3 my-5">
-                    <h2 style="font-size: 70px;">MENU</h2>
-                    <h3 style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
+                <div class="col-2 text-center my-5">
+                    <h2>menu</h2>
+                    <h3></h3>
                     <h3></h3>
                     <h3></h3>
                 </div>
@@ -87,16 +87,25 @@
         $(window).on('resize', function () {
             replacePage();
         })
-        </script>
+        /*
+                for (let i = window.screen.width; i > 5; i -= 50) {
+                    for (let j = 5; j < window.screen.height; j += 50) {
+                        context.beginPath();
+                        context.fillStyle = 'yellow';
+                        context.fill();
+                        context.lineWidth = 2;
+                        context.lineheight = 30;
+                        context.moveTo(window.screen.width - i * 200, j * 200);
+                        context.lineTo(j, i);
+                        context.stroke();
+                    }
+                }
+        */</script>
     <style>
-        body { 
-            cursor: url(kitty2.cur), auto;
-            -webkit-animation: cursor 700ms infinite;
-            animation: cursor 700ms infinite;
-        }
-
-        a {
-            cursor: url(kitty_pointer.cur), auto;            
+        * {
+            cursor: url(kitty.cur), auto;
+            -webkit-animation: cursor 600ms infinite;
+            animation: cursor 600ms infinite;
         }
 
         @-webkit-keyframes cursor {
@@ -104,15 +113,7 @@
                 cursor: url(kitty.cur), auto;
             }
 
-            25% {
-                cursor: url(kitty2.cur), auto;
-            }
-
             50% {
-                cursor: url(kitty.cur), auto;
-            }
-
-            75% {
                 cursor: url(kitty2.cur), auto;
             }
 
@@ -127,15 +128,7 @@
                 cursor: url(kitty.cur), auto;
             }
 
-            25% {
-                cursor: url(kitty2.cur), auto;
-            }
-
             50% {
-                cursor: url(kitty.cur), auto;
-            }
-
-            75% {
                 cursor: url(kitty2.cur), auto;
             }
 
