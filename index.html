@@ -36,9 +36,11 @@
         </div>
     </div>
     <div id="smallDevice">
-        <h1 class="my-5 text-center" style="font-size: 100px; color: rgba(0,0,0,1);">CATAHOLIC GAME STUDIO</h1>
-        <h2 class="my-5 text-center" style="font-size: 80px; color: rgba(0,0,0,1);">menu</h2>
+        <h1 class="my-5 text-center" style="font-size: 130px; color: rgba(0,0,0,1);">CATAHOLIC GAME STUDIO</h1>
+        <h2 class="my-5 text-center" style="font-size: 100px; color: rgba(0,0,0,1);">menu</h2>
+        <h3 class="my-5 text-center" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
         <img src="cat_logo.png" style="opacity: 0.2; height: 100%; width: auto;" />
+        <img src="kitty_pointer.cur" id="kitty_running"/>
     </div>
     <script>
         let canvas = document.getElementById('canvas');
@@ -75,6 +77,12 @@
             }
         }
 
+        function smallDeviceAnimation() {
+            if (window.screen.width < 500.0) {
+                
+            }
+        }
+
         $(document).ready(function () {
             console.log($("body").length);
             //$("#largeDevice").css('cursor', 'url(kitty_running.gif),auto');
@@ -89,7 +97,27 @@
         })
         </script>
     <style>
-        body { 
+        #kitty_running {
+            bottom: 15%;
+            position: absolute;
+            -webkit-animation: linear infinite;
+            -webkit-animation-name: run;
+            -webkit-animation-duration: 5s;
+        }
+
+        @-webkit-keyframes run {
+            0% {
+                right: 0;
+            }
+            50% {
+                right: 100%;
+            }
+            100% {
+                right: 0;    
+            }
+        }
+
+        #largeDevice { 
             cursor: url(kitty2.cur), auto;
             -webkit-animation: cursor 700ms infinite;
             animation: cursor 700ms infinite;
