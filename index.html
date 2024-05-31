@@ -9,6 +9,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.i18n/1.0.9/jquery.i18n.min.js" integrity="sha512-EkS8Kq86l7dHt/dOBniHgtYvAScDqFw/lIPX5VCwaVKsufs0pY44I2cguqZ45QaFOGGwVd3T1nXvVJYIEjRsjA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 </head>
 
 <body>
@@ -26,10 +27,16 @@
                     </div>
                 </div>
                 <div class="col-3 my-5">
-                    <h2 style="font-size: 70px;">MENU</h2>
-                    <h3 style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
-                    <h3></h3>
-                    <h3></h3>
+                    <h2 class="en" style="font-size: 70px;">MENU</h2>
+                    <h3 class="en" style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
+                    <h3 class="en" style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">FLUFFY</a></h3>
+                    <h3 class="en"></h3>
+                    <h3 class="en"></h3>
+                    <h2 class="zh-TW text-center" style="font-size: 70px;">選單</h2>
+                    <h3 class="zh-TW text-center" style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">連連貓</a></h3>
+                    <h3 class="zh-TW text-center" style="font-size: 30px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">躲貓貓</a></h3>
+                    <h3 class="zh-TW"></h3>
+                    <h3 class="zh-TW"></h3>
                 </div>
                 <div class="col-2"></div>
             </div>
@@ -37,8 +44,14 @@
     </div>
     <div id="smallDevice">
         <h1 class="my-5 text-center" style="font-size: 130px; color: rgba(0,0,0,1);">CATAHOLIC GAME STUDIO</h1>
-        <h2 class="my-5 text-center" style="font-size: 100px; color: rgba(0,0,0,1);">menu</h2>
-        <h3 class="my-5 text-center" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
+        <h2 class="my-5 text-center en" style="font-size: 100px; color: rgba(0,0,0,1);">menu</h2>
+        <h3 class="my-5 text-center en" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">CAT CONNECT</a></h3>
+        <h3 class="my-5 text-center en" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">FLUFFY</a></h3>
+        <h2 class="zh-TW text-center" style="font-size: 100px;">選單</h2>
+        <h3 class="zh-TW text-center" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">連連貓</a></h3>
+        <h3 class="zh-TW text-center" style="font-size: 75px; margin-top: 30px;"><a href="cat_connect/cat_connect.html">躲貓貓</a></h3>
+        <h3 class="zh-TW"></h3>
+        <h3 class="zh-TW"></h3>
         <img src="cat_logo.png" style="opacity: 0.2; height: 100%; width: auto;" />
         <img src="kitty_pointer.cur" id="kitty_running"/>
     </div>
@@ -90,7 +103,33 @@
 
         $(function () {
             replacePage();
+            adjustLanguage();
         })
+
+        function adjustLanguage() {
+            var userLang = navigator.language || navigator.userLanguage;
+            if (userLang === 'ko') {
+                $('.en').hide();
+                $('.zh-TW').hide();
+                $('.ja').hide();
+                $('.ko').show();
+            } else if (userLang === 'ja') {
+                $('.en').hide();
+                $('.zh-TW').hide();
+                $('.ja').show();
+                $('.ko').hide();
+            } else if (userLang === 'zh-TW') {
+                $('.en').hide();
+                $('.zh-TW').show();
+                $('.ja').hide();
+                $('.ko').hide();
+            } else {
+                $('.en').show();
+                $('.zh-TW').hide();
+                $('.ja').hide();
+                $('.ko').hide();
+            }
+        }
 
         $(window).on('resize', function () {
             replacePage();
