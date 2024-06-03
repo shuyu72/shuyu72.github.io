@@ -1,3 +1,4 @@
+<html>
 <head>
     <title>CATAHOLIC GAME STUDIO</title>
     <meta charset="utf-8">
@@ -13,7 +14,11 @@
 </head>
 
 <body>
-    <div></div>
+    <div id="clickMe"></div>
+    <audio controls autoplay loop id="bgm">
+        <source src="pan-flute-greensleeves-144616.mp3" type="audio/mp3">
+        Your browser does not support the audio element.
+    </audio>
     <div id="largeDevice">
         <canvas id="canvas" class="float-left v-100" style="height: 30rem; bottom: 0rem; top: 20rem;"></canvas>
         <div class="container h-100 v-100">
@@ -134,6 +139,20 @@
         $(window).on('resize', function () {
             replacePage();
         })
+
+        $(function () {
+            window.addEventListener('click', musicPlay);
+            //$('#clickMe').click();
+        })
+
+        function musicPlay() {
+            document.getElementById('bgm').play();
+            document.removeEventListener('click', musicPlay);
+        }
+        
+        window.onload = function() {
+           var context = new AudioContext();
+        }
         </script>
     <style>
         #kitty_running {
@@ -213,3 +232,4 @@
         }
     </style>
 </body>
+</html>
